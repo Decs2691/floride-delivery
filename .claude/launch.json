@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "floride-dsp",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "8790", "/Users/danielcantorsoto/Desktop/Proyecto DSP"],
+      "port": 8790
+    }
+  ]
+}

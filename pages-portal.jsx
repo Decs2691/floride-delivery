@@ -33,6 +33,54 @@ const DEMO_USERS = {
     title: 'Operations Supervisor',
     station: 'DFL4 — Orlando',
   },
+  'trainer@floride.com': {
+    password: 'trainer2026',
+    role: 'trainer',
+    name: 'Marcus Webb',
+    id: 'TR-003',
+    title: 'Driver Trainer',
+    station: 'DFL4 — Orlando',
+  },
+  'dispatch@floride.com': {
+    password: 'dispatch2026',
+    role: 'dispatch',
+    name: 'Sofia Morales',
+    id: 'DS-007',
+    title: 'Dispatch Coordinator',
+    station: 'DFL4 — Orlando',
+  },
+  'sassistant@floride.com': {
+    password: 'sassist2026',
+    role: 'supervisor-assistant',
+    name: 'Kevin Park',
+    id: 'SA-002',
+    title: 'Supervisor Assistant',
+    station: 'DFL4 — Orlando',
+  },
+  'supervisor@floride.com': {
+    password: 'super2026',
+    role: 'supervisor',
+    name: 'Yamila Ricardo',
+    id: 'SV-001',
+    title: 'Operations Supervisor',
+    station: 'DFL4 — Orlando',
+  },
+  'ops@floride.com': {
+    password: 'ops2026',
+    role: 'ops-manager',
+    name: 'Jordan Ellis',
+    id: 'OM-001',
+    title: 'Operations Manager',
+    station: 'DFL4 — Orlando',
+  },
+  'ceo@floride.com': {
+    password: 'ceo2026',
+    role: 'ceo',
+    name: 'Alex Johnson',
+    id: 'CEO-01',
+    title: 'Chief Executive Officer',
+    station: 'FloRide HQ — Orlando',
+  },
 };
 
 // ─── Sample data ──────────────────────────────────────────────
@@ -76,6 +124,77 @@ const DRIVER_LIST = [
   { id: 'DR-0055', name: 'Antoine Dubois',  score: 91, tier: 'Fantastic',  routes: 5 },
 ];
 
+// ─── Role-specific sample data ───────────────────────────────
+const TRAINEES = [
+  { id:'DR-0088', name:'Luis Fernandez',   days:3,  progress:28, status:'In Training',  score: null },
+  { id:'DR-0091', name:'Priya Sharma',     days:7,  progress:65, status:'In Training',  score: null },
+  { id:'DR-0079', name:'Tomás Guerrero',   days:12, progress:90, status:'Final Eval',   score: 84   },
+  { id:'DR-0083', name:'Aisha Okafor',     days:14, progress:100,status:'Completed',    score: 91   },
+];
+
+const TRAINING_SCHEDULE = [
+  { day:'Mon May 26', time:'7:00 AM', trainee:'Luis Fernandez',  topic:'Van pre-inspection & safety check', location:'DFL4 Lot A' },
+  { day:'Mon May 26', time:'8:30 AM', trainee:'Priya Sharma',    topic:'Route navigation & customer protocols', location:'On Route' },
+  { day:'Tue May 27', time:'7:00 AM', trainee:'Tomás Guerrero',  topic:'Final evaluation — full solo route', location:'On Route' },
+  { day:'Wed May 28', time:'9:00 AM', trainee:'Luis Fernandez',  topic:'Package handling & POD procedures', location:'Warehouse' },
+];
+
+const DISPATCH_ROUTES = [
+  { id:'RT-001', driver:'Maria Gonzalez',  zone:'Orlando Central',     stops:148, status:'Active',    pct:62 },
+  { id:'RT-002', driver:'Daniel Cantor',   zone:'Lake Nona',           stops:132, status:'Active',    pct:48 },
+  { id:'RT-003', driver:'James Thompson',  zone:'Winter Park',         stops:119, status:'Active',    pct:71 },
+  { id:'RT-004', driver:'Antoine Dubois',  zone:'Kissimmee',           stops:155, status:'Active',    pct:55 },
+  { id:'RT-005', driver:'Carlos Reyes',    zone:'Sanford',             stops:108, status:'Delayed',   pct:33 },
+  { id:'RT-006', driver:'Lena Muller',     zone:'Apopka',              stops:141, status:'Active',    pct:80 },
+  { id:'RT-007', driver:'Aisha Okafor',    zone:'Hunter\'s Creek',     stops:127, status:'Completed', pct:100 },
+  { id:'RT-008', driver:'Priya Sharma',    zone:'Lake Mary',           stops:98,  status:'Not Started',pct:0 },
+];
+
+const INCIDENTS = [
+  { id:'INC-041', date:'May 26 · 10:14 AM', driver:'Carlos Reyes',   type:'Vehicle Issue',   desc:'Van overheating warning light. Pulled over safely at Sunoco on US-17.', status:'Open',     priority:'high' },
+  { id:'INC-040', date:'May 26 · 8:52 AM',  driver:'Lena Muller',    type:'Customer Report', desc:'Customer claims package delivered to wrong address.', status:'In Review', priority:'medium' },
+  { id:'INC-039', date:'May 25 · 3:30 PM',  driver:'James Thompson', type:'Accident',        desc:'Minor parking lot collision. No injuries. Photos submitted.', status:'Closed',   priority:'low' },
+];
+
+const ATTENDANCE = [
+  { id:'DR-0045', name:'Daniel Cantor Soto', status:'On Time',  time:'9:48 AM', route:'Lake Nona' },
+  { id:'DR-0032', name:'Maria Gonzalez',     status:'On Time',  time:'7:02 AM', route:'Orlando Central' },
+  { id:'DR-0018', name:'Carlos Reyes',       status:'Late',     time:'9:22 AM', route:'Sanford' },
+  { id:'DR-0061', name:'James Thompson',     status:'On Time',  time:'6:58 AM', route:'Winter Park' },
+  { id:'DR-0074', name:'Lena Muller',        status:'On Time',  time:'7:15 AM', route:'Apopka' },
+  { id:'DR-0055', name:'Antoine Dubois',     status:'On Time',  time:'7:01 AM', route:'Kissimmee' },
+  { id:'DR-0088', name:'Luis Fernandez',     status:'Absent',   time:'—',       route:'—' },
+];
+
+const REQUESTS = [
+  { id:'REQ-018', driver:'Carlos Reyes',   type:'Day Off Request',  msg:'Requesting Friday May 30 off — family emergency.', time:'9:05 AM', urgent:true  },
+  { id:'REQ-017', driver:'Lena Muller',    type:'Uniform Issue',    msg:'My vest size is wrong. Need a Medium, received Large.', time:'8:30 AM', urgent:false },
+  { id:'REQ-016', driver:'Luis Fernandez', type:'Question',         msg:'Where do I pick up my van scanner before the route?', time:'7:45 AM', urgent:false },
+];
+
+const CHECKLIST = [
+  { id:1, task:'Confirm all 60 drivers have checked in', done:true },
+  { id:2, task:'Send shift reminders for PM wave (2:00 PM)', done:false },
+  { id:3, task:'Review Carlos Reyes attendance pattern — 3rd late this week', done:false },
+  { id:4, task:'Update scanner inventory log in the system', done:true },
+  { id:5, task:'Submit daily attendance report to supervisor by noon', done:false },
+];
+
+const COACHING_QUEUE = [
+  { id:'DR-0074', name:'Lena Muller',   score:62, issues:['Safe Driving: 58', 'On-Time: 65'], sessions:0, priority:'urgent' },
+  { id:'DR-0018', name:'Carlos Reyes',  score:71, issues:['POD: 68', 'Park Sequence: 70'], sessions:1, priority:'soon'   },
+  { id:'DR-0045', name:'Daniel Cantor', score:87, issues:['POD: 79', 'Park Seq: 72'],      sessions:0, priority:'watch'  },
+];
+
+const FLEET = [
+  { id:'VAN-12', driver:'Maria Gonzalez',  status:'Active',    mileage:87420, lastInsp:'May 20', fuel:78 },
+  { id:'VAN-07', driver:'Carlos Reyes',    status:'Issue',     mileage:103850,lastInsp:'May 18', fuel:45 },
+  { id:'VAN-23', driver:'James Thompson',  status:'Active',    mileage:62100, lastInsp:'May 22', fuel:91 },
+  { id:'VAN-31', driver:'Antoine Dubois',  status:'Active',    mileage:44780, lastInsp:'May 21', fuel:65 },
+  { id:'VAN-09', driver:'Lena Muller',     status:'Active',    mileage:118200,lastInsp:'May 15', fuel:82 },
+  { id:'VAN-16', driver:'—',              status:'In Service', mileage:95440, lastInsp:'May 10', fuel:100 },
+];
+
 // ─── Helpers ──────────────────────────────────────────────────
 function scoreColor(s) {
   if (s >= 90) return { bg: 'rgba(34,197,94,0.1)',   text: '#16a34a', border: 'rgba(34,197,94,0.25)' };
@@ -111,10 +230,26 @@ function ScoreRing({ score, size = 100 }) {
 
 // ─── Portal Navbar ────────────────────────────────────────────
 function PortalNav({ user, onLogout, active, setActive }) {
-  const dLinks = ['dashboard','scorecard','training','announcements'];
-  const mLinks = ['overview','my-team','announcements','scorecards'];
-  const links = user.role === 'driver' ? dLinks : mLinks;
-  const labels = { dashboard:'Dashboard', scorecard:'My Scorecard', training:'Training', announcements:'Announcements', overview:'Overview', 'my-team':'My Team', scorecards:'Scorecards' };
+  const roleLinks = {
+    'driver':               ['dashboard','scorecard','training','announcements'],
+    'trainer':              ['overview','trainees','schedule','materials'],
+    'dispatch':             ['routes','drivers','incidents','messages'],
+    'supervisor-assistant': ['attendance','requests','checklist'],
+    'supervisor':           ['overview','team','coaching','incidents'],
+    'ops-manager':          ['overview','teams','fleet','reports'],
+    'ceo':                  ['executive','financials','team','alerts'],
+    'manager':              ['overview','my-team','announcements','scorecards'],
+  };
+  const labels = {
+    dashboard:'Dashboard', scorecard:'My Scorecard', training:'Training', announcements:'Announcements',
+    overview:'Overview', 'my-team':'My Team', scorecards:'Scorecards',
+    trainees:'My Trainees', schedule:'Schedule', materials:'Materials',
+    routes:'Routes Today', drivers:'Drivers', incidents:'Incidents', messages:'Messages',
+    attendance:'Attendance', requests:'Requests', checklist:'Checklist',
+    team:'Team', coaching:'Coaching', teams:'All Teams', fleet:'Fleet', reports:'Reports',
+    executive:'Executive', financials:'Financials', alerts:'Alerts',
+  };
+  const links = roleLinks[user.role] || roleLinks['driver'];
 
   return (
     <header style={{ position:'sticky', top:0, zIndex:40, background:'#fff', borderBottom:'1px solid rgba(26,26,46,0.08)', height:60, display:'flex', alignItems:'center', boxShadow:'0 1px 8px rgba(26,26,46,0.05)' }}>
@@ -709,11 +844,795 @@ function LoginPage({ onLogin }) {
   );
 }
 
+// ─── TRAINER PORTAL ───────────────────────────────────────────
+function TrainerPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('overview');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'overview'  && <TrainerOverview user={user} setActive={setActive} />}
+        {active === 'trainees'  && <TrainerTrainees />}
+        {active === 'schedule'  && <TrainerSchedule />}
+        {active === 'materials' && <DriverTraining />}
+      </main>
+    </div>
+  );
+}
+
+function TrainerOverview({ user, setActive }) {
+  return (
+    <div>
+      <div style={{ marginBottom:28 }}>
+        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+        {[
+          { label:'Active Trainees',    value:'3',  sub:'in program',     col:'#2563eb' },
+          { label:'Completed This Month',value:'1', sub:'graduated',      col:'#16a34a' },
+          { label:'Sessions Today',      value:'2', sub:'scheduled',      col:'#FF6B35' },
+          { label:'Avg Completion',      value:'71%',sub:'across trainees',col:'#a855f7' },
+        ].map(k => (
+          <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:k.col }}>{k.value}</div>
+            <div style={{ fontSize:11, color:'#bbb', marginTop:4 }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+          <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>My Trainees</h3>
+            <button onClick={() => setActive('trainees')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+          </div>
+          {TRAINEES.map(t => (
+            <div key={t.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)', display:'flex', alignItems:'center', gap:12 }}>
+              <Avatar name={t.name} size={34} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{t.name}</div>
+                <div style={{ fontSize:11, color:'#aaa', marginTop:2 }}>Day {t.days} · {t.status}</div>
+              </div>
+              <div style={{ width:80 }}>
+                <div style={{ background:'rgba(26,26,46,0.07)', borderRadius:999, height:6, overflow:'hidden' }}>
+                  <div style={{ width:`${t.progress}%`, height:'100%', background: t.progress===100 ? '#16a34a' : 'var(--brand-accent)', borderRadius:999 }} />
+                </div>
+                <div style={{ fontSize:10, color:'#bbb', marginTop:3, textAlign:'right' }}>{t.progress}%</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+          <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Today's Sessions</h3>
+            <button onClick={() => setActive('schedule')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>Full schedule →</button>
+          </div>
+          {TRAINING_SCHEDULE.filter(s => s.day === 'Mon May 26').map((s,i) => (
+            <div key={i} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                <div>
+                  <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)' }}>{s.time}</div>
+                  <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)', margin:'3px 0' }}>{s.trainee}</div>
+                  <div style={{ fontSize:12, color:'#888' }}>{s.topic}</div>
+                </div>
+                <span style={{ fontSize:11, background:'rgba(26,26,46,0.05)', color:'#666', padding:'3px 8px', borderRadius:6, whiteSpace:'nowrap' }}>{s.location}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TrainerTrainees() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>My Trainees</h2>
+      <div style={{ display:'grid', gap:16 }}>
+        {TRAINEES.map(t => (
+          <div key={t.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', alignItems:'center', gap:18 }}>
+            <Avatar name={t.name} size={48} />
+            <div style={{ flex:1 }}>
+              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{t.name}</div>
+              <div style={{ fontSize:12, color:'#aaa', marginTop:2 }}>{t.id} · Day {t.days} of training</div>
+              <div style={{ marginTop:10, width:'60%' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                  <span style={{ fontSize:11, color:'#888' }}>Training progress</span>
+                  <span style={{ fontSize:11, fontWeight:700, color: t.progress===100 ? '#16a34a' : 'var(--brand-accent)' }}>{t.progress}%</span>
+                </div>
+                <div style={{ background:'rgba(26,26,46,0.06)', borderRadius:999, height:8, overflow:'hidden' }}>
+                  <div style={{ width:`${t.progress}%`, height:'100%', background: t.progress===100 ? '#16a34a' : 'var(--brand-accent)', borderRadius:999, transition:'width .6s ease' }} />
+                </div>
+              </div>
+            </div>
+            <div style={{ textAlign:'right' }}>
+              <span style={{ fontSize:12, fontWeight:700, padding:'4px 12px', borderRadius:999, background: t.status==='Completed' ? 'rgba(34,197,94,0.1)' : t.status==='Final Eval' ? 'rgba(59,158,255,0.1)' : 'rgba(255,107,53,0.1)', color: t.status==='Completed' ? '#16a34a' : t.status==='Final Eval' ? '#2563eb' : '#FF6B35' }}>{t.status}</span>
+              {t.score && <div style={{ fontSize:20, fontWeight:800, fontFamily:'var(--font-display)', color:'#16a34a', marginTop:8 }}>{t.score}/100</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TrainerSchedule() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Training Schedule</h2>
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+        {TRAINING_SCHEDULE.map((s,i) => (
+          <div key={i} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:20, alignItems:'flex-start' }}>
+            <div style={{ textAlign:'center', minWidth:80 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:'var(--brand-accent)', textTransform:'uppercase', letterSpacing:'0.06em' }}>{s.day.split(' ')[0]}</div>
+              <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{s.day.split(' ').slice(1).join(' ')}</div>
+              <div style={{ fontSize:16, fontWeight:800, fontFamily:'var(--font-display)', color:'var(--brand-ink)', marginTop:4 }}>{s.time}</div>
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14 }}>{s.trainee}</div>
+              <div style={{ fontSize:13, color:'#666', marginTop:4 }}>{s.topic}</div>
+              <div style={{ fontSize:11, color:'#aaa', marginTop:6 }}>📍 {s.location}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── DISPATCH PORTAL ──────────────────────────────────────────
+function DispatchPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('routes');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'routes'    && <DispatchRoutes />}
+        {active === 'drivers'   && <DispatchDrivers />}
+        {active === 'incidents' && <DispatchIncidents />}
+        {active === 'messages'  && <DispatchMessages />}
+      </main>
+    </div>
+  );
+}
+
+function DispatchRoutes() {
+  const statusColor = s => ({ Active:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, Delayed:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'}, Completed:{bg:'rgba(59,158,255,0.1)',text:'#2563eb'}, 'Not Started':{bg:'rgba(26,26,46,0.06)',text:'#888'} })[s] || {};
+  return (
+    <div>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+        <div>
+          <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Routes Today</h2>
+          <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026 · DFL4 Station</div>
+        </div>
+        <div style={{ display:'flex', gap:12 }}>
+          {[['Active','#16a34a',6],['Delayed','#dc2626',1],['Completed','#2563eb',1]].map(([l,c,n]) => (
+            <div key={l} style={{ textAlign:'center', padding:'10px 16px', background:'#fff', borderRadius:10, border:'1px solid rgba(26,26,46,0.07)' }}>
+              <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:c }}>{n}</div>
+              <div style={{ fontSize:11, color:'#aaa' }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+          <thead>
+            <tr style={{ background:'rgba(26,26,46,0.025)' }}>
+              {['Route','Driver','Zone','Stops','Progress','Status'].map(h => (
+                <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {DISPATCH_ROUTES.map(r => {
+              const sc = statusColor(r.status);
+              return (
+                <tr key={r.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                  <td style={{ padding:'13px 20px', fontSize:12, fontFamily:'var(--font-mono)', color:'#888' }}>{r.id}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{r.driver}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{r.zone}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{r.stops}</td>
+                  <td style={{ padding:'13px 20px', minWidth:120 }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <div style={{ flex:1, background:'rgba(26,26,46,0.07)', borderRadius:999, height:6, overflow:'hidden' }}>
+                        <div style={{ width:`${r.pct}%`, height:'100%', background: r.pct===100 ? '#16a34a' : r.status==='Delayed' ? '#dc2626' : 'var(--brand-accent)', borderRadius:999 }} />
+                      </div>
+                      <span style={{ fontSize:11, color:'#aaa', width:28 }}>{r.pct}%</span>
+                    </div>
+                  </td>
+                  <td style={{ padding:'13px 20px' }}>
+                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:sc.bg, color:sc.text }}>{r.status}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function DispatchDrivers() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Driver Status</h2>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14 }}>
+        {DISPATCH_ROUTES.map(r => {
+          const col = {Active:'#16a34a',Delayed:'#dc2626',Completed:'#2563eb','Not Started':'#aaa'}[r.status];
+          return (
+            <div key={r.id} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+                <Avatar name={r.driver} size={36} />
+                <div>
+                  <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-ink)' }}>{r.driver}</div>
+                  <div style={{ fontSize:11, color:'#aaa' }}>{r.zone}</div>
+                </div>
+              </div>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ fontSize:11, fontWeight:700, color:col, background:`${col}18`, padding:'3px 9px', borderRadius:999 }}>{r.status}</span>
+                <span style={{ fontSize:12, color:'#888' }}>{r.pct}% · {r.stops} stops</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function DispatchIncidents() {
+  const priColor = p => ({high:'#dc2626',medium:'#d97706',low:'#16a34a'})[p];
+  return (
+    <div>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Incidents</h2>
+        <button style={{ padding:'10px 18px', background:'var(--brand-accent)', color:'#fff', borderRadius:10, fontSize:13, fontWeight:700 }}>+ Report Incident</button>
+      </div>
+      <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+        {INCIDENTS.map(inc => (
+          <div key={inc.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1px solid ${inc.status==='Open' ? 'rgba(239,68,68,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${priColor(inc.priority)}` }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+              <div>
+                <div style={{ display:'flex', gap:8, marginBottom:8 }}>
+                  <span style={{ fontSize:10, fontWeight:700, color:priColor(inc.priority), background:`${priColor(inc.priority)}18`, padding:'2px 8px', borderRadius:999, textTransform:'uppercase' }}>{inc.priority}</span>
+                  <span style={{ fontSize:10, fontWeight:600, color:'#888', background:'rgba(26,26,46,0.05)', padding:'2px 8px', borderRadius:999 }}>{inc.type}</span>
+                </div>
+                <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14 }}>{inc.driver}</div>
+                <p style={{ fontSize:13, color:'#555', lineHeight:1.6, margin:'6px 0 8px' }}>{inc.desc}</p>
+                <div style={{ fontSize:11, color:'#bbb' }}>{inc.id} · {inc.date}</div>
+              </div>
+              <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background: inc.status==='Open' ? 'rgba(239,68,68,0.1)' : inc.status==='In Review' ? 'rgba(251,191,36,0.1)' : 'rgba(34,197,94,0.1)', color: inc.status==='Open' ? '#dc2626' : inc.status==='In Review' ? '#d97706' : '#16a34a', flexShrink:0 }}>{inc.status}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DispatchMessages() {
+  const [msg, setMsg] = usePS('');
+  const [target, setTarget] = usePS('all');
+  const [sent, setSent] = usePS(false);
+  function send() { if(!msg.trim()) return; setSent(true); setMsg(''); setTimeout(()=>setSent(false),3000); }
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Send Message</h2>
+      {sent && <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:12, padding:'12px 18px', marginBottom:18, color:'#16a34a', fontSize:13, fontWeight:600 }}>✓ Message sent successfully.</div>}
+      <div style={{ background:'#fff', borderRadius:16, padding:28, border:'1px solid rgba(26,26,46,0.07)', maxWidth:560 }}>
+        <div style={{ marginBottom:16 }}>
+          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:6 }}>Send to</label>
+          <select value={target} onChange={e=>setTarget(e.target.value)} style={{ width:'100%', padding:'11px 14px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, outline:'none' }}>
+            <option value="all">All Drivers (60)</option>
+            {DISPATCH_ROUTES.map(r => <option key={r.id} value={r.driver}>{r.driver}</option>)}
+          </select>
+        </div>
+        <div style={{ marginBottom:20 }}>
+          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:6 }}>Message</label>
+          <textarea value={msg} onChange={e=>setMsg(e.target.value)} rows={4} placeholder="Type your message..." style={{ width:'100%', padding:'11px 14px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, resize:'vertical', boxSizing:'border-box', outline:'none' }} />
+        </div>
+        <button onClick={send} style={{ padding:'11px 22px', background:'var(--brand-accent)', color:'#fff', borderRadius:9, fontSize:13, fontWeight:700 }}>Send Message</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── SUPERVISOR ASSISTANT PORTAL ──────────────────────────────
+function SupervisorAssistantPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('attendance');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'attendance' && <SAAttendance />}
+        {active === 'requests'   && <SARequests />}
+        {active === 'checklist'  && <SAChecklist />}
+      </main>
+    </div>
+  );
+}
+
+function SAAttendance() {
+  const stCol = s => ({  'On Time':{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, Late:{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, Absent:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s];
+  const counts = { onTime: ATTENDANCE.filter(a=>a.status==='On Time').length, late: ATTENDANCE.filter(a=>a.status==='Late').length, absent: ATTENDANCE.filter(a=>a.status==='Absent').length };
+  return (
+    <div>
+      <div style={{ marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Attendance Today</h2>
+        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16, marginBottom:24 }}>
+        {[['On Time',counts.onTime,'#16a34a'],['Late',counts.late,'#d97706'],['Absent',counts.absent,'#dc2626']].map(([l,v,c])=>(
+          <div key={l} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ fontSize:12, color:'#999', marginBottom:6 }}>{l}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:32, fontWeight:800, color:c }}>{v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+          <thead>
+            <tr style={{ background:'rgba(26,26,46,0.025)' }}>
+              {['Driver','ID','Check-in','Route','Status'].map(h=>(
+                <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ATTENDANCE.map(a => {
+              const c = stCol(a.status);
+              return (
+                <tr key={a.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                  <td style={{ padding:'13px 20px' }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                      <Avatar name={a.name} size={32} />
+                      <span style={{ fontSize:13, fontWeight:600 }}>{a.name}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding:'13px 20px', fontSize:12, color:'#aaa', fontFamily:'var(--font-mono)' }}>{a.id}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{a.time}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{a.route}</td>
+                  <td style={{ padding:'13px 20px' }}>
+                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{a.status}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function SARequests() {
+  const [resolved, setResolved] = usePS({});
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Driver Requests</h2>
+      <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+        {REQUESTS.map(r => (
+          <div key={r.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1px solid ${r.urgent ? 'rgba(255,107,53,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${r.urgent ? '#FF6B35' : 'rgba(26,26,46,0.1)'}` }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', gap:8, marginBottom:8 }}>
+                  {r.urgent && <span style={{ fontSize:10, fontWeight:700, background:'rgba(255,107,53,0.1)', color:'#FF6B35', padding:'2px 8px', borderRadius:999, textTransform:'uppercase' }}>Urgent</span>}
+                  <span style={{ fontSize:10, fontWeight:600, color:'#888', background:'rgba(26,26,46,0.05)', padding:'2px 8px', borderRadius:999 }}>{r.type}</span>
+                </div>
+                <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14 }}>{r.driver}</div>
+                <p style={{ fontSize:13, color:'#555', lineHeight:1.6, margin:'6px 0 8px' }}>{r.msg}</p>
+                <div style={{ fontSize:11, color:'#bbb' }}>{r.id} · {r.time}</div>
+              </div>
+              {!resolved[r.id] ? (
+                <button onClick={()=>setResolved(rv=>({...rv,[r.id]:true}))} style={{ marginLeft:16, padding:'8px 14px', fontSize:12, fontWeight:600, background:'rgba(26,26,46,0.05)', border:'1px solid rgba(26,26,46,0.1)', borderRadius:8, color:'#555', flexShrink:0 }}>Mark Resolved</button>
+              ) : (
+                <span style={{ marginLeft:16, fontSize:12, color:'#16a34a', fontWeight:600 }}>✓ Resolved</span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SAChecklist() {
+  const [items, setItems] = usePS(CHECKLIST);
+  function toggle(id) { setItems(prev => prev.map(i => i.id===id ? {...i, done:!i.done} : i)); }
+  const done = items.filter(i=>i.done).length;
+  return (
+    <div>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Daily Checklist</h2>
+        <span style={{ fontSize:13, fontWeight:600, color: done===items.length ? '#16a34a' : '#888' }}>{done}/{items.length} completed</span>
+      </div>
+      <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+        {items.map((item,i) => (
+          <div key={item.id} onClick={()=>toggle(item.id)} style={{ display:'flex', alignItems:'center', gap:14, padding:'18px 24px', borderBottom: i<items.length-1 ? '1px solid rgba(26,26,46,0.05)' : 'none', cursor:'pointer', transition:'background .12s' }}
+            onMouseEnter={e=>e.currentTarget.style.background='rgba(26,26,46,0.015)'}
+            onMouseLeave={e=>e.currentTarget.style.background=''}
+          >
+            <div style={{ width:22, height:22, borderRadius:6, border:`2px solid ${item.done ? '#16a34a' : 'rgba(26,26,46,0.2)'}`, background: item.done ? '#16a34a' : 'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
+              {item.done && <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>}
+            </div>
+            <span style={{ fontSize:14, color: item.done ? '#aaa' : 'var(--brand-ink)', textDecoration: item.done ? 'line-through' : 'none', transition:'all .15s' }}>{item.task}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── SUPERVISOR PORTAL ────────────────────────────────────────
+function SupervisorPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('overview');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'overview'  && <ManagerOverview user={user} setActive={setActive} />}
+        {active === 'team'      && <ManagerTeam />}
+        {active === 'coaching'  && <SupervisorCoaching />}
+        {active === 'incidents' && <DispatchIncidents />}
+      </main>
+    </div>
+  );
+}
+
+function SupervisorCoaching() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 8px' }}>Coaching Queue</h2>
+      <p style={{ fontSize:13, color:'#999', marginBottom:24 }}>Drivers who need a 1-on-1 session based on this week's scorecard.</p>
+      <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+        {COACHING_QUEUE.map(d => {
+          const pri = {urgent:'#dc2626',soon:'#d97706',watch:'#2563eb'}[d.priority];
+          return (
+            <div key={d.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${pri}` }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                <div style={{ display:'flex', gap:14, alignItems:'center' }}>
+                  <Avatar name={d.name} size={46} />
+                  <div>
+                    <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{d.name}</div>
+                    <div style={{ fontSize:12, color:'#aaa', marginTop:2 }}>{d.id} · {d.sessions} session{d.sessions!==1?'s':''} this month</div>
+                    <div style={{ display:'flex', gap:8, marginTop:8, flexWrap:'wrap' }}>
+                      {d.issues.map(iss => (
+                        <span key={iss} style={{ fontSize:11, fontWeight:600, background:'rgba(239,68,68,0.08)', color:'#dc2626', padding:'2px 8px', borderRadius:999 }}>⚠ {iss}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color: d.score>=80 ? '#2563eb' : d.score>=70 ? '#d97706' : '#dc2626' }}>{d.score}</div>
+                  <div style={{ fontSize:11, color:'#aaa' }}>overall</div>
+                  <span style={{ marginTop:8, display:'inline-block', fontSize:11, fontWeight:700, color:pri, background:`${pri}18`, padding:'3px 10px', borderRadius:999, textTransform:'uppercase' }}>{d.priority}</span>
+                </div>
+              </div>
+              <div style={{ marginTop:14, paddingTop:14, borderTop:'1px solid rgba(26,26,46,0.06)', display:'flex', gap:10 }}>
+                <button style={{ padding:'8px 16px', background:'var(--brand-accent)', color:'#fff', borderRadius:8, fontSize:12, fontWeight:700 }}>Schedule Session</button>
+                <button style={{ padding:'8px 16px', border:'1px solid rgba(26,26,46,0.14)', borderRadius:8, fontSize:12, fontWeight:600, color:'#555' }}>Add Note</button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── OPS MANAGER PORTAL ───────────────────────────────────────
+function OpsManagerPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('overview');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'overview' && <OpsOverview user={user} setActive={setActive} />}
+        {active === 'teams'    && <OpsTeams />}
+        {active === 'fleet'    && <OpsFleet />}
+        {active === 'reports'  && <OpsReports />}
+      </main>
+    </div>
+  );
+}
+
+function OpsOverview({ user, setActive }) {
+  return (
+    <div>
+      <div style={{ marginBottom:28 }}>
+        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+        {[
+          { label:'Routes Today',      value:'60',   sub:'all active',     col:'#2563eb' },
+          { label:'Fleet Status',      value:'59/60',sub:'1 in service',   col:'#16a34a' },
+          { label:'Incidents Open',    value:'2',    sub:'need attention', col:'#dc2626' },
+          { label:'Weekly Score Avg',  value:'83.2', sub:'vs 81.4 last wk',col:'#FF6B35' },
+        ].map(k=>(
+          <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:k.col }}>{k.value}</div>
+            <div style={{ fontSize:11, color:'#bbb', marginTop:4 }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+          <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Open Incidents</h3>
+            <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+          </div>
+          {INCIDENTS.filter(i=>i.status!=='Closed').map(inc=>(
+            <div key={inc.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
+              <div style={{ display:'flex', justifyContent:'space-between' }}>
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{inc.driver} — {inc.type}</div>
+                  <div style={{ fontSize:12, color:'#888', marginTop:2 }}>{inc.date}</div>
+                </div>
+                <span style={{ fontSize:11, fontWeight:700, color: inc.status==='Open' ? '#dc2626' : '#d97706', background: inc.status==='Open' ? 'rgba(239,68,68,0.08)' : 'rgba(251,191,36,0.08)', padding:'3px 9px', borderRadius:999 }}>{inc.status}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+          <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Drivers At Risk</h3>
+            <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+          </div>
+          {DRIVER_LIST.filter(d=>d.score<75).map(d=>(
+            <div key={d.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                <Avatar name={d.name} size={32} />
+                <div>
+                  <div style={{ fontSize:13, fontWeight:600 }}>{d.name}</div>
+                  <div style={{ fontSize:11, color:'#aaa' }}>{d.tier}</div>
+                </div>
+              </div>
+              <span style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:'#dc2626' }}>{d.score}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OpsTeams() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>All Teams</h2>
+      <ManagerTeam />
+    </div>
+  );
+}
+
+function OpsFleet() {
+  const stCol = s => ({Active:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'},Issue:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'},'In Service':{bg:'rgba(251,191,36,0.1)',text:'#d97706'}})[s] || {};
+  return (
+    <div>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Fleet Status</h2>
+        <div style={{ display:'flex', gap:12 }}>
+          {[['Active','#16a34a',4],['Issue','#dc2626',1],['In Service','#d97706',1]].map(([l,c,n])=>(
+            <div key={l} style={{ textAlign:'center', padding:'10px 16px', background:'#fff', borderRadius:10, border:'1px solid rgba(26,26,46,0.07)' }}>
+              <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:c }}>{n}</div>
+              <div style={{ fontSize:11, color:'#aaa' }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+          <thead>
+            <tr style={{ background:'rgba(26,26,46,0.025)' }}>
+              {['Van','Driver','Status','Mileage','Last Inspection','Fuel'].map(h=>(
+                <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {FLEET.map(v=>{
+              const c = stCol(v.status);
+              return (
+                <tr key={v.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                  <td style={{ padding:'13px 20px', fontSize:13, fontFamily:'var(--font-mono)', fontWeight:600, color:'var(--brand-ink)' }}>{v.id}</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.driver}</td>
+                  <td style={{ padding:'13px 20px' }}><span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{v.status}</span></td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.mileage.toLocaleString()} mi</td>
+                  <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.lastInsp}</td>
+                  <td style={{ padding:'13px 20px', minWidth:120 }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <div style={{ flex:1, background:'rgba(26,26,46,0.07)', borderRadius:999, height:6, overflow:'hidden' }}>
+                        <div style={{ width:`${v.fuel}%`, height:'100%', background: v.fuel>60 ? '#16a34a' : v.fuel>30 ? '#d97706' : '#dc2626', borderRadius:999 }} />
+                      </div>
+                      <span style={{ fontSize:11, color:'#aaa' }}>{v.fuel}%</span>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function OpsReports() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Reports</h2>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16 }}>
+        {[
+          { title:'Weekly Performance Report', desc:'Driver scores, tiers, and improvements for May 19–25', date:'May 25, 2026', type:'PDF' },
+          { title:'Monthly Operations Summary', desc:'Route completion, incidents, fleet status for May 2026', date:'May 31, 2026', type:'PDF' },
+          { title:'Attendance & Punctuality', desc:'Check-in records and patterns for current month', date:'May 26, 2026', type:'XLSX' },
+          { title:'Incident Log', desc:'All incidents from the past 30 days with resolutions', date:'May 26, 2026', type:'PDF' },
+          { title:'Coaching Sessions Log', desc:'1-on-1 sessions completed and driver improvement tracking', date:'May 24, 2026', type:'PDF' },
+          { title:'Fleet Maintenance Log', desc:'Van mileage, inspections, and service history', date:'May 22, 2026', type:'XLSX' },
+        ].map((r,i)=>(
+          <div key={i} style={{ background:'#fff', borderRadius:14, padding:'20px 22px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
+              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, flex:1 }}>{r.title}</div>
+              <span style={{ fontSize:10, fontWeight:700, color:'#FF6B35', background:'rgba(255,107,53,0.1)', padding:'2px 7px', borderRadius:4, marginLeft:8 }}>{r.type}</span>
+            </div>
+            <p style={{ fontSize:12, color:'#888', lineHeight:1.5, margin:'0 0 12px' }}>{r.desc}</p>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <span style={{ fontSize:11, color:'#bbb' }}>{r.date}</span>
+              <button style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)' }}>Download →</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── CEO PORTAL ───────────────────────────────────────────────
+function CEOPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('executive');
+  return (
+    <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+      <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+      <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+        {active === 'executive'  && <CEOExecutive user={user} setActive={setActive} />}
+        {active === 'financials' && <CEOFinancials />}
+        {active === 'team'       && <ManagerTeam />}
+        {active === 'alerts'     && <CEOAlerts />}
+      </main>
+    </div>
+  );
+}
+
+function CEOExecutive({ user, setActive }) {
+  return (
+    <div>
+      <div style={{ marginBottom:28 }}>
+        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+        {[
+          { label:'Revenue This Month',   value:'$412K', sub:'+8% vs last month',  col:'#16a34a' },
+          { label:'Routes Completed',     value:'1,240', sub:'this month',          col:'#2563eb' },
+          { label:'Team Score Avg',       value:'83.2',  sub:'company-wide',        col:'#FF6B35' },
+          { label:'Driver Retention',     value:'94%',   sub:'30-day rolling',      col:'#a855f7' },
+        ].map(k=>(
+          <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:k.col }}>{k.value}</div>
+            <div style={{ fontSize:11, color:'#bbb', marginTop:4 }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 340px', gap:20 }}>
+        <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}>
+          <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'0 0 20px' }}>Monthly Revenue Trend</h3>
+          <div style={{ display:'flex', gap:8, alignItems:'flex-end', height:120 }}>
+            {[{m:'Dec',v:61},{m:'Jan',v:68},{m:'Feb',v:64},{m:'Mar',v:73},{m:'Apr',v:78},{m:'May',v:82}].map((d,i)=>(
+              <div key={d.m} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:6 }}>
+                <div style={{ fontSize:10, color:'#aaa' }}>${d.v}K</div>
+                <div style={{ width:'100%', background: i===5 ? 'var(--brand-accent)' : 'rgba(26,26,46,0.1)', borderRadius:'4px 4px 0 0', height:`${(d.v/82)*100}px`, transition:'height .4s' }} />
+                <div style={{ fontSize:10, color:'#bbb' }}>{d.m}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+          <div style={{ background:'linear-gradient(135deg,#1A1A2E,#2d2d52)', borderRadius:16, padding:22, color:'#fff' }}>
+            <div style={{ fontSize:11, fontWeight:700, opacity:0.6, textTransform:'uppercase', letterSpacing:'0.08em', marginBottom:8 }}>Amazon Bonus Status</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'#16a34a' }}>Fantastic+</div>
+            <div style={{ fontSize:13, opacity:0.75, marginTop:4 }}>Top 12% of DSPs nationally</div>
+            <div style={{ marginTop:14, fontSize:12, opacity:0.6 }}>Est. monthly bonus: <strong style={{ color:'#4ade80', opacity:1 }}>$38,000</strong></div>
+          </div>
+          <button onClick={()=>setActive('alerts')} style={{ background:'rgba(239,68,68,0.07)', border:'1px solid rgba(239,68,68,0.2)', borderRadius:14, padding:18, textAlign:'left' }}>
+            <div style={{ fontSize:12, fontWeight:700, color:'#dc2626', marginBottom:4 }}>⚠ 2 items need your attention</div>
+            <div style={{ fontSize:12, color:'#888' }}>1 open vehicle incident · 1 at-risk driver</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CEOFinancials() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Financials</h2>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16, marginBottom:24 }}>
+        {[
+          { label:'Revenue MTD',        value:'$412,800', sub:'May 1–26',           col:'#16a34a' },
+          { label:'Driver Payroll MTD', value:'$198,400', sub:'60 drivers',          col:'#dc2626' },
+          { label:'Operating Margin',   value:'51.9%',    sub:'excl. Amazon bonuses',col:'#2563eb' },
+          { label:'Amazon Bonus (Est)', value:'$38,000',  sub:'this month',          col:'#a855f7' },
+          { label:'Routes YTD',         value:'7,240',    sub:'Jan–May 2026',         col:'#FF6B35' },
+          { label:'Revenue YTD',        value:'$2.1M',    sub:'on track for $5M',    col:'#16a34a' },
+        ].map(k=>(
+          <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
+            <div style={{ fontSize:12, color:'#999', marginBottom:6 }}>{k.label}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:26, fontWeight:800, color:k.col }}>{k.value}</div>
+            <div style={{ fontSize:11, color:'#bbb', marginTop:4 }}>{k.sub}</div>
+          </div>
+        ))}
+      </div>
+      <OpsReports />
+    </div>
+  );
+}
+
+function CEOAlerts() {
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Alerts & Action Items</h2>
+      <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+        {[
+          { level:'critical', icon:'🚨', title:'VAN-07 — Overheating Issue (Active Route)', body:'Carlos Reyes pulled over on US-17 with overheating warning. Dispatch has been notified. Alternative van needed.', action:'Contact Dispatch' },
+          { level:'warning',  icon:'⚠️', title:'Lena Muller — At-Risk Score: 62/100', body:'Second consecutive week below 65. Coaching session must be scheduled within 48 hours per Amazon policy.', action:'Schedule Coaching' },
+          { level:'info',     icon:'📋', title:'Monthly Report Due Friday May 30', body:'Submit the monthly operations summary to Amazon regional manager by end of day Friday.', action:'View Report' },
+          { level:'info',     icon:'👥', title:'3 Open Driver Positions', body:'Headcount approved for 63 drivers. 3 positions still open — referrals from existing team recommended.', action:'View Hiring' },
+        ].map((a,i)=>{
+          const col = {critical:'#dc2626',warning:'#d97706',info:'#2563eb'}[a.level];
+          return (
+            <div key={i} style={{ background:'#fff', borderRadius:14, padding:'20px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${col}`, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16 }}>
+              <div>
+                <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
+                  <span style={{ fontSize:16 }}>{a.icon}</span>
+                  <span style={{ fontSize:10, fontWeight:700, color:col, background:`${col}18`, padding:'2px 8px', borderRadius:999, textTransform:'uppercase' }}>{a.level}</span>
+                </div>
+                <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, marginBottom:6 }}>{a.title}</div>
+                <p style={{ fontSize:13, color:'#555', lineHeight:1.6, margin:0 }}>{a.body}</p>
+              </div>
+              <button style={{ padding:'8px 16px', background: a.level==='critical' ? '#dc2626' : 'var(--brand-accent)', color:'#fff', borderRadius:8, fontSize:12, fontWeight:700, flexShrink:0, whiteSpace:'nowrap' }}>{a.action}</button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── Portal root ──────────────────────────────────────────────
 function PortalPage({ user, setUser }) {
+  const logout = () => setUser(null);
   if (!user) return <LoginPage onLogin={setUser} />;
-  if (user.role === 'manager') return <ManagerPortal user={user} onLogout={() => setUser(null)} />;
-  return <DriverPortal user={user} onLogout={() => setUser(null)} />;
+  switch(user.role) {
+    case 'driver':               return <DriverPortal              user={user} onLogout={logout} />;
+    case 'trainer':              return <TrainerPortal             user={user} onLogout={logout} />;
+    case 'dispatch':             return <DispatchPortal            user={user} onLogout={logout} />;
+    case 'supervisor-assistant': return <SupervisorAssistantPortal user={user} onLogout={logout} />;
+    case 'supervisor':           return <SupervisorPortal          user={user} onLogout={logout} />;
+    case 'ops-manager':          return <OpsManagerPortal          user={user} onLogout={logout} />;
+    case 'ceo':                  return <CEOPortal                 user={user} onLogout={logout} />;
+    case 'manager':              return <ManagerPortal             user={user} onLogout={logout} />;
+    default:                     return <DriverPortal              user={user} onLogout={logout} />;
+  }
 }
 
 Object.assign(window, { PortalPage });

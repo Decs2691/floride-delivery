@@ -4,6 +4,8 @@
    ============================================================ */
 
 const { useState: usePS, useEffect: usePE } = React;
+const isMob = () => typeof window !== 'undefined' && window.innerWidth < 640;
+const isTab = () => typeof window !== 'undefined' && window.innerWidth < 900;
 
 // ─── Demo credentials ─────────────────────────────────────────
 const DEMO_USERS = {
@@ -287,9 +289,9 @@ function PortalNav({ user, onLogout, active, setActive }) {
 
   return (
     <header style={{ position:'sticky', top:0, zIndex:40, background:'#fff', borderBottom:'1px solid rgba(26,26,46,0.08)', height:60, display:'flex', alignItems:'center', boxShadow:'0 1px 8px rgba(26,26,46,0.05)' }}>
-      <div style={{ maxWidth:1160, margin:'0 auto', width:'100%', padding:'0 28px', display:'flex', alignItems:'center', gap:8 }}>
+      <div style={{ maxWidth:1160, margin:'0 auto', width:'100%', padding: isMob() ? '0 12px' : '0 28px', display:'flex', alignItems:'center', gap:8 }}>
         <FloRideLogo size={22} />
-        <nav style={{ display:'flex', gap:2, marginLeft:28 }}>
+        <nav style={{ display:'flex', gap:2, marginLeft: isMob() ? 8 : 28, overflowX:'auto', WebkitOverflowScrolling:'touch', scrollbarWidth:'none', flexShrink:1 }}>
           {links.map(l => (
             <button key={l} onClick={() => setActive(l)} style={{
               padding:'7px 13px', fontSize:13, fontWeight:500, borderRadius:8,
@@ -349,7 +351,7 @@ function DriverHome({ user, setActive }) {
       </div>
 
       {/* KPI row */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Overall Score',       value:'87',     unit:'/ 100',      col:'#2563eb' },
           { label:'Tier This Week',      value:'Great',  unit:'keep it up', col:'#2563eb' },
@@ -372,7 +374,7 @@ function DriverHome({ user, setActive }) {
         const isNear = pct >= 80;
         const accent = isNear ? '#16a34a' : 'var(--brand-accent)';
         return (
-          <div style={{ background: isNear ? 'linear-gradient(135deg,#f0fdf4,#dcfce7)' : 'linear-gradient(135deg,#fff8f5,#fff0ea)', borderRadius:16, padding:'20px 24px', border:`1.5px solid ${isNear ? '#86efac' : 'rgba(255,107,53,0.25)'}`, marginBottom:24, display:'flex', alignItems:'center', gap:20 }}>
+          <div style={{ background: isNear ? 'linear-gradient(135deg,#f0fdf4,#dcfce7)' : 'linear-gradient(135deg,#fff8f5,#fff0ea)', borderRadius:16, padding:'20px 24px', border:`1.5px solid ${isNear ? '#86efac' : 'rgba(255,107,53,0.25)'}`, marginBottom:24, display:'flex', alignItems: isMob() ? 'flex-start' : 'center', flexDirection: isMob() ? 'column' : 'row', gap:20 }}>
             <div style={{ width:64, height:64, borderRadius:'50%', background:`conic-gradient(${accent} ${pct}%, rgba(26,26,46,0.07) 0)`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, position:'relative' }}>
               <div style={{ width:50, height:50, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <span style={{ fontSize:22 }}>{isNear ? '🔥' : '🛡️'}</span>
@@ -396,7 +398,7 @@ function DriverHome({ user, setActive }) {
         );
       })()}
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 1fr', gap:20, marginBottom:24 }}>
         {/* Scorecard preview */}
         <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:18 }}>
@@ -467,7 +469,7 @@ function DriverHome({ user, setActive }) {
           <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Training Library</h3>
           <button onClick={() => setActive('training')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>See all →</button>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14 }}>
+        <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14 }}>
           {VIDEOS.map(v => (
             <div key={v.id} style={{ background:'#fff', borderRadius:14, overflow:'hidden', border:'1px solid rgba(26,26,46,0.07)', cursor:'pointer', transition:'transform .15s,box-shadow .15s' }}
               onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(26,26,46,0.1)'; }}
@@ -497,7 +499,7 @@ function DriverScorecard() {
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>My Scorecard</h2>
       <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Week of {SCORECARD.week}</div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'320px 1fr', gap:20, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '320px 1fr', gap:20, marginBottom:24 }}>
         {/* Overall card */}
         <div style={{ background:'#fff', borderRadius:18, padding:28, border:'1px solid rgba(26,26,46,0.07)', textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:12 }}>
           <ScoreRing score={87} size={140} />
@@ -651,7 +653,7 @@ function ManagerOverview({ user, setActive }) {
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Active Drivers',    value:'60', sub:'on route today',   col:'#2563eb' },
           { label:'Avg Team Score',    value:'82', sub:'this week',        col:'#16a34a' },
@@ -666,14 +668,15 @@ function ManagerOverview({ user, setActive }) {
         ))}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 300px', gap:20 }}>
         {/* Team table */}
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Team Performance</h3>
             <button onClick={() => setActive('my-team')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
           </div>
-          <table style={{ width:'100%', borderCollapse:'collapse' }}>
+          <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse', minWidth: isMob() ? 480 : 'auto' }}>
             <thead>
               <tr style={{ background:'rgba(26,26,46,0.025)' }}>
                 {['Driver','ID','Score','Tier','Routes'].map(h => (
@@ -703,6 +706,7 @@ function ManagerOverview({ user, setActive }) {
               })}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Quick actions */}
@@ -949,7 +953,7 @@ function TrainerOverview({ user, setActive }) {
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Active Trainees',    value:'3',  sub:'in program',     col:'#2563eb' },
           { label:'Completed This Month',value:'1', sub:'graduated',      col:'#16a34a' },
@@ -963,7 +967,7 @@ function TrainerOverview({ user, setActive }) {
           </div>
         ))}
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 1fr', gap:20 }}>
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
             <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>My Trainees</h3>
@@ -1246,7 +1250,7 @@ function SAAttendance() {
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Attendance Today</h2>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap:16, marginBottom:24 }}>
         {[['On Time',counts.onTime,'#16a34a'],['Late',counts.late,'#d97706'],['Absent',counts.absent,'#dc2626']].map(([l,v,c])=>(
           <div key={l} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', marginBottom:6 }}>{l}</div>
@@ -1255,7 +1259,8 @@ function SAAttendance() {
         ))}
       </div>
       <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
-        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+        <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse', minWidth: isMob() ? 520 : 'auto' }}>
           <thead>
             <tr style={{ background:'rgba(26,26,46,0.025)' }}>
               {['Driver','ID','Check-in','Route','Status'].map(h=>(
@@ -1285,6 +1290,7 @@ function SAAttendance() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
@@ -1613,7 +1619,7 @@ function CEOExecutive({ user, setActive }) {
           </div>
         ))}
       </div>
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 340px', gap:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 340px', gap:20 }}>
         <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}>
           <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'0 0 20px' }}>Monthly Revenue Trend</h3>
           <div style={{ display:'flex', gap:8, alignItems:'flex-end', height:120 }}>
@@ -1753,7 +1759,7 @@ function DriverRecognition({ user }) {
         <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#f59e0b', marginBottom:16 }}>
           ⭐ Employee of the Month · {RECOGNITION.month}
         </div>
-        <div style={{ display:'flex', alignItems:'flex-start', gap:24, marginBottom:24 }}>
+        <div style={{ display:'flex', alignItems:'flex-start', flexDirection: isMob() ? 'column' : 'row', gap:24, marginBottom:24 }}>
           <div style={{ width:80, height:80, borderRadius:'50%', background:'linear-gradient(135deg,#f59e0b,#FF6B35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:30, fontWeight:800, color:'#fff', flexShrink:0 }}>
             {w.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
           </div>
@@ -1766,7 +1772,7 @@ function DriverRecognition({ user }) {
             </div>
           </div>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:24 }}>
+        <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : 'repeat(3,1fr)', gap:12, marginBottom:24 }}>
           {w.highlights.map(h => (
             <div key={h.label} style={{ background:'rgba(255,255,255,0.07)', borderRadius:12, padding:'14px 16px' }}>
               <div style={{ fontSize:11, color:'rgba(255,255,255,0.55)', marginBottom:4 }}>{h.label}</div>

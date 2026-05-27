@@ -316,6 +316,17 @@ function Navbar({ route, navigate }) {
           >
             {i('Contact', 'Contacto')}
           </button>
+          <button
+            onClick={() => navigate('portal')}
+            style={{
+              padding: '9px 16px', fontSize: 13, fontWeight: 600,
+              border: `1.5px solid ${onPaperRoute ? 'rgba(26,26,46,0.2)' : 'rgba(255,255,255,0.28)'}`,
+              borderRadius: 8, color: linkColor,
+              transition: 'all .15s',
+            }}
+          >
+            {i('Employee Login', 'Empleados')}
+          </button>
           <Btn onClick={() => navigate('apply')} variant="primary">{i('Apply Now', 'Aplicar Ahora')}</Btn>
         </div>
 

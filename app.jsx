@@ -12,6 +12,7 @@ function App() {
   const [route, setRoute] = useStateApp('home');
   const [lang, setLang] = useStateApp('en');
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [portalUser, setPortalUser] = useStateApp(null);
 
   // Apply tweaks to root vars
   useEffectApp(() => {
@@ -53,6 +54,15 @@ function App() {
   }, [route]);
 
   const navigate = (r) => setRoute(r);
+
+  // Portal renders standalone — no FloRide navbar/footer
+  if (route === 'portal') {
+    return (
+      <LangContext.Provider value={{ lang, setLang }}>
+        <PortalPage user={portalUser} setUser={(u) => { setPortalUser(u); if (!u) setRoute('home'); }} />
+      </LangContext.Provider>
+    );
+  }
 
   let Page;
   switch (route) {

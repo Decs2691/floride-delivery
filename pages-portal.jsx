@@ -83,6 +83,40 @@ const DEMO_USERS = {
   },
 };
 
+// ─── Infraction streaks per driver ───────────────────────────
+const INFRACTION_STREAKS = {
+  'DR-0045': { days: 47, lastInc: 'Apr 9',  milestone: 60  },
+  'DR-0032': { days: 112,lastInc: 'Feb 4',  milestone: 120 },
+  'DR-0018': { days: 8,  lastInc: 'May 18', milestone: 30  },
+  'DR-0061': { days: 63, lastInc: 'Mar 24', milestone: 90  },
+  'DR-0074': { days: 3,  lastInc: 'May 23', milestone: 30  },
+  'DR-0055': { days: 89, lastInc: 'Feb 26', milestone: 90  },
+};
+
+// ─── Recognition data ─────────────────────────────────────────
+const RECOGNITION = {
+  month: 'May 2026',
+  winner: {
+    id: 'DR-0032',
+    name: 'Maria Gonzalez',
+    score: 95,
+    tier: 'Fantastic',
+    routes: 22,
+    highlights: [
+      { label: 'Delivered & Received', value: '99/100' },
+      { label: 'Customer Feedback',    value: '98/100' },
+      { label: 'Safe Driving Score',   value: '97/100' },
+    ],
+    quote: 'Maria has been an absolute standout this month. She completed 22 routes with zero incidents, received 4 personal compliments from customers, and helped two new drivers during their first week on the road. Her consistency and attitude set the standard for the entire team.',
+    from: 'Yamila Ricardo · Operations Supervisor',
+  },
+  topWeek: [
+    { id:'DR-0055', name:'Antoine Dubois',    score:91, highlight:'Zero incidents · 5 routes completed', badge:'⭐' },
+    { id:'DR-0061', name:'James Thompson',     score:88, highlight:'Highest On-Time score · 5 routes',   badge:'⭐' },
+    { id:'DR-0045', name:'Daniel Cantor Soto', score:87, highlight:'47-day streak · Most improved this week', badge:'📈' },
+  ],
+};
+
 // ─── Sample data ──────────────────────────────────────────────
 const SCORECARD = {
   week: 'May 19 – 25, 2026',
@@ -231,7 +265,7 @@ function ScoreRing({ score, size = 100 }) {
 // ─── Portal Navbar ────────────────────────────────────────────
 function PortalNav({ user, onLogout, active, setActive }) {
   const roleLinks = {
-    'driver':               ['dashboard','scorecard','training','announcements'],
+    'driver':               ['dashboard','scorecard','training','announcements','recognition'],
     'trainer':              ['overview','trainees','schedule','materials'],
     'dispatch':             ['routes','drivers','incidents','messages'],
     'supervisor-assistant': ['attendance','requests','checklist'],
@@ -241,7 +275,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
     'manager':              ['overview','my-team','announcements','scorecards'],
   };
   const labels = {
-    dashboard:'Dashboard', scorecard:'My Scorecard', training:'Training', announcements:'Announcements',
+    dashboard:'Dashboard', scorecard:'My Scorecard', training:'Training', announcements:'Announcements', recognition:'Recognition Wall',
     overview:'Overview', 'my-team':'My Team', scorecards:'Scorecards',
     trainees:'My Trainees', schedule:'Schedule', materials:'Materials',
     routes:'Routes Today', drivers:'Drivers', incidents:'Incidents', messages:'Messages',
@@ -291,6 +325,7 @@ function DriverPortal({ user, onLogout }) {
         {active === 'scorecard'     && <DriverScorecard />}
         {active === 'training'      && <DriverTraining />}
         {active === 'announcements' && <DriverAnnouncements />}
+        {active === 'recognition'   && <DriverRecognition user={user} />}
       </main>
     </div>
   );
@@ -328,6 +363,38 @@ function DriverHome({ user, setActive }) {
           </div>
         ))}
       </div>
+
+
+      {/* Days Without Infractions */}
+      {(() => {
+        const s = INFRACTION_STREAKS[user.id] || { days: 0, milestone: 30, lastInc: '—' };
+        const pct = Math.min(100, Math.round((s.days / s.milestone) * 100));
+        const isNear = pct >= 80;
+        const accent = isNear ? '#16a34a' : 'var(--brand-accent)';
+        return (
+          <div style={{ background: isNear ? 'linear-gradient(135deg,#f0fdf4,#dcfce7)' : 'linear-gradient(135deg,#fff8f5,#fff0ea)', borderRadius:16, padding:'20px 24px', border:`1.5px solid ${isNear ? '#86efac' : 'rgba(255,107,53,0.25)'}`, marginBottom:24, display:'flex', alignItems:'center', gap:20 }}>
+            <div style={{ width:64, height:64, borderRadius:'50%', background:`conic-gradient(${accent} ${pct}%, rgba(26,26,46,0.07) 0)`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, position:'relative' }}>
+              <div style={{ width:50, height:50, borderRadius:'50%', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <span style={{ fontSize:22 }}>{isNear ? '🔥' : '🛡️'}</span>
+              </div>
+            </div>
+            <div style={{ flex:1 }}>
+              <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color: isNear ? '#15803d' : '#c2410c', marginBottom:4 }}>
+                {isNear ? '🎯 Almost at your milestone!' : '✅ Days Without Infractions'}
+              </div>
+              <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:8 }}>
+                <span style={{ fontFamily:'var(--font-display)', fontSize:36, fontWeight:800, color: accent, lineHeight:1 }}>{s.days}</span>
+                <span style={{ fontSize:14, color:'#888', fontWeight:500 }}>days streak</span>
+                <span style={{ fontSize:12, color:'#bbb' }}>· Last incident: {s.lastInc}</span>
+              </div>
+              <div style={{ background:'rgba(26,26,46,0.08)', borderRadius:999, height:8, overflow:'hidden' }}>
+                <div style={{ height:'100%', width:`${pct}%`, background: isNear ? '#22c55e' : 'var(--brand-accent)', borderRadius:999, transition:'width 0.6s' }} />
+              </div>
+              <div style={{ fontSize:11, color:'#999', marginTop:5 }}>Next milestone: <strong style={{ color: accent }}>{s.milestone} days</strong> · {s.milestone - s.days} to go</div>
+            </div>
+          </div>
+        );
+      })()}
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:24 }}>
         {/* Scorecard preview */}
@@ -378,6 +445,20 @@ function DriverHome({ user, setActive }) {
             </p>
           </div>
         </div>
+      </div>
+
+
+      {/* Recognition preview */}
+      <div style={{ marginTop:24, background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:16, padding:24, color:'#fff', display:'flex', alignItems:'center', gap:20 }}>
+        <div style={{ fontSize:42, flexShrink:0 }}>🏆</div>
+        <div style={{ flex:1 }}>
+          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>Employee of the Month · {RECOGNITION.month}</div>
+          <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, marginBottom:4 }}>{RECOGNITION.winner.name}</div>
+          <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} routes · {RECOGNITION.winner.tier} tier</div>
+        </div>
+        <button onClick={() => setActive('recognition')} style={{ padding:'10px 18px', background:'rgba(255,255,255,0.12)', border:'1.5px solid rgba(255,255,255,0.2)', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, flexShrink:0, cursor:'pointer' }}>
+          See Wall of Fame →
+        </button>
       </div>
 
       {/* Training library preview */}
@@ -1614,6 +1695,119 @@ function CEOAlerts() {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+
+// ─── Infraction Streak (standalone page) ─────────────────────
+function InfractionStreakPage({ user }) {
+  const all = Object.entries(INFRACTION_STREAKS).map(([id, s]) => {
+    const driver = DRIVER_LIST.find(d => d.id === id) || { name: id };
+    return { id, name: driver.name, ...s };
+  }).sort((a, b) => b.days - a.days);
+
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Safety Streaks</h2>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Days without incidents across the team</div>
+      <div style={{ display:'grid', gap:14 }}>
+        {all.map((s, i) => {
+          const pct = Math.min(100, Math.round((s.days / s.milestone) * 100));
+          const isYou = s.id === user.id;
+          const col = s.days >= s.milestone ? '#16a34a' : s.days >= s.milestone * 0.6 ? 'var(--brand-accent)' : '#f59e0b';
+          return (
+            <div key={s.id} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:`1.5px solid ${isYou ? 'var(--brand-accent)' : 'rgba(26,26,46,0.07)'}`, display:'flex', alignItems:'center', gap:16 }}>
+              <div style={{ fontSize:22, fontWeight:800, color:'#ddd', width:32, textAlign:'center' }}>{i+1}</div>
+              <Avatar name={s.name} size={42} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontWeight:700, fontSize:14, color:'var(--brand-ink)', marginBottom:6 }}>{s.name}{isYou ? ' (you)' : ''}</div>
+                <div style={{ background:'rgba(26,26,46,0.07)', borderRadius:999, height:8, overflow:'hidden' }}>
+                  <div style={{ height:'100%', width:`${pct}%`, background:col, borderRadius:999 }} />
+                </div>
+                <div style={{ fontSize:11, color:'#999', marginTop:4 }}>Next milestone: {s.milestone} days · Last incident: {s.lastInc}</div>
+              </div>
+              <div style={{ textAlign:'right', flexShrink:0 }}>
+                <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:col, lineHeight:1 }}>{s.days}</div>
+                <div style={{ fontSize:11, color:'#aaa' }}>days</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Recognition Wall ──────────────────────────────────────────
+function DriverRecognition({ user }) {
+  const w = RECOGNITION.winner;
+  return (
+    <div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Recognition Wall</h2>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Celebrating the drivers who set the standard · {RECOGNITION.month}</div>
+
+      {/* Employee of the Month */}
+      <div style={{ background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:20, padding:36, color:'#fff', marginBottom:28, position:'relative', overflow:'hidden' }}>
+        <div style={{ position:'absolute', top:-30, right:-30, fontSize:140, opacity:0.06, lineHeight:1 }}>🏆</div>
+        <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#f59e0b', marginBottom:16 }}>
+          ⭐ Employee of the Month · {RECOGNITION.month}
+        </div>
+        <div style={{ display:'flex', alignItems:'flex-start', gap:24, marginBottom:24 }}>
+          <div style={{ width:80, height:80, borderRadius:'50%', background:'linear-gradient(135deg,#f59e0b,#FF6B35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:30, fontWeight:800, color:'#fff', flexShrink:0 }}>
+            {w.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
+          </div>
+          <div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:30, fontWeight:800, marginBottom:4 }}>{w.name}</div>
+            <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+              <span style={{ background:'rgba(245,158,11,0.2)', color:'#f59e0b', padding:'3px 10px', borderRadius:999, fontSize:12, fontWeight:700 }}>Score {w.score}/100</span>
+              <span style={{ background:'rgba(255,255,255,0.1)', color:'#fff', padding:'3px 10px', borderRadius:999, fontSize:12, fontWeight:600 }}>{w.tier}</span>
+              <span style={{ background:'rgba(34,197,94,0.15)', color:'#4ade80', padding:'3px 10px', borderRadius:999, fontSize:12, fontWeight:600 }}>{w.routes} routes</span>
+            </div>
+          </div>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12, marginBottom:24 }}>
+          {w.highlights.map(h => (
+            <div key={h.label} style={{ background:'rgba(255,255,255,0.07)', borderRadius:12, padding:'14px 16px' }}>
+              <div style={{ fontSize:11, color:'rgba(255,255,255,0.55)', marginBottom:4 }}>{h.label}</div>
+              <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:'#f59e0b' }}>{h.value}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:'rgba(255,255,255,0.05)', borderRadius:12, padding:'18px 20px', borderLeft:'3px solid #f59e0b' }}>
+          <p style={{ fontSize:13, lineHeight:1.7, color:'rgba(255,255,255,0.85)', margin:0 }}>"{w.quote}"</p>
+          <div style={{ fontSize:12, color:'rgba(255,255,255,0.45)', marginTop:10 }}>— {w.from}</div>
+        </div>
+      </div>
+
+      {/* Top performers this week */}
+      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>⭐ Top Performers This Week</h3>
+      <div style={{ display:'grid', gap:14, marginBottom:28 }}>
+        {RECOGNITION.topWeek.map((d, i) => {
+          const medals = ['🥇','🥈','🥉'];
+          const isYou = d.id === user.id;
+          return (
+            <div key={d.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1.5px solid ${isYou ? 'var(--brand-accent)' : 'rgba(26,26,46,0.07)'}`, display:'flex', alignItems:'center', gap:16, boxShadow:'0 2px 8px rgba(26,26,46,0.04)' }}>
+              <div style={{ fontSize:32 }}>{medals[i]}</div>
+              <Avatar name={d.name} size={48} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, color:'var(--brand-ink)', marginBottom:4 }}>
+                  {d.name}{isYou ? <span style={{ fontSize:12, color:'var(--brand-accent)', marginLeft:8, fontFamily:'var(--font-body)' }}>← that's you!</span> : ''}
+                </div>
+                <div style={{ fontSize:13, color:'#666' }}>{d.highlight}</div>
+              </div>
+              <div style={{ textAlign:'right' }}>
+                <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color: i===0 ? '#f59e0b' : i===1 ? '#94a3b8' : '#a16207' }}>{d.score}</div>
+                <div style={{ fontSize:11, color:'#aaa' }}>score</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Streak leaderboard */}
+      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>🛡️ Infraction-Free Streaks</h3>
+      <InfractionStreakPage user={user} />
     </div>
   );
 }

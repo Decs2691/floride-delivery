@@ -7,10 +7,19 @@ const { useState: usePS, useEffect: usePE } = React;
 
 // ─── Demo credentials ─────────────────────────────────────────
 const DEMO_USERS = {
+  'emprender2691@gmail.com': {
+    password: 'floride2026',
+    role: 'driver',
+    name: 'Daniel Cantor Soto',
+    id: 'DR-0045',
+    route: 'Lake Nona / Hunter\'s Creek',
+    shiftTime: '9:50 AM',
+    station: 'DFL4 — Orlando',
+  },
   'driver@floride.com': {
     password: 'driver2026',
     role: 'driver',
-    name: 'Daniel Cantor',
+    name: 'Daniel Cantor Soto',
     id: 'DR-0045',
     route: 'Lake Nona / Hunter\'s Creek',
     shiftTime: '9:50 AM',
@@ -59,7 +68,7 @@ const VIDEOS = [
 ];
 
 const DRIVER_LIST = [
-  { id: 'DR-0045', name: 'Daniel Cantor',   score: 87, tier: 'Great',      routes: 5 },
+  { id: 'DR-0045', name: 'Daniel Cantor Soto', score: 87, tier: 'Great',    routes: 5 },
   { id: 'DR-0032', name: 'Maria Gonzalez',  score: 95, tier: 'Fantastic',  routes: 5 },
   { id: 'DR-0018', name: 'Carlos Reyes',    score: 71, tier: 'Fair',       routes: 4 },
   { id: 'DR-0061', name: 'James Thompson',  score: 88, tier: 'Great',      routes: 5 },
@@ -687,15 +696,7 @@ function LoginPage({ onLogin }) {
             </button>
           </form>
 
-          <div style={{ marginTop:28, padding:'16px 18px', background:'#fff', borderRadius:12, border:'1px solid rgba(26,26,46,0.08)' }}>
-            <div style={{ fontSize:11, color:'#bbb', fontWeight:600, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:8 }}>Demo credentials</div>
-            <div style={{ fontSize:12, color:'#666', display:'grid', gap:5 }}>
-              <div>🚐 <strong>Driver:</strong> driver@floride.com / driver2026</div>
-              <div>👤 <strong>Manager:</strong> manager@floride.com / manager2026</div>
-            </div>
-          </div>
-
-          <p style={{ textAlign:'center', fontSize:12, color:'#bbb', marginTop:22 }}>
+          <p style={{ textAlign:'center', fontSize:12, color:'#bbb', marginTop:28 }}>
             Need access? Contact <span style={{ color:'var(--brand-accent)' }}>support@floridedelivery.com</span>
           </p>
         </div>

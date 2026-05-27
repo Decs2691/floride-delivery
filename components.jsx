@@ -433,6 +433,9 @@ function MobileDrawer({ open, close, items, route, navigate }) {
         <button className="fr-btn fr-btn--ghost on-dark" onClick={() => { navigate('contact'); close(); }} style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.22)', justifyContent: 'center' }}>
           {i('Contact us', 'Contáctanos')}
         </button>
+        <button onClick={() => { navigate('portal'); close(); }} style={{ justifyContent:'center', padding:'12px 16px', fontSize:13, fontWeight:700, border:'1.5px solid rgba(255,255,255,0.22)', borderRadius:10, color:'rgba(255,255,255,0.85)', background:'transparent', display:'flex', alignItems:'center', gap:8 }}>
+          🔐 {i('Employee Login', 'Portal Empleados')}
+        </button>
       </div>
     </div>
   );

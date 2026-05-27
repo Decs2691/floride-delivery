@@ -434,7 +434,7 @@ function MobileDrawer({ open, close, items, route, navigate }) {
           {i('Contact us', 'Contáctanos')}
         </button>
         <button onClick={() => { navigate('portal'); close(); }} style={{ justifyContent:'center', padding:'12px 16px', fontSize:13, fontWeight:700, border:'1.5px solid rgba(255,255,255,0.22)', borderRadius:10, color:'rgba(255,255,255,0.85)', background:'transparent', display:'flex', alignItems:'center', gap:8 }}>
-          🔐 {i('Employee Login', 'Portal Empleados')}
+          🔐 Log In
         </button>
       </div>
     </div>

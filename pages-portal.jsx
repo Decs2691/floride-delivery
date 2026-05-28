@@ -102,7 +102,7 @@ const RECOGNITION = {
     id: 'DR-0032',
     name: 'Maria Gonzalez',
     score: 95,
-    tier: 'Fantastic',
+    tier: 'Platinum',
     routes: 22,
     highlights: [
       { label: 'Delivered & Received', value: '99/100' },
@@ -152,13 +152,18 @@ const VIDEOS = [
 ];
 
 const DRIVER_LIST = [
-  { id: 'DR-0045', name: 'Daniel Cantor Soto', score: 87, tier: 'Great',    routes: 5 },
-  { id: 'DR-0032', name: 'Maria Gonzalez',  score: 95, tier: 'Fantastic',  routes: 5 },
-  { id: 'DR-0018', name: 'Carlos Reyes',    score: 71, tier: 'Fair',       routes: 4 },
-  { id: 'DR-0061', name: 'James Thompson',  score: 88, tier: 'Great',      routes: 5 },
-  { id: 'DR-0074', name: 'Lena Muller',     score: 62, tier: 'At Risk',    routes: 3 },
-  { id: 'DR-0055', name: 'Antoine Dubois',  score: 91, tier: 'Fantastic',  routes: 5 },
+  { id: 'DR-0045', name: 'Daniel Cantor Soto', score: 87, tier: 'Gold',     routes: 5, tierHistory: ['Silver','Gold','Gold']     },
+  { id: 'DR-0032', name: 'Maria Gonzalez',     score: 95, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Platinum','Platinum'] },
+  { id: 'DR-0018', name: 'Carlos Reyes',       score: 71, tier: 'Silver',   routes: 4, tierHistory: ['Gold','Bronze','Silver']    },
+  { id: 'DR-0061', name: 'James Thompson',     score: 88, tier: 'Gold',     routes: 5, tierHistory: ['Gold','Gold','Gold']        },
+  { id: 'DR-0074', name: 'Lena Muller',        score: 62, tier: 'Bronze',   routes: 3, tierHistory: ['Bronze','Bronze','Bronze']  },
+  { id: 'DR-0055', name: 'Antoine Dubois',     score: 91, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Gold','Platinum']    },
 ];
+
+// Drivers with 3 consecutive Bronze weeks → need intervention
+const BRONZE_ALERTS = DRIVER_LIST.filter(d =>
+  d.tierHistory && d.tierHistory.length === 3 && d.tierHistory.every(t => t === 'Bronze')
+);
 
 // ─── Role-specific sample data ───────────────────────────────
 const TRAINEES = [
@@ -233,14 +238,23 @@ const FLEET = [
 
 // ─── Helpers ──────────────────────────────────────────────────
 function scoreColor(s) {
-  if (s >= 90) return { bg: 'rgba(34,197,94,0.1)',   text: '#16a34a', border: 'rgba(34,197,94,0.25)' };
-  if (s >= 80) return { bg: 'rgba(59,158,255,0.1)',  text: '#2563eb', border: 'rgba(59,158,255,0.25)' };
-  if (s >= 70) return { bg: 'rgba(251,191,36,0.1)',  text: '#d97706', border: 'rgba(251,191,36,0.25)' };
-  return           { bg: 'rgba(239,68,68,0.1)',    text: '#dc2626', border: 'rgba(239,68,68,0.25)' };
+  if (s >= 90) return { bg: 'rgba(139,92,246,0.1)',  text: '#7c3aed', border: 'rgba(139,92,246,0.25)' }; // Platinum
+  if (s >= 80) return { bg: 'rgba(234,179,8,0.12)',  text: '#b45309', border: 'rgba(234,179,8,0.3)'   }; // Gold
+  if (s >= 70) return { bg: 'rgba(148,163,184,0.15)',text: '#475569', border: 'rgba(148,163,184,0.3)' }; // Silver
+  return           { bg: 'rgba(180,83,9,0.12)',   text: '#9a3412', border: 'rgba(180,83,9,0.3)'   }; // Bronze
 }
 
 function tierColor(t) {
-  return ({ Fantastic:'#16a34a', Great:'#2563eb', Fair:'#d97706', 'At Risk':'#dc2626' })[t] || '#666';
+  return ({ Platinum:'#7c3aed', Gold:'#b45309', Silver:'#475569', Bronze:'#9a3412',
+            Fantastic:'#16a34a', Great:'#2563eb', Fair:'#d97706', 'At Risk':'#dc2626' })[t] || '#666';
+}
+
+function tierBg(t) {
+  return ({ Platinum:'rgba(139,92,246,0.1)', Gold:'rgba(234,179,8,0.12)', Silver:'rgba(148,163,184,0.15)', Bronze:'rgba(180,83,9,0.12)' })[t] || 'rgba(26,26,46,0.06)';
+}
+
+function tierIcon(t) {
+  return ({ Platinum:'🏆', Gold:'🥇', Silver:'🥈', Bronze:'🥉' })[t] || '—';
 }
 
 // ─── Score Ring ───────────────────────────────────────────────
@@ -354,7 +368,7 @@ function DriverHome({ user, setActive }) {
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Overall Score',       value:'87',     unit:'/ 100',      col:'#2563eb' },
-          { label:'Tier This Week',      value:'Great',  unit:'keep it up', col:'#2563eb' },
+          { label:'Tier This Week',      value:'Gold 🥇', unit:'keep it up', col:'#b45309' },
           { label:'Routes This Month',   value:'22',     unit:'completed',  col:'#16a34a' },
           { label:'Unread Announcements',value:'1',      unit:'new',        col:'#FF6B35' },
         ].map(k => (
@@ -504,7 +518,7 @@ function DriverScorecard() {
         <div style={{ background:'#fff', borderRadius:18, padding:28, border:'1px solid rgba(26,26,46,0.07)', textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:12 }}>
           <ScoreRing score={87} size={140} />
           <div>
-            <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, color:'var(--brand-ink)' }}>Great</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, color:'#b45309' }}>🥇 Gold</div>
             <div style={{ fontSize:13, color:'#999' }}>Your tier this week</div>
           </div>
           {/* History bars */}
@@ -653,6 +667,8 @@ function ManagerOverview({ user, setActive }) {
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
 
+      <BronzeAlertBanner onViewDriver={() => setActive('my-team')} />
+
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Active Drivers',    value:'60', sub:'on route today',   col:'#2563eb' },
@@ -699,7 +715,12 @@ function ManagerOverview({ user, setActive }) {
                     <td style={{ padding:'12px 20px' }}>
                       <span style={{ fontSize:13, fontWeight:700, color:c.text, background:c.bg, padding:'2px 9px', borderRadius:999 }}>{d.score}</span>
                     </td>
-                    <td style={{ padding:'12px 20px', fontSize:13, fontWeight:600, color:tierColor(d.tier) }}>{d.tier}</td>
+                    <td style={{ padding:'12px 20px' }}>
+                      <span style={{ display:'inline-flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:tierColor(d.tier), background:tierBg(d.tier), padding:'3px 9px', borderRadius:999 }}>
+                        {tierIcon(d.tier)} {d.tier}
+                        {d.tierHistory && d.tierHistory.every(t=>t==='Bronze') && <span title="3 weeks Bronze">🚨</span>}
+                      </span>
+                    </td>
                     <td style={{ padding:'12px 20px', fontSize:13, color:'#666' }}>{d.routes}</td>
                   </tr>
                 );
@@ -1814,6 +1835,38 @@ function DriverRecognition({ user }) {
       {/* Streak leaderboard */}
       <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>🛡️ Infraction-Free Streaks</h3>
       <InfractionStreakPage user={user} />
+    </div>
+  );
+}
+
+
+// ─── Bronze Alert Banner ───────────────────────────────────────
+function BronzeAlertBanner({ onViewDriver }) {
+  if (!BRONZE_ALERTS.length) return null;
+  return (
+    <div style={{ background:'linear-gradient(135deg,#7f1d1d,#991b1b)', borderRadius:14, padding:'18px 22px', marginBottom:20, border:'1.5px solid #dc2626', display:'flex', alignItems:'center', gap:16 }}>
+      <div style={{ fontSize:28, flexShrink:0 }}>🚨</div>
+      <div style={{ flex:1 }}>
+        <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#fca5a5', marginBottom:6 }}>
+          Bronze Alert — Immediate Coaching Required
+        </div>
+        <div style={{ fontSize:13, color:'#fff', lineHeight:1.6 }}>
+          {BRONZE_ALERTS.map(d => (
+            <span key={d.id} style={{ marginRight:16, display:'inline-flex', alignItems:'center', gap:6 }}>
+              <span style={{ fontWeight:700 }}>{d.name}</span>
+              <span style={{ fontSize:11, background:'rgba(255,255,255,0.15)', padding:'2px 8px', borderRadius:999, color:'#fecaca' }}>
+                3 weeks Bronze · Score {d.score}
+              </span>
+            </span>
+          ))}
+        </div>
+        <div style={{ fontSize:12, color:'rgba(255,255,255,0.6)', marginTop:6 }}>
+          This driver has been in Bronze tier for 3 consecutive weeks. A formal coaching session must be scheduled this week.
+        </div>
+      </div>
+      <button onClick={onViewDriver} style={{ padding:'10px 16px', background:'#dc2626', border:'none', borderRadius:10, color:'#fff', fontSize:12, fontWeight:700, flexShrink:0, cursor:'pointer', whiteSpace:'nowrap' }}>
+        Schedule Coaching →
+      </button>
     </div>
   );
 }

@@ -258,6 +258,37 @@ const REQUESTS = [
   { id:'REQ-016', driver:'Luis Fernandez', type:'Question',         msg:'Where do I pick up my van scanner before the route?', time:'7:45 AM', urgent:false },
 ];
 
+
+const SHIFT_NOTES = [
+  {
+    id: 1,
+    author: 'Yamila Ricardo',
+    role: 'Operations Supervisor',
+    shift: 'AM',
+    date: 'May 26, 2026 · 5:45 PM',
+    tags: ['incident','attendance'],
+    body: 'RT-005 (Carlos Reyes) had a van overheating issue on US-17 around 10:14 AM. Driver pulled over safely. Van #FL-012 is out of service pending inspection. Route was not completed — 72 stops remaining. Luis Fernandez was absent today with no notice. Contacted him at 9:30 AM, claims he forgot. This is his second no-show this month. Recommend formal warning next week if it repeats.',
+  },
+  {
+    id: 2,
+    author: 'Yamila Ricardo',
+    role: 'Operations Supervisor',
+    shift: 'AM',
+    date: 'May 25, 2026 · 6:02 PM',
+    tags: ['general','recognition'],
+    body: 'Strong day overall. Maria Gonzalez completed her route 40 min early and helped James Thompson with a tricky delivery on Winter Park. Antoine Dubois hit 100 stops before lunch — personal record. No major incidents. Scorecard week closes tomorrow — remind drivers to check their scores Monday morning.',
+  },
+  {
+    id: 3,
+    author: 'Logan Martinez',
+    role: 'Station Manager',
+    shift: 'PM',
+    date: 'May 24, 2026 · 8:10 PM',
+    tags: ['general'],
+    body: 'PM wave ran smooth. All 8 routes returned by 7:30 PM. Van inspections for Monday are confirmed: FL-007 at 8 AM, FL-012 at 9 AM, FL-018 at 10 AM. Remind Lena Muller she needs to attend the coaching session with Yamila on Tuesday — this is mandatory given her Bronze streak.',
+  },
+];
+
 const CHECKLIST = [
   { id:1, task:'Confirm all 60 drivers have checked in', done:true },
   { id:2, task:'Send shift reminders for PM wave (2:00 PM)', done:false },
@@ -401,9 +432,9 @@ function PortalNav({ user, onLogout, active, setActive }) {
     'trainer':              ['overview','trainees','schedule','materials'],
     'dispatch':             ['routes','drivers','incidents','messages'],
     'supervisor-assistant': ['attendance','requests','checklist'],
-    'supervisor':           ['overview','team','coaching','incidents'],
-    'ops-manager':          ['overview','teams','fleet','reports'],
-    'ceo':                  ['executive','financials','team','alerts'],
+    'supervisor':           ['overview','team','coaching','incidents','notes'],
+    'ops-manager':          ['overview','teams','fleet','reports','notes'],
+    'ceo':                  ['executive','financials','team','alerts','notes'],
     'manager':              ['overview','my-team','announcements','scorecards'],
   };
   const labels = {
@@ -431,6 +462,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
     fleet:         i('Fleet','Flota'),
     reports:       i('Reports','Reportes'),
     executive:     i('Executive','Ejecutivo'),
+    notes:         i('Shift Notes','Notas de turno'),
     financials:    i('Financials','Finanzas'),
     alerts:        i('Alerts','Alertas'),
   };
@@ -1534,6 +1566,7 @@ function SupervisorPortal({ user, onLogout }) {
         {active === 'team'      && <ManagerTeam />}
         {active === 'coaching'  && <SupervisorCoaching />}
         {active === 'incidents' && <DispatchIncidents />}
+        {active === 'notes'     && <ShiftNotes user={user} />}
       </main>
     </div>
   );
@@ -1591,6 +1624,7 @@ function OpsManagerPortal({ user, onLogout }) {
         {active === 'teams'    && <OpsTeams />}
         {active === 'fleet'    && <OpsFleet />}
         {active === 'reports'  && <OpsReports />}
+        {active === 'notes'    && <ShiftNotes user={user} />}
       </main>
     </div>
   );
@@ -1761,6 +1795,7 @@ function CEOPortal({ user, onLogout }) {
         {active === 'financials' && <CEOFinancials />}
         {active === 'team'       && <ManagerTeam />}
         {active === 'alerts'     && <CEOAlerts />}
+        {active === 'notes'      && <ShiftNotes user={user} />}
       </main>
     </div>
   );
@@ -1989,6 +2024,125 @@ function DriverRecognition({ user }) {
   );
 }
 
+
+
+// ─── Shift Notes / Handoff ─────────────────────────────────────
+function ShiftNotes({ user }) {
+  const i = useT();
+  const canWrite = ['supervisor','ops-manager','manager','ceo'].includes(user.role);
+  const [notes, setNotes] = usePS(SHIFT_NOTES);
+  const [text, setText] = usePS('');
+  const [shift, setShift] = usePS('AM');
+  const [tag, setTag] = usePS('general');
+  const [submitted, setSubmitted] = usePS(false);
+
+  const tagColors = {
+    general:    { bg:'rgba(59,130,246,0.1)',  text:'#2563eb'  },
+    incident:   { bg:'rgba(239,68,68,0.1)',   text:'#dc2626'  },
+    attendance: { bg:'rgba(245,158,11,0.1)',  text:'#d97706'  },
+    recognition:{ bg:'rgba(34,197,94,0.1)',   text:'#16a34a'  },
+  };
+  const tagLabels = {
+    general: i('General','General'), incident: i('Incident','Incidente'),
+    attendance: i('Attendance','Asistencia'), recognition: i('Recognition','Reconocimiento'),
+  };
+
+  const submit = () => {
+    if (!text.trim()) return;
+    const newNote = {
+      id: Date.now(),
+      author: user.name,
+      role: user.title || user.role,
+      shift,
+      date: `May 28, 2026 · ${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`,
+      tags: [tag],
+      body: text.trim(),
+    };
+    setNotes(n => [newNote, ...n]);
+    setText('');
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 3000);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom:28 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Shift Notes','Notas de turno')}</h2>
+        <div style={{ fontSize:13, color:'#999' }}>{i('Internal handoff log — visible to supervisors and above','Bitácora interna — visible para supervisores y operaciones')}</div>
+      </div>
+
+      {/* Compose box — only for roles that can write */}
+      {canWrite && (
+        <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)', marginBottom:28, boxShadow:'0 2px 8px rgba(26,26,46,0.04)' }}>
+          <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-ink)', marginBottom:16 }}>
+            ✍️ {i('Add shift note','Agregar nota de turno')}
+          </div>
+          <div style={{ display:'flex', gap:10, marginBottom:12 }}>
+            <div>
+              <div style={{ fontSize:11, color:'#aaa', marginBottom:4, fontWeight:600 }}>{i('Shift','Turno')}</div>
+              <div style={{ display:'flex', gap:6 }}>
+                {['AM','PM'].map(s => (
+                  <button key={s} onClick={() => setShift(s)} style={{ padding:'6px 14px', borderRadius:8, fontSize:12, fontWeight:700, background: shift===s ? 'var(--brand-ink)' : 'rgba(26,26,46,0.06)', color: shift===s ? '#fff' : '#888', border:'1px solid rgba(26,26,46,0.1)', cursor:'pointer' }}>{s}</button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize:11, color:'#aaa', marginBottom:4, fontWeight:600 }}>{i('Tag','Etiqueta')}</div>
+              <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
+                {Object.keys(tagColors).map(t => (
+                  <button key={t} onClick={() => setTag(t)} style={{ padding:'6px 12px', borderRadius:8, fontSize:11, fontWeight:700, background: tag===t ? tagColors[t].text : tagColors[t].bg, color: tag===t ? '#fff' : tagColors[t].text, border:`1px solid ${tagColors[t].text}30`, cursor:'pointer' }}>
+                    {tagLabels[t]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
+            placeholder={i('Write your shift summary here — incidents, attendance issues, highlights, handoff instructions...','Escribe el resumen de tu turno — incidentes, asistencia, reconocimientos, instrucciones...')}
+            style={{ width:'100%', minHeight:110, borderRadius:10, border:'1.5px solid rgba(26,26,46,0.12)', padding:'12px 14px', fontSize:13, color:'var(--brand-ink)', resize:'vertical', fontFamily:'var(--font-body)', lineHeight:1.6, outline:'none', boxSizing:'border-box' }}
+          />
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:12 }}>
+            <div style={{ fontSize:12, color:'#bbb' }}>{text.length} {i('characters','caracteres')}</div>
+            <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+              {submitted && <span style={{ fontSize:12, color:'#16a34a', fontWeight:600 }}>✓ {i('Note saved','Nota guardada')}</span>}
+              <button onClick={submit} disabled={!text.trim()} style={{ padding:'9px 20px', background: text.trim() ? 'var(--brand-ink)' : 'rgba(26,26,46,0.15)', color:'#fff', borderRadius:10, fontSize:13, fontWeight:700, cursor: text.trim() ? 'pointer' : 'default', transition:'background .15s' }}>
+                {i('Submit note','Enviar nota')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notes feed */}
+      <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
+        {notes.map(n => (
+          <div key={n.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', boxShadow:'0 1px 4px rgba(26,26,46,0.04)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:14, flexWrap:'wrap', gap:8 }}>
+              <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+                <Avatar name={n.author} size={36} />
+                <div>
+                  <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-ink)' }}>{n.author}</div>
+                  <div style={{ fontSize:11, color:'#aaa' }}>{n.role} · {n.shift} {i('Shift','turno')}</div>
+                </div>
+              </div>
+              <div style={{ display:'flex', gap:6, alignItems:'center', flexWrap:'wrap' }}>
+                {n.tags.map(t => (
+                  <span key={t} style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background: tagColors[t]?.bg || 'rgba(26,26,46,0.06)', color: tagColors[t]?.text || '#666' }}>
+                    {tagLabels[t] || t}
+                  </span>
+                ))}
+                <span style={{ fontSize:11, color:'#bbb' }}>{n.date}</span>
+              </div>
+            </div>
+            <p style={{ fontSize:13, color:'#444', lineHeight:1.75, margin:0 }}>{n.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // ─── Bronze Alert Banner ───────────────────────────────────────
 function BronzeAlertBanner({ onViewDriver }) {

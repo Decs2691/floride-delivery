@@ -591,19 +591,88 @@ function Photo({ label, h = 300, light = false, style = {} }) {
 }
 
 /* ---------- Avatar placeholder ---------- */
-function Avatar({ name, size = 48 }) {
+function Avatar({ name, size = 48, userId, editable = false, onPhotoChange }) {
   const initials = name.split(' ').map((n) => n[0]).slice(0,2).join('');
   const palette = ['#FF6B35', '#2d2d52', '#1A1A2E', '#e8541d'];
   const idx = (name.charCodeAt(0) + name.length) % palette.length;
+
+  const stored = userId ? localStorage.getItem('floride-photo-' + userId) : null;
+  const [photo, setPhoto] = React.useState(stored);
+
+  // Listen for photo changes from other components
+  React.useEffect(() => {
+    if (!userId) return;
+    const handler = (e) => {
+      if (e.key === 'floride-photo-' + userId) setPhoto(e.newValue);
+    };
+    window.addEventListener('storage', handler);
+    // Also poll localStorage for same-tab updates
+    const interval = setInterval(() => {
+      const p = localStorage.getItem('floride-photo-' + userId);
+      setPhoto(prev => (p !== prev ? p : prev));
+    }, 800);
+    return () => { window.removeEventListener('storage', handler); clearInterval(interval); };
+  }, [userId]);
+
+  const handleUpload = () => {
+    if (!editable) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const dataUrl = ev.target.result;
+        localStorage.setItem('floride-photo-' + userId, dataUrl);
+        setPhoto(dataUrl);
+        if (onPhotoChange) onPhotoChange(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    };
+    input.click();
+  };
+
+  const base = {
+    width: size, height: size, borderRadius: '50%', flexShrink: 0,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    position: 'relative', overflow: 'hidden',
+    cursor: editable ? 'pointer' : 'default',
+  };
+
+  if (photo) {
+    return (
+      <div style={base} onClick={handleUpload} title={editable ? 'Click to change photo' : undefined}>
+        <img src={photo} alt={name} style={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:'50%' }} />
+        {editable && (
+          <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0)', display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'50%', transition:'background .2s' }}
+            onMouseEnter={e => e.currentTarget.style.background='rgba(0,0,0,0.35)'}
+            onMouseLeave={e => e.currentTarget.style.background='rgba(0,0,0,0)'}
+          >
+            <span style={{ fontSize: size * 0.28, opacity:0 }}
+              onMouseEnter={e => e.currentTarget.style.opacity='1'}
+              onMouseLeave={e => e.currentTarget.style.opacity='0'}
+            >📷</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <div style={{
-      width: size, height: size, borderRadius: '50%',
-      background: palette[idx], color: '#fff',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'var(--font-display)', fontWeight: 700,
-      fontSize: size * 0.36,
-      flexShrink: 0,
-    }}>{initials}</div>
+    <div style={{ ...base, background: palette[idx], color: '#fff', fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: size * 0.36 }}
+      onClick={handleUpload}
+      title={editable ? 'Click to upload photo' : undefined}
+    >
+      {initials}
+      {editable && (
+        <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0)', display:'flex', alignItems:'center', justifyContent:'center', borderRadius:'50%', fontSize: size * 0.3, transition:'background .2s' }}
+          onMouseEnter={e => { e.currentTarget.style.background='rgba(0,0,0,0.4)'; e.currentTarget.innerText='📷'; }}
+          onMouseLeave={e => { e.currentTarget.style.background='rgba(0,0,0,0)'; e.currentTarget.innerText=''; }}
+        />
+      )}
+    </div>
   );
 }
 

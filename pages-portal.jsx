@@ -429,9 +429,9 @@ function PortalNav({ user, onLogout, active, setActive }) {
   const i = useT();
   const roleLinks = {
     'driver':               ['dashboard','scorecard','training','announcements','recognition'],
-    'trainer':              ['overview','trainees','schedule','materials'],
-    'dispatch':             ['routes','drivers','incidents','messages'],
-    'supervisor-assistant': ['attendance','requests','checklist'],
+    'trainer':              ['overview','trainees','schedule','materials','notes'],
+    'dispatch':             ['routes','drivers','incidents','messages','notes'],
+    'supervisor-assistant': ['attendance','requests','checklist','notes'],
     'supervisor':           ['overview','team','coaching','incidents','notes'],
     'ops-manager':          ['overview','teams','fleet','reports','notes'],
     'ceo':                  ['executive','financials','team','alerts','notes'],
@@ -488,7 +488,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
             <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)', lineHeight:1.2 }}>{user.name}</div>
             <div style={{ fontSize:11, color:'#aaa' }}>{user.id}</div>
           </div>
-          <Avatar name={user.name} size={36} />
+          <Avatar name={user.name} size={36} userId={user.id} editable={true} />
           <div style={{ display:'flex', background:'rgba(26,26,46,0.05)', borderRadius:8, overflow:'hidden', border:'1px solid rgba(26,26,46,0.1)' }}>
             {['en','es'].map(l => (
               <button key={l} onClick={() => setLang(l)} style={{ padding:'5px 10px', fontSize:11, fontWeight:700, background: lang===l ? 'var(--brand-accent)' : 'transparent', color: lang===l ? '#fff' : '#888', transition:'all .15s', textTransform:'uppercase', letterSpacing:'0.05em' }}>
@@ -527,7 +527,12 @@ function DriverHome({ user, setActive }) {
   return (
     <div>
       {/* Welcome */}
-      <div style={{ marginBottom:28 }}>
+      <div style={{ marginBottom:28, display:'flex', alignItems:'center', gap:18 }}>
+        <div style={{ position:'relative', flexShrink:0 }}>
+          <Avatar name={user.name} size={64} userId={user.id} editable={true} />
+          <div style={{ position:'absolute', bottom:0, right:0, width:20, height:20, borderRadius:'50%', background:'var(--brand-accent)', border:'2px solid #fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, cursor:'pointer' }} title="Click avatar to change photo">📷</div>
+        </div>
+        <div>
         <div style={{ fontSize:13, color:'#999', fontWeight:500 }}>Monday, May 26, 2026</div>
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 8px' }}>
           {i('Good morning','Buenos días')}, {user.name.split(' ')[0]}
@@ -537,6 +542,7 @@ function DriverHome({ user, setActive }) {
           <span style={{ color:'#666' }}>{i('Route','Ruta')}: <strong>{user.route}</strong></span>
           <span style={{ color:'#ccc' }}>·</span>
           <span style={{ color:'#666' }}>{i('Shift at','Turno a las')}: <strong>{user.shiftTime}</strong></span>
+        </div>
         </div>
       </div>
 
@@ -885,7 +891,7 @@ function ManagerOverview({ user, setActive }) {
                   <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
                     <td style={{ padding:'12px 20px' }}>
                       <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                        <Avatar name={d.name} size={30} />
+                        <Avatar name={d.name} size={30} userId={d.id} editable={true} />
                         <span style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{d.name}</span>
                       </div>
                     </td>
@@ -1280,6 +1286,7 @@ function DispatchPortal({ user, onLogout }) {
         {active === 'drivers'   && <DispatchDrivers />}
         {active === 'incidents' && <DispatchIncidents />}
         {active === 'messages'  && <DispatchMessages />}
+        {active === 'notes'     && <ShiftNotes user={user} />}
       </main>
     </div>
   );
@@ -1437,6 +1444,7 @@ function SupervisorAssistantPortal({ user, onLogout }) {
         {active === 'attendance' && <SAAttendance />}
         {active === 'requests'   && <SARequests />}
         {active === 'checklist'  && <SAChecklist />}
+        {active === 'notes'      && <ShiftNotes user={user} />}
       </main>
     </div>
   );
@@ -1966,9 +1974,7 @@ function DriverRecognition({ user }) {
           ⭐ Employee of the Month · {RECOGNITION.month}
         </div>
         <div style={{ display:'flex', alignItems:'flex-start', flexDirection: isMob() ? 'column' : 'row', gap:24, marginBottom:24 }}>
-          <div style={{ width:80, height:80, borderRadius:'50%', background:'linear-gradient(135deg,#f59e0b,#FF6B35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:30, fontWeight:800, color:'#fff', flexShrink:0 }}>
-            {w.name.split(' ').map(n=>n[0]).join('').slice(0,2)}
-          </div>
+          <Avatar name={w.name} size={80} userId={w.id} />
           <div>
             <div style={{ fontFamily:'var(--font-display)', fontSize:30, fontWeight:800, marginBottom:4 }}>{w.name}</div>
             <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
@@ -2029,7 +2035,7 @@ function DriverRecognition({ user }) {
 // ─── Shift Notes / Handoff ─────────────────────────────────────
 function ShiftNotes({ user }) {
   const i = useT();
-  const canWrite = ['supervisor','ops-manager','manager','ceo'].includes(user.role);
+  const canWrite = ['supervisor','ops-manager','manager','ceo','trainer','dispatch','supervisor-assistant'].includes(user.role);
   const [notes, setNotes] = usePS(SHIFT_NOTES);
   const [text, setText] = usePS('');
   const [shift, setShift] = usePS('AM');

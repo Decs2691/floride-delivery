@@ -2038,7 +2038,7 @@ function ShiftNotes({ user }) {
   const canWrite = ['supervisor','ops-manager','manager','ceo','trainer','dispatch','supervisor-assistant'].includes(user.role);
   const [notes, setNotes] = usePS(SHIFT_NOTES);
   const [text, setText] = usePS('');
-  const [shift, setShift] = usePS('AM');
+
   const [tag, setTag] = usePS('general');
   const [submitted, setSubmitted] = usePS(false);
 
@@ -2059,7 +2059,6 @@ function ShiftNotes({ user }) {
       id: Date.now(),
       author: user.name,
       role: user.title || user.role,
-      shift,
       date: `May 28, 2026 · ${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`,
       tags: [tag],
       body: text.trim(),
@@ -2084,14 +2083,6 @@ function ShiftNotes({ user }) {
             ✍️ {i('Add shift note','Agregar nota de turno')}
           </div>
           <div style={{ display:'flex', gap:10, marginBottom:12 }}>
-            <div>
-              <div style={{ fontSize:11, color:'#aaa', marginBottom:4, fontWeight:600 }}>{i('Shift','Turno')}</div>
-              <div style={{ display:'flex', gap:6 }}>
-                {['AM','PM'].map(s => (
-                  <button key={s} onClick={() => setShift(s)} style={{ padding:'6px 14px', borderRadius:8, fontSize:12, fontWeight:700, background: shift===s ? 'var(--brand-ink)' : 'rgba(26,26,46,0.06)', color: shift===s ? '#fff' : '#888', border:'1px solid rgba(26,26,46,0.1)', cursor:'pointer' }}>{s}</button>
-                ))}
-              </div>
-            </div>
             <div>
               <div style={{ fontSize:11, color:'#aaa', marginBottom:4, fontWeight:600 }}>{i('Tag','Etiqueta')}</div>
               <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
@@ -2130,7 +2121,7 @@ function ShiftNotes({ user }) {
                 <Avatar name={n.author} size={36} />
                 <div>
                   <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-ink)' }}>{n.author}</div>
-                  <div style={{ fontSize:11, color:'#aaa' }}>{n.role} · {n.shift} {i('Shift','turno')}</div>
+                  <div style={{ fontSize:11, color:'#aaa' }}>{n.role}</div>
                 </div>
               </div>
               <div style={{ display:'flex', gap:6, alignItems:'center', flexWrap:'wrap' }}>

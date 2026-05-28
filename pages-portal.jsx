@@ -119,6 +119,51 @@ const RECOGNITION = {
   ],
 };
 
+
+// ─── Notifications per role ────────────────────────────────────
+const NOTIFICATIONS = {
+  'driver': [
+    { id:1, icon:'📊', title:'Your scorecard is ready', body:'Week of May 19–25 · Score: 87 · Tier: Gold', time:'2h ago',  read:false },
+    { id:2, icon:'🔔', title:'New announcement', body:'Extra Routes Available — Saturday May 30. Reply if available.', time:'4h ago',  read:false },
+    { id:3, icon:'🏆', title:'Recognition Wall updated', body:'Maria Gonzalez named Employee of the Month. See who made the Top 3 this week!', time:'1d ago',  read:true },
+    { id:4, icon:'✅', title:'Training completed', body:'You finished "Safe driving in heavy rain" — great work!', time:'2d ago',  read:true },
+  ],
+  'manager': [
+    { id:1, icon:'🚨', title:'Bronze Alert — Action Required', body:'Lena Muller has been Bronze for 3 consecutive weeks. Schedule coaching this week.', time:'1h ago',  read:false },
+    { id:2, icon:'📋', title:'2 driver requests pending', body:'Carlos Reyes: Day Off. Lena Muller: Uniform issue. Review in Requests tab.', time:'3h ago',  read:false },
+    { id:3, icon:'📤', title:'Scorecard uploaded', body:'Week May 19–25 scores are now visible to all drivers.', time:'1d ago',  read:true },
+  ],
+  'trainer': [
+    { id:1, icon:'🎓', title:'Tomás Guerrero — Final Eval Today', body:'Final evaluation scheduled at 7:00 AM on Route. Be ready.', time:'30m ago', read:false },
+    { id:2, icon:'👤', title:'New trainee assigned', body:'Luis Fernandez starts Day 1 tomorrow at DFL4 Lot A.', time:'1d ago',  read:true },
+  ],
+  'dispatch': [
+    { id:1, icon:'⚠️', title:'RT-005 Delayed — Carlos Reyes', body:'Sanford route at 33%. Vehicle overheating reported. Check INC-041.', time:'45m ago', read:false },
+    { id:2, icon:'🚨', title:'New incident reported', body:'INC-041: Van overheating on US-17. Driver pulled over safely.', time:'1h ago',  read:false },
+    { id:3, icon:'❌', title:'Luis Fernandez absent today', body:'RT-008 Lake Mary has no driver. Reassign or cancel route.', time:'2h ago',  read:false },
+  ],
+  'supervisor-assistant': [
+    { id:1, icon:'⏰', title:'Carlos Reyes checked in late', body:'3rd late arrival this week. Flag for supervisor review.', time:'2h ago',  read:false },
+    { id:2, icon:'❌', title:'Luis Fernandez absent', body:'No check-in as of 9:00 AM. Route unassigned.', time:'3h ago',  read:false },
+    { id:3, icon:'📋', title:'Daily report due at noon', body:'Submit attendance report to supervisor before 12:00 PM.', time:'4h ago',  read:true },
+  ],
+  'supervisor': [
+    { id:1, icon:'🚨', title:'Bronze Alert — Coaching Required', body:'Lena Muller: 3 consecutive Bronze weeks. Open a formal coaching session.', time:'1h ago',  read:false },
+    { id:2, icon:'📊', title:'Weekly team report ready', body:'Team avg score: 82. 2 drivers at risk. 1 Bronze alert.', time:'3h ago',  read:false },
+    { id:3, icon:'⏰', title:'Attendance issue flagged', body:'Carlos Reyes: 3rd late arrival this week. Review recommended.', time:'5h ago',  read:true },
+  ],
+  'ops-manager': [
+    { id:1, icon:'🚗', title:'Fleet inspection due Friday', body:'3 vans pending inspection. All must pass before May 29.', time:'2h ago',  read:false },
+    { id:2, icon:'🚨', title:'Bronze Alert on team', body:'Lena Muller flagged for 3 consecutive Bronze weeks.', time:'3h ago',  read:false },
+    { id:3, icon:'📈', title:'Weekly ops report available', body:'60 routes completed. On-time rate: 91%. See full report.', time:'1d ago',  read:true },
+  ],
+  'ceo': [
+    { id:1, icon:'🚨', title:'Bronze Alert — Immediate Action', body:'Lena Muller (DR-0074) at 3 Bronze weeks. Supervisor notified.', time:'1h ago',  read:false },
+    { id:2, icon:'💰', title:'Weekly revenue summary', body:'Est. revenue this week: $75,600 · Bonus tier: on track', time:'4h ago',  read:false },
+    { id:3, icon:'🚗', title:'Fleet: 1 vehicle out of service', body:'Van #FL-012 overheating. Under review by dispatch.', time:'5h ago',  read:true },
+  ],
+};
+
 // ─── Sample data ──────────────────────────────────────────────
 const SCORECARD = {
   week: 'May 19 – 25, 2026',
@@ -279,6 +324,74 @@ function ScoreRing({ score, size = 100 }) {
 }
 
 // ─── Portal Navbar ────────────────────────────────────────────
+
+// ─── Notification Bell ────────────────────────────────────────
+function NotificationBell({ role }) {
+  const [open, setOpen] = usePS(false);
+  const [read, setRead] = usePS({});
+  const notifs = NOTIFICATIONS[role] || [];
+  const unread = notifs.filter(n => !n.read && !read[n.id]).length;
+
+  const markRead = (id) => setRead(r => ({ ...r, [id]: true }));
+  const markAll = () => {
+    const all = {};
+    notifs.forEach(n => { all[n.id] = true; });
+    setRead(all);
+  };
+
+  return (
+    <div style={{ position:'relative' }}>
+      <button onClick={() => setOpen(o => !o)} style={{ position:'relative', width:38, height:38, borderRadius:10, background: open ? 'rgba(26,26,46,0.07)' : 'transparent', border:'1px solid rgba(26,26,46,0.1)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:17, cursor:'pointer', transition:'background .15s' }}>
+        🔔
+        {unread > 0 && (
+          <span style={{ position:'absolute', top:4, right:4, width:16, height:16, borderRadius:'50%', background:'#dc2626', color:'#fff', fontSize:9, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', lineHeight:1 }}>
+            {unread}
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div style={{ position:'absolute', right:0, top:46, width: isMob() ? 300 : 360, background:'#fff', borderRadius:16, boxShadow:'0 8px 40px rgba(26,26,46,0.18)', border:'1px solid rgba(26,26,46,0.08)', zIndex:100, overflow:'hidden' }}>
+          <div style={{ padding:'14px 18px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, color:'var(--brand-ink)' }}>Notifications</div>
+            {unread > 0 && (
+              <button onClick={markAll} style={{ fontSize:11, color:'var(--brand-accent)', fontWeight:600, cursor:'pointer' }}>Mark all read</button>
+            )}
+          </div>
+          <div style={{ maxHeight:360, overflowY:'auto' }}>
+            {notifs.length === 0 && (
+              <div style={{ padding:24, textAlign:'center', color:'#aaa', fontSize:13 }}>No notifications</div>
+            )}
+            {notifs.map(n => {
+              const isRead = n.read || read[n.id];
+              return (
+                <div key={n.id} onClick={() => markRead(n.id)} style={{ padding:'14px 18px', borderBottom:'1px solid rgba(26,26,46,0.05)', background: isRead ? '#fff' : 'rgba(255,107,53,0.04)', cursor:'pointer', display:'flex', gap:12, alignItems:'flex-start', transition:'background .1s' }}
+                  onMouseEnter={e => e.currentTarget.style.background='rgba(26,26,46,0.03)'}
+                  onMouseLeave={e => e.currentTarget.style.background = isRead ? '#fff' : 'rgba(255,107,53,0.04)'}
+                >
+                  <div style={{ fontSize:20, flexShrink:0, marginTop:2 }}>{n.icon}</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 }}>
+                      <div style={{ fontSize:13, fontWeight: isRead ? 500 : 700, color:'var(--brand-ink)', lineHeight:1.3 }}>{n.title}</div>
+                      {!isRead && <div style={{ width:7, height:7, borderRadius:'50%', background:'var(--brand-accent)', flexShrink:0, marginTop:4 }} />}
+                    </div>
+                    <div style={{ fontSize:12, color:'#777', marginTop:3, lineHeight:1.5 }}>{n.body}</div>
+                    <div style={{ fontSize:11, color:'#bbb', marginTop:5 }}>{n.time}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {unread === 0 && notifs.length > 0 && (
+            <div style={{ padding:'10px 18px', textAlign:'center', fontSize:12, color:'#bbb' }}>All caught up ✓</div>
+          )}
+        </div>
+      )}
+      {open && <div onClick={() => setOpen(false)} style={{ position:'fixed', inset:0, zIndex:99 }} />}
+    </div>
+  );
+}
+
 function PortalNav({ user, onLogout, active, setActive }) {
   const roleLinks = {
     'driver':               ['dashboard','scorecard','training','announcements','recognition'],
@@ -316,6 +429,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
           ))}
         </nav>
         <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:12 }}>
+          <NotificationBell role={user.role} />
           <div style={{ textAlign:'right' }}>
             <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)', lineHeight:1.2 }}>{user.name}</div>
             <div style={{ fontSize:11, color:'#aaa' }}>{user.id}</div>

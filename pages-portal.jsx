@@ -327,6 +327,7 @@ function ScoreRing({ score, size = 100 }) {
 
 // ─── Notification Bell ────────────────────────────────────────
 function NotificationBell({ role }) {
+  const i = useT();
   const [open, setOpen] = usePS(false);
   const [read, setRead] = usePS({});
   const notifs = NOTIFICATIONS[role] || [];
@@ -353,14 +354,14 @@ function NotificationBell({ role }) {
       {open && (
         <div style={{ position:'absolute', right:0, top:46, width: isMob() ? 300 : 360, background:'#fff', borderRadius:16, boxShadow:'0 8px 40px rgba(26,26,46,0.18)', border:'1px solid rgba(26,26,46,0.08)', zIndex:100, overflow:'hidden' }}>
           <div style={{ padding:'14px 18px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, color:'var(--brand-ink)' }}>Notifications</div>
+            <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, color:'var(--brand-ink)' }}>{i('Notifications','Notificaciones')}</div>
             {unread > 0 && (
-              <button onClick={markAll} style={{ fontSize:11, color:'var(--brand-accent)', fontWeight:600, cursor:'pointer' }}>Mark all read</button>
+              <button onClick={markAll} style={{ fontSize:11, color:'var(--brand-accent)', fontWeight:600, cursor:'pointer' }}>{i('Mark all read','Marcar todo leído')}</button>
             )}
           </div>
           <div style={{ maxHeight:360, overflowY:'auto' }}>
             {notifs.length === 0 && (
-              <div style={{ padding:24, textAlign:'center', color:'#aaa', fontSize:13 }}>No notifications</div>
+              <div style={{ padding:24, textAlign:'center', color:'#aaa', fontSize:13 }}>{i('No notifications','Sin notificaciones')}</div>
             )}
             {notifs.map(n => {
               const isRead = n.read || read[n.id];
@@ -383,7 +384,7 @@ function NotificationBell({ role }) {
             })}
           </div>
           {unread === 0 && notifs.length > 0 && (
-            <div style={{ padding:'10px 18px', textAlign:'center', fontSize:12, color:'#bbb' }}>All caught up ✓</div>
+            <div style={{ padding:'10px 18px', textAlign:'center', fontSize:12, color:'#bbb' }}>{i('All caught up ✓','Todo al día ✓')}</div>
           )}
         </div>
       )}
@@ -393,6 +394,8 @@ function NotificationBell({ role }) {
 }
 
 function PortalNav({ user, onLogout, active, setActive }) {
+  const { lang, setLang } = useLang();
+  const i = useT();
   const roleLinks = {
     'driver':               ['dashboard','scorecard','training','announcements','recognition'],
     'trainer':              ['overview','trainees','schedule','materials'],
@@ -404,13 +407,32 @@ function PortalNav({ user, onLogout, active, setActive }) {
     'manager':              ['overview','my-team','announcements','scorecards'],
   };
   const labels = {
-    dashboard:'Dashboard', scorecard:'My Scorecard', training:'Training', announcements:'Announcements', recognition:'Recognition Wall',
-    overview:'Overview', 'my-team':'My Team', scorecards:'Scorecards',
-    trainees:'My Trainees', schedule:'Schedule', materials:'Materials',
-    routes:'Routes Today', drivers:'Drivers', incidents:'Incidents', messages:'Messages',
-    attendance:'Attendance', requests:'Requests', checklist:'Checklist',
-    team:'Team', coaching:'Coaching', teams:'All Teams', fleet:'Fleet', reports:'Reports',
-    executive:'Executive', financials:'Financials', alerts:'Alerts',
+    dashboard:     i('Dashboard','Panel'),
+    scorecard:     i('My Scorecard','Mi Desempeño'),
+    training:      i('Training','Entrenamiento'),
+    announcements: i('Announcements','Avisos'),
+    recognition:   i('Recognition Wall','Reconocimientos'),
+    overview:      i('Overview','Resumen'),
+    'my-team':     i('My Team','Mi Equipo'),
+    scorecards:    i('Scorecards','Puntuaciones'),
+    trainees:      i('My Trainees','Mis Aprendices'),
+    schedule:      i('Schedule','Horario'),
+    materials:     i('Materials','Materiales'),
+    routes:        i('Routes Today','Rutas Hoy'),
+    drivers:       i('Drivers','Conductores'),
+    incidents:     i('Incidents','Incidentes'),
+    messages:      i('Messages','Mensajes'),
+    attendance:    i('Attendance','Asistencia'),
+    requests:      i('Requests','Solicitudes'),
+    checklist:     i('Checklist','Lista de tareas'),
+    team:          i('Team','Equipo'),
+    coaching:      i('Coaching','Coaching'),
+    teams:         i('All Teams','Todos los equipos'),
+    fleet:         i('Fleet','Flota'),
+    reports:       i('Reports','Reportes'),
+    executive:     i('Executive','Ejecutivo'),
+    financials:    i('Financials','Finanzas'),
+    alerts:        i('Alerts','Alertas'),
   };
   const links = roleLinks[user.role] || roleLinks['driver'];
 
@@ -435,8 +457,15 @@ function PortalNav({ user, onLogout, active, setActive }) {
             <div style={{ fontSize:11, color:'#aaa' }}>{user.id}</div>
           </div>
           <Avatar name={user.name} size={36} />
+          <div style={{ display:'flex', background:'rgba(26,26,46,0.05)', borderRadius:8, overflow:'hidden', border:'1px solid rgba(26,26,46,0.1)' }}>
+            {['en','es'].map(l => (
+              <button key={l} onClick={() => setLang(l)} style={{ padding:'5px 10px', fontSize:11, fontWeight:700, background: lang===l ? 'var(--brand-accent)' : 'transparent', color: lang===l ? '#fff' : '#888', transition:'all .15s', textTransform:'uppercase', letterSpacing:'0.05em' }}>
+                {l}
+              </button>
+            ))}
+          </div>
           <button onClick={onLogout} style={{ padding:'7px 13px', fontSize:12, fontWeight:600, border:'1px solid rgba(26,26,46,0.14)', borderRadius:8, color:'#666' }}>
-            Sign Out
+            {i('Sign Out','Salir')}
           </button>
         </div>
       </div>
@@ -462,29 +491,30 @@ function DriverPortal({ user, onLogout }) {
 }
 
 function DriverHome({ user, setActive }) {
+  const i = useT();
   return (
     <div>
       {/* Welcome */}
       <div style={{ marginBottom:28 }}>
         <div style={{ fontSize:13, color:'#999', fontWeight:500 }}>Monday, May 26, 2026</div>
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 8px' }}>
-          Good morning, {user.name.split(' ')[0]}
+          {i('Good morning','Buenos días')}, {user.name.split(' ')[0]}
         </h1>
         <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:13 }}>
           <span style={{ background:'rgba(34,197,94,0.1)', color:'#16a34a', padding:'3px 10px', borderRadius:999, fontWeight:600, fontSize:12 }}>● Active</span>
-          <span style={{ color:'#666' }}>Route: <strong>{user.route}</strong></span>
+          <span style={{ color:'#666' }}>{i('Route','Ruta')}: <strong>{user.route}</strong></span>
           <span style={{ color:'#ccc' }}>·</span>
-          <span style={{ color:'#666' }}>Shift at <strong>{user.shiftTime}</strong></span>
+          <span style={{ color:'#666' }}>{i('Shift at','Turno a las')}: <strong>{user.shiftTime}</strong></span>
         </div>
       </div>
 
       {/* KPI row */}
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
-          { label:'Overall Score',       value:'87',     unit:'/ 100',      col:'#2563eb' },
-          { label:'Tier This Week',      value:'Gold 🥇', unit:'keep it up', col:'#b45309' },
-          { label:'Routes This Month',   value:'22',     unit:'completed',  col:'#16a34a' },
-          { label:'Unread Announcements',value:'1',      unit:'new',        col:'#FF6B35' },
+          { label:i('Overall Score','Puntuación'),       value:'87',     unit:'/ 100',      col:'#2563eb' },
+          { label:i('Tier This Week','Nivel semanal'),   value:'Gold 🥇', unit:i('keep it up','¡sigue así'), col:'#b45309' },
+          { label:i('Routes This Month','Rutas del mes'), value:'22',     unit:i('completed','completadas'), col:'#16a34a' },
+          { label:i('Announcements','Avisos'),            value:'1',      unit:i('new','nuevo'),             col:'#FF6B35' },
         ].map(k => (
           <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)', boxShadow:'0 1px 4px rgba(26,26,46,0.04)' }}>
             <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
@@ -510,17 +540,17 @@ function DriverHome({ user, setActive }) {
             </div>
             <div style={{ flex:1 }}>
               <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color: isNear ? '#15803d' : '#c2410c', marginBottom:4 }}>
-                {isNear ? '🎯 Almost at your milestone!' : '✅ Days Without Infractions'}
+                {isNear ? i('🎯 Almost at your milestone!','🎯 ¡Casi en tu meta!') : i('✅ Days Without Infractions','✅ Días sin infracciones')}
               </div>
               <div style={{ display:'flex', alignItems:'baseline', gap:8, marginBottom:8 }}>
                 <span style={{ fontFamily:'var(--font-display)', fontSize:36, fontWeight:800, color: accent, lineHeight:1 }}>{s.days}</span>
-                <span style={{ fontSize:14, color:'#888', fontWeight:500 }}>days streak</span>
+                <span style={{ fontSize:14, color:'#888', fontWeight:500 }}>{i('days streak','días seguidos')}</span>
                 <span style={{ fontSize:12, color:'#bbb' }}>· Last incident: {s.lastInc}</span>
               </div>
               <div style={{ background:'rgba(26,26,46,0.08)', borderRadius:999, height:8, overflow:'hidden' }}>
                 <div style={{ height:'100%', width:`${pct}%`, background: isNear ? '#22c55e' : 'var(--brand-accent)', borderRadius:999, transition:'width 0.6s' }} />
               </div>
-              <div style={{ fontSize:11, color:'#999', marginTop:5 }}>Next milestone: <strong style={{ color: accent }}>{s.milestone} days</strong> · {s.milestone - s.days} to go</div>
+              <div style={{ fontSize:11, color:'#999', marginTop:5 }}>{i('Next milestone','Siguiente meta')}: <strong style={{ color: accent }}>{s.milestone} {i('days','días')}</strong> · {s.milestone - s.days} {i('to go','por completar')}</div>
             </div>
           </div>
         );
@@ -531,7 +561,7 @@ function DriverHome({ user, setActive }) {
         <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:18 }}>
             <div>
-              <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>This Week's Scorecard</h3>
+              <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i("This Week's Scorecard",'Desempeño esta semana')}</h3>
               <div style={{ fontSize:12, color:'#999', marginTop:3 }}>{SCORECARD.week}</div>
             </div>
             <ScoreRing score={87} size={72} />
@@ -554,7 +584,7 @@ function DriverHome({ user, setActive }) {
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           {/* Urgent announcement */}
           <div style={{ background:'linear-gradient(135deg,#FF6B35 0%,#e8541d 100%)', borderRadius:16, padding:22, color:'#fff' }}>
-            <div style={{ fontSize:10, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', opacity:0.85, marginBottom:8 }}>🔔 Urgent</div>
+            <div style={{ fontSize:10, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', opacity:0.85, marginBottom:8 }}>🔔 {i('Urgent','Urgente')}</div>
             <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, marginBottom:6 }}>{ANNOUNCEMENTS[0].title}</div>
             <div style={{ fontSize:13, opacity:0.9, lineHeight:1.5 }}>{ANNOUNCEMENTS[0].body}</div>
             <div style={{ marginTop:10, fontSize:11, opacity:0.65 }}>{ANNOUNCEMENTS[0].from} · {ANNOUNCEMENTS[0].date}</div>
@@ -565,8 +595,8 @@ function DriverHome({ user, setActive }) {
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
               <div style={{ width:30,height:30,borderRadius:8,background:'rgba(26,26,46,0.05)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:15 }}>✨</div>
               <div>
-                <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-ink)' }}>AI Coaching Tip</div>
-                <div style={{ fontSize:11, color:'#aaa' }}>Based on your scorecard</div>
+                <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-ink)' }}>{i('AI Coaching Tip','Consejo de Coaching')}</div>
+                <div style={{ fontSize:11, color:'#aaa' }}>{i('Based on your scorecard','Basado en tu desempeño')}</div>
               </div>
             </div>
             <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)', marginBottom:8 }}>📷 Photo on Delivery · 79/100</div>
@@ -587,15 +617,15 @@ function DriverHome({ user, setActive }) {
           <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} routes · {RECOGNITION.winner.tier} tier</div>
         </div>
         <button onClick={() => setActive('recognition')} style={{ padding:'10px 18px', background:'rgba(255,255,255,0.12)', border:'1.5px solid rgba(255,255,255,0.2)', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, flexShrink:0, cursor:'pointer' }}>
-          See Wall of Fame →
+          {i('See Wall of Fame →','Ver muro de honor →')}
         </button>
       </div>
 
       {/* Training library preview */}
       <div>
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-          <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Training Library</h3>
-          <button onClick={() => setActive('training')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>See all →</button>
+          <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('Training Library','Biblioteca de Entrenamiento')}</h3>
+          <button onClick={() => setActive('training')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('See all →','Ver todo →')}</button>
         </div>
         <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14 }}>
           {VIDEOS.map(v => (
@@ -622,9 +652,10 @@ function DriverHome({ user, setActive }) {
 }
 
 function DriverScorecard() {
+  const i = useT();
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>My Scorecard</h2>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('My Scorecard','Mi Desempeño')}</h2>
       <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Week of {SCORECARD.week}</div>
 
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '320px 1fr', gap:20, marginBottom:24 }}>
@@ -633,7 +664,7 @@ function DriverScorecard() {
           <ScoreRing score={87} size={140} />
           <div>
             <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, color:'#b45309' }}>🥇 Gold</div>
-            <div style={{ fontSize:13, color:'#999' }}>Your tier this week</div>
+            <div style={{ fontSize:13, color:'#999' }}>{i('Your tier this week','Tu nivel esta semana')}</div>
           </div>
           {/* History bars */}
           <div style={{ width:'100%', marginTop:8 }}>
@@ -688,9 +719,10 @@ function DriverScorecard() {
 }
 
 function DriverTraining() {
+  const i = useT();
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Training Library</h2>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Training Library','Biblioteca de Entrenamiento')}</h2>
       <p style={{ color:'#999', fontSize:14, marginBottom:28 }}>Resources to handle any situation on the road.</p>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:18 }}>
         {VIDEOS.map(v => (
@@ -969,6 +1001,8 @@ function ManagerAnnouncements() {
 
 // ─── LOGIN PAGE ───────────────────────────────────────────────
 function LoginPage({ onLogin }) {
+  const i = useT();
+  const { lang, setLang } = useLang();
   const [email, setEmail] = usePS('');
   const [pw, setPw] = usePS('');
   const [error, setError] = usePS('');
@@ -1027,14 +1061,14 @@ function LoginPage({ onLogin }) {
 
           <form onSubmit={submit}>
             <div style={{ marginBottom:16 }}>
-              <label style={{ display:'block', fontSize:12, fontWeight:600, color:'var(--brand-ink)', marginBottom:6 }}>Email address</label>
+              <label style={{ display:'block', fontSize:12, fontWeight:600, color:'var(--brand-ink)', marginBottom:6 }}>{i('Email address','Correo electrónico')}</label>
               <input type="email" placeholder="you@floridedelivery.com" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle}
                 onFocus={e => e.target.style.borderColor='#FF6B35'}
                 onBlur={e => e.target.style.borderColor='rgba(26,26,46,0.14)'} />
             </div>
             <div style={{ marginBottom:22 }}>
               <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
-                <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)' }}>Password</label>
+                <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)' }}>{i('Password','Contraseña')}</label>
                 <button type="button" style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>Forgot password?</button>
               </div>
               <input type="password" placeholder="••••••••" value={pw} onChange={e => setPw(e.target.value)} required style={inputStyle}
@@ -1843,6 +1877,7 @@ function CEOAlerts() {
 
 // ─── Infraction Streak (standalone page) ─────────────────────
 function InfractionStreakPage({ user }) {
+  const i = useT();
   const all = Object.entries(INFRACTION_STREAKS).map(([id, s]) => {
     const driver = DRIVER_LIST.find(d => d.id === id) || { name: id };
     return { id, name: driver.name, ...s };
@@ -1850,8 +1885,8 @@ function InfractionStreakPage({ user }) {
 
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Safety Streaks</h2>
-      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Days without incidents across the team</div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Safety Streaks','Rachas de seguridad')}</h2>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Days without incidents across the team','Días sin incidentes en todo el equipo')}</div>
       <div style={{ display:'grid', gap:14 }}>
         {all.map((s, i) => {
           const pct = Math.min(100, Math.round((s.days / s.milestone) * 100));
@@ -1862,11 +1897,11 @@ function InfractionStreakPage({ user }) {
               <div style={{ fontSize:22, fontWeight:800, color:'#ddd', width:32, textAlign:'center' }}>{i+1}</div>
               <Avatar name={s.name} size={42} />
               <div style={{ flex:1 }}>
-                <div style={{ fontWeight:700, fontSize:14, color:'var(--brand-ink)', marginBottom:6 }}>{s.name}{isYou ? ' (you)' : ''}</div>
+                <div style={{ fontWeight:700, fontSize:14, color:'var(--brand-ink)', marginBottom:6 }}>{s.name}{isYou ? ` (${i('you','tú')})` : ''}</div>
                 <div style={{ background:'rgba(26,26,46,0.07)', borderRadius:999, height:8, overflow:'hidden' }}>
                   <div style={{ height:'100%', width:`${pct}%`, background:col, borderRadius:999 }} />
                 </div>
-                <div style={{ fontSize:11, color:'#999', marginTop:4 }}>Next milestone: {s.milestone} days · Last incident: {s.lastInc}</div>
+                <div style={{ fontSize:11, color:'#999', marginTop:4 }}>{i('Next milestone','Próxima meta')}: {s.milestone} {i('days','días')} · {i('Last incident','Último incidente')}: {s.lastInc}</div>
               </div>
               <div style={{ textAlign:'right', flexShrink:0 }}>
                 <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:col, lineHeight:1 }}>{s.days}</div>
@@ -1882,11 +1917,12 @@ function InfractionStreakPage({ user }) {
 
 // ─── Recognition Wall ──────────────────────────────────────────
 function DriverRecognition({ user }) {
+  const i = useT();
   const w = RECOGNITION.winner;
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Recognition Wall</h2>
-      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Celebrating the drivers who set the standard · {RECOGNITION.month}</div>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Recognition Wall','Muro de Honor')}</h2>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Celebrating the drivers who set the standard','Reconociendo a los conductores que marcan el ejemplo')} · {RECOGNITION.month}</div>
 
       {/* Employee of the Month */}
       <div style={{ background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:20, padding:36, color:'#fff', marginBottom:28, position:'relative', overflow:'hidden' }}>
@@ -1922,7 +1958,7 @@ function DriverRecognition({ user }) {
       </div>
 
       {/* Top performers this week */}
-      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>⭐ Top Performers This Week</h3>
+      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>⭐ {i('Top Performers This Week','Mejores de la semana')}</h3>
       <div style={{ display:'grid', gap:14, marginBottom:28 }}>
         {RECOGNITION.topWeek.map((d, i) => {
           const medals = ['🥇','🥈','🥉'];
@@ -1947,7 +1983,7 @@ function DriverRecognition({ user }) {
       </div>
 
       {/* Streak leaderboard */}
-      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>🛡️ Infraction-Free Streaks</h3>
+      <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>🛡️ {i('Infraction-Free Streaks','Rachas sin infracciones')}</h3>
       <InfractionStreakPage user={user} />
     </div>
   );
@@ -1956,6 +1992,7 @@ function DriverRecognition({ user }) {
 
 // ─── Bronze Alert Banner ───────────────────────────────────────
 function BronzeAlertBanner({ onViewDriver }) {
+  const i = useT();
   if (!BRONZE_ALERTS.length) return null;
   return (
     <div style={{ background:'linear-gradient(135deg,#7f1d1d,#991b1b)', borderRadius:14, padding:'18px 22px', marginBottom:20, border:'1.5px solid #dc2626', display:'flex', alignItems:'center', gap:16 }}>

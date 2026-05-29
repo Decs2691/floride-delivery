@@ -315,6 +315,91 @@ const FLEET = [
   { id:'VAN-09', driver:'Lena Muller',     status:'Active',    mileage:118200,lastInsp:'May 15', fuel:82 },
   { id:'VAN-16', driver:'—',              status:'In Service', mileage:95440, lastInsp:'May 10', fuel:100 },
 ];
+// ─── Wave Assignments ─────────────────────────────────────────
+const WAVE_COLORS = {
+  1: { bg:'#2563eb', light:'rgba(37,99,235,0.1)',  label:'Wave 1' },
+  2: { bg:'#dc2626', light:'rgba(220,38,38,0.1)',  label:'Wave 2' },
+  3: { bg:'#16a34a', light:'rgba(22,163,74,0.1)',  label:'Wave 3' },
+  4: { bg:'#ca8a04', light:'rgba(202,138,4,0.1)',  label:'Wave 4' },
+  5: { bg:'#7c3aed', light:'rgba(124,58,237,0.1)', label:'Wave 5' },
+  6: { bg:'#ea580c', light:'rgba(234,88,12,0.1)',  label:'Wave 6' },
+};
+
+const WAVE_DATA = [
+  { wave:1, time:'7:00 AM', drivers:[
+    { pos:1,  id:'DR-0032', name:'Maria Gonzalez',    van:'FL-12' },
+    { pos:2,  id:'DR-0055', name:'Antoine Dubois',    van:'FL-05' },
+    { pos:3,  id:'DR-0061', name:'James Thompson',    van:'FL-23' },
+    { pos:4,  id:'DR-0112', name:'Sofia Navarro',     van:'FL-08' },
+    { pos:5,  id:'DR-0089', name:'Tyler Brooks',      van:'FL-31' },
+    { pos:6,  id:'DR-0103', name:'Keisha Williams',   van:'FL-17' },
+    { pos:7,  id:'DR-0077', name:'Marcus Bell',       van:'FL-44' },
+    { pos:8,  id:'DR-0066', name:'Diana Herrera',     van:'FL-02' },
+    { pos:9,  id:'DR-0094', name:'Oscar Ramos',       van:'FL-39' },
+    { pos:10, id:'DR-0041', name:'Rachel Kim',        van:'FL-61' },
+  ]},
+  { wave:2, time:'7:45 AM', drivers:[
+    { pos:1,  id:'DR-0045', name:'Daniel Cantor Soto',van:'FL-07' },
+    { pos:2,  id:'DR-0018', name:'Carlos Reyes',      van:'FL-09' },
+    { pos:3,  id:'DR-0074', name:'Lena Muller',       van:'FL-33' },
+    { pos:4,  id:'DR-0128', name:'Brandon Cruz',      van:'FL-15' },
+    { pos:5,  id:'DR-0057', name:'Nadia Petrova',     van:'FL-48' },
+    { pos:6,  id:'DR-0083', name:'Aisha Okafor',      van:'FL-56' },
+    { pos:7,  id:'DR-0099', name:'Luis Torres',       van:'FL-21' },
+    { pos:8,  id:'DR-0116', name:'Hannah Webb',       van:'FL-37' },
+    { pos:9,  id:'DR-0072', name:'Jerome Davis',      van:'FL-62' },
+    { pos:10, id:'DR-0048', name:'Yuki Tanaka',       van:'FL-04' },
+  ]},
+  { wave:3, time:'8:30 AM', drivers:[
+    { pos:1,  id:'DR-0079', name:'Tomás Guerrero',    van:'FL-11' },
+    { pos:2,  id:'DR-0088', name:'Luis Fernandez',    van:'FL-27' },
+    { pos:3,  id:'DR-0091', name:'Priya Sharma',      van:'FL-43' },
+    { pos:4,  id:'DR-0134', name:'Chloe Martin',      van:'FL-06' },
+    { pos:5,  id:'DR-0063', name:'Andre Osei',        van:'FL-58' },
+    { pos:6,  id:'DR-0107', name:'Rosa Delgado',      van:'FL-19' },
+    { pos:7,  id:'DR-0052', name:'David Park',        van:'FL-35' },
+    { pos:8,  id:'DR-0119', name:'Elena Vasquez',     van:'FL-50' },
+    { pos:9,  id:'DR-0086', name:'Malik Johnson',     van:'FL-66' },
+    { pos:10, id:'DR-0031', name:'Ingrid Olsen',      van:'FL-29' },
+  ]},
+  { wave:4, time:'9:15 AM', drivers:[
+    { pos:1,  id:'DR-0142', name:'Patrick O'Brien',  van:'FL-14' },
+    { pos:2,  id:'DR-0068', name:'Fatima Al-Hassan',  van:'FL-46' },
+    { pos:3,  id:'DR-0125', name:'Trevor Nichols',    van:'FL-03' },
+    { pos:4,  id:'DR-0059', name:'Mei Lin',           van:'FL-52' },
+    { pos:5,  id:'DR-0096', name:'Samuel Adeyemi',    van:'FL-24' },
+    { pos:6,  id:'DR-0113', name:'Valeria Rios',      van:'FL-38' },
+    { pos:7,  id:'DR-0081', name:'Jason Morales',     van:'FL-64' },
+    { pos:8,  id:'DR-0044', name:'Amara Diallo',      van:'FL-16' },
+    { pos:9,  id:'DR-0138', name:'Kevin O'Neal',     van:'FL-42' },
+    { pos:10, id:'DR-0075', name:'Zara Ahmed',        van:'FL-57' },
+  ]},
+  { wave:5, time:'10:00 AM', drivers:[
+    { pos:1,  id:'DR-0102', name:'Cameron Price',     van:'FL-10' },
+    { pos:2,  id:'DR-0037', name:'Lucia Mendoza',     van:'FL-26' },
+    { pos:3,  id:'DR-0149', name:'Evan Hughes',       van:'FL-49' },
+    { pos:4,  id:'DR-0084', name:'Nia Robinson',      van:'FL-18' },
+    { pos:5,  id:'DR-0121', name:'Ivan Petrov',       van:'FL-55' },
+    { pos:6,  id:'DR-0070', name:'Stephanie Cho',     van:'FL-32' },
+    { pos:7,  id:'DR-0109', name:'Dante Reyes',       van:'FL-67' },
+    { pos:8,  id:'DR-0055', name:'Fabian Ortega',     van:'FL-20' },
+    { pos:9,  id:'DR-0093', name:'Alicia Stone',      van:'FL-45' },
+    { pos:10, id:'DR-0062', name:'Weston Clarke',     van:'FL-60' },
+  ]},
+  { wave:6, time:'11:30 AM', drivers:[
+    { pos:1,  id:'DR-0117', name:'Bianca Ferreira',   van:'FL-13' },
+    { pos:2,  id:'DR-0076', name:'Hassan Mansour',    van:'FL-28' },
+    { pos:3,  id:'DR-0140', name:'Destiny Harper',    van:'FL-51' },
+    { pos:4,  id:'DR-0053', name:'Reuben Castillo',   van:'FL-22' },
+    { pos:5,  id:'DR-0130', name:'Mia Johansson',     van:'FL-41' },
+    { pos:6,  id:'DR-0097', name:'Theo Baptiste',     van:'FL-68' },
+    { pos:7,  id:'DR-0065', name:'Cynthia Nguyen',    van:'FL-36' },
+    { pos:8,  id:'DR-0111', name:'Omar Khalil',       van:'FL-53' },
+    { pos:9,  id:'DR-0085', name:'Jade Freeman',      van:'FL-25' },
+    { pos:10, id:'DR-0143', name:'Rodrigo Vega',      van:'FL-70' },
+  ]},
+];
+
 
 // ─── Helpers ──────────────────────────────────────────────────
 function scoreColor(s) {
@@ -432,14 +517,14 @@ function PortalNav({ user, onLogout, active, setActive }) {
   const { lang, setLang } = useLang();
   const i = useT();
   const roleLinks = {
-    'driver':               ['dashboard','scorecard','training','announcements','recognition'],
-    'trainer':              ['overview','trainees','schedule','materials','notes'],
+    'driver':               ['dashboard','scorecard','training','announcements','recognition','waves'],
+    'trainer':              ['overview','trainees','schedule','materials','notes','waves'],
     'dispatch':             ['routes','drivers','incidents','messages','notes'],
-    'supervisor-assistant': ['attendance','requests','checklist','notes'],
-    'supervisor':           ['overview','team','coaching','incidents','notes'],
-    'ops-manager':          ['overview','teams','fleet','reports','notes'],
-    'ceo':                  ['executive','financials','team','alerts','notes'],
-    'manager':              ['overview','my-team','announcements','scorecards'],
+    'supervisor-assistant': ['attendance','requests','checklist','notes','waves'],
+    'supervisor':           ['overview','team','coaching','incidents','notes','waves'],
+    'ops-manager':          ['overview','teams','fleet','reports','notes','waves'],
+    'ceo':                  ['executive','financials','team','alerts','notes','waves'],
+    'manager':              ['overview','my-team','announcements','scorecards','waves'],
   };
   const labels = {
     dashboard:     i('Dashboard','Panel'),
@@ -467,6 +552,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
     reports:       i('Reports','Reportes'),
     executive:     i('Executive','Ejecutivo'),
     notes:         i('Shift Notes','Notas de turno'),
+    waves:         i('Wave Board','Wave Board'),
     financials:    i('Financials','Finanzas'),
     alerts:        i('Alerts','Alertas'),
   };
@@ -521,6 +607,7 @@ function DriverPortal({ user, onLogout }) {
         {active === 'training'      && <DriverTraining />}
         {active === 'announcements' && <DriverAnnouncements />}
         {active === 'recognition'   && <DriverRecognition user={user} />}
+        {active === 'waves'         && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -842,6 +929,7 @@ function ManagerPortal({ user, onLogout }) {
             <button style={{ marginTop:20, padding:'12px 24px', background:'var(--brand-accent)', color:'#fff', borderRadius:10, fontSize:14, fontWeight:700 }}>Upload Scorecard</button>
           </div>
         )}
+        {active === 'waves'          && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -1155,6 +1243,8 @@ function TrainerPortal({ user, onLogout }) {
         {active === 'trainees'  && <TrainerTrainees />}
         {active === 'schedule'  && <TrainerSchedule />}
         {active === 'materials' && <DriverTraining />}
+        {active === 'notes'     && <ShiftNotes user={user} />}
+        {active === 'waves'     && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -1293,7 +1383,7 @@ function DispatchPortal({ user, onLogout }) {
     <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
       <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
       <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
-        {active === 'routes'    && <DispatchRoutes />}
+        {active === 'routes'    && <WaveBoard user={user} />}
         {active === 'drivers'   && <DispatchDrivers />}
         {active === 'incidents' && <DispatchIncidents />}
         {active === 'messages'  && <VanReport />}
@@ -1528,6 +1618,7 @@ function SupervisorAssistantPortal({ user, onLogout }) {
         {active === 'requests'   && <SARequests />}
         {active === 'checklist'  && <SAChecklist />}
         {active === 'notes'      && <ShiftNotes user={user} />}
+        {active === 'waves'      && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -1662,6 +1753,7 @@ function SupervisorPortal({ user, onLogout }) {
         {active === 'coaching'  && <SupervisorCoaching />}
         {active === 'incidents' && <DispatchIncidents />}
         {active === 'notes'     && <ShiftNotes user={user} />}
+        {active === 'waves'     && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -1721,6 +1813,7 @@ function OpsManagerPortal({ user, onLogout }) {
         {active === 'fleet'    && <OpsFleet />}
         {active === 'reports'  && <OpsReports />}
         {active === 'notes'    && <ShiftNotes user={user} />}
+        {active === 'waves'    && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -1896,6 +1989,7 @@ function CEOPortal({ user, onLogout }) {
         {active === 'team'       && <ManagerTeam />}
         {active === 'alerts'     && <CEOAlerts />}
         {active === 'notes'      && <ShiftNotes user={user} />}
+        {active === 'waves'      && <WaveBoard user={user} />}
       </main>
     </div>
   );
@@ -2235,6 +2329,107 @@ function ShiftNotes({ user }) {
     </div>
   );
 }
+
+
+// ─── Wave Board ────────────────────────────────────────────────
+function WaveBoard({ user }) {
+  const i = useT();
+  const isDriver = user && user.role === 'driver';
+  const driverId = user && user.id;
+
+  // Find this driver's assignment
+  let myAssignment = null;
+  if (isDriver) {
+    for (const w of WAVE_DATA) {
+      const found = w.drivers.find(d => d.id === driverId);
+      if (found) { myAssignment = { ...found, wave: w.wave, time: w.time }; break; }
+    }
+  }
+
+  const wc = (n) => WAVE_COLORS[n];
+
+  return (
+    <div>
+      <div style={{ marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>
+          📋 {i('Wave Board — Today','Tabla de Waves — Hoy')}
+        </h2>
+        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026 · {i('60 drivers · 6 waves','60 conductores · 6 waves')}</div>
+      </div>
+
+      {/* Driver: My assignment card */}
+      {isDriver && myAssignment && (
+        <div style={{ background:`linear-gradient(135deg,${wc(myAssignment.wave).bg},${wc(myAssignment.wave).bg}cc)`, borderRadius:16, padding:'22px 26px', color:'#fff', marginBottom:28, display:'flex', alignItems:'center', gap:20 }}>
+          <div style={{ fontSize:40 }}>🚐</div>
+          <div>
+            <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', opacity:0.8, marginBottom:4 }}>{i("Your assignment today","Tu asignación de hoy")}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, marginBottom:4 }}>
+              {i('Wave','Wave')} {myAssignment.wave} · Van {myAssignment.van}
+            </div>
+            <div style={{ fontSize:13, opacity:0.85 }}>
+              {i('Departure','Salida')}: <strong>{myAssignment.time}</strong> · {i('Position','Posición')} #{myAssignment.pos} {i('in wave','en el wave')}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Wave blocks */}
+      <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
+        {WAVE_DATA.map(w => {
+          const col = wc(w.wave);
+          return (
+            <div key={w.wave} style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+              {/* Wave header */}
+              <div style={{ background:col.light, borderBottom:`2px solid ${col.bg}`, padding:'14px 22px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+                  <span style={{ background:col.bg, color:'#fff', fontWeight:800, fontSize:13, padding:'4px 14px', borderRadius:999, fontFamily:'var(--font-display)' }}>
+                    Wave {w.wave}
+                  </span>
+                  <span style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, color:'var(--brand-ink)' }}>{w.time}</span>
+                </div>
+                <span style={{ fontSize:12, color:'#888', fontWeight:600 }}>{w.drivers.length} {i('drivers','conductores')}</span>
+              </div>
+
+              {/* Table */}
+              <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse', minWidth:380 }}>
+                  <thead>
+                    <tr style={{ background:'rgba(26,26,46,0.02)' }}>
+                      {['#', i('Driver','Conductor'), i('ID','ID'), i('Van','Van')].map(h => (
+                        <th key={h} style={{ padding:'9px 18px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {w.drivers.map(d => {
+                      const isMe = d.id === driverId;
+                      return (
+                        <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', background: isMe ? col.light : 'transparent', transition:'background .15s' }}>
+                          <td style={{ padding:'11px 18px', fontSize:12, color:'#bbb', fontWeight:600, width:36 }}>{d.pos}</td>
+                          <td style={{ padding:'11px 18px' }}>
+                            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                              {isMe && <span style={{ fontSize:10, fontWeight:800, color:col.bg, background:`${col.bg}18`, padding:'1px 7px', borderRadius:999 }}>YOU</span>}
+                              <span style={{ fontSize:13, fontWeight: isMe ? 700 : 500, color: isMe ? col.bg : 'var(--brand-ink)' }}>{d.name}</span>
+                            </div>
+                          </td>
+                          <td style={{ padding:'11px 18px', fontSize:11, color:'#aaa', fontFamily:'var(--font-mono)' }}>{d.id}</td>
+                          <td style={{ padding:'11px 18px' }}>
+                            <span style={{ fontSize:12, fontWeight:700, color: isMe ? col.bg : '#555', background: isMe ? col.light : 'rgba(26,26,46,0.05)', padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.van}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 
 // ─── Bronze Alert Banner ───────────────────────────────────────
 function BronzeAlertBanner({ onViewDriver }) {

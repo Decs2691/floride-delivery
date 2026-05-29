@@ -2359,16 +2359,24 @@ function WaveBoard({ user }) {
 
       {/* Driver: My assignment card */}
       {isDriver && myAssignment && (
-        <div style={{ background:`linear-gradient(135deg,${wc(myAssignment.wave).bg},${wc(myAssignment.wave).bg}cc)`, borderRadius:16, padding:'22px 26px', color:'#fff', marginBottom:28, display:'flex', alignItems:'center', gap:20 }}>
-          <div style={{ fontSize:40 }}>🚐</div>
-          <div>
-            <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', opacity:0.8, marginBottom:4 }}>{i("Your assignment today","Tu asignación de hoy")}</div>
-            <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, marginBottom:4 }}>
-              {i('Wave','Wave')} {myAssignment.wave} · Van {myAssignment.van}
-            </div>
-            <div style={{ fontSize:13, opacity:0.85 }}>
-              {i('Departure','Salida')}: <strong>{myAssignment.time}</strong> · {i('Position','Posición')} #{myAssignment.pos} {i('in wave','en el wave')}
-            </div>
+        <div style={{ background:'#fff', borderRadius:16, border:`2px solid ${wc(myAssignment.wave).bg}`, marginBottom:28, overflow:'hidden' }}>
+          <div style={{ background:wc(myAssignment.wave).bg, padding:'10px 22px', display:'flex', alignItems:'center', gap:10 }}>
+            <span style={{ fontSize:15 }}>🚐</span>
+            <span style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#fff' }}>{i('Your assignment today','Tu asignación de hoy')}</span>
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr 1fr' : 'repeat(5,1fr)' }}>
+            {[
+              { label:i('Date','Fecha'),       value:'May 26, 2026',       accent:false },
+              { label:i('Driver','Conductor'), value:myAssignment.name,    accent:false },
+              { label:'Wave',                  value:`Wave ${myAssignment.wave}`, accent:true },
+              { label:i('Van','Van'),          value:myAssignment.van,     accent:true },
+              { label:i('Departure','Salida'), value:myAssignment.time,    accent:false },
+            ].map((f, idx, arr) => (
+              <div key={idx} style={{ padding:'16px 20px', borderRight: idx < arr.length-1 ? '1px solid rgba(26,26,46,0.07)' : 'none' }}>
+                <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', color:'#bbb', marginBottom:5 }}>{f.label}</div>
+                <div style={{ fontFamily:'var(--font-display)', fontSize:14, fontWeight:800, color: f.accent ? wc(myAssignment.wave).bg : 'var(--brand-ink)' }}>{f.value}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}

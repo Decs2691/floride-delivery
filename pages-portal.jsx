@@ -363,7 +363,7 @@ const WAVE_DATA = [
     { pos:10, id:'DR-0031', name:'Ingrid Olsen',      van:'FL-29' },
   ]},
   { wave:4, time:'9:15 AM', drivers:[
-    { pos:1,  id:'DR-0142', name:'Patrick O'Brien',  van:'FL-14' },
+    { pos:1,  id:'DR-0142', name:"Patrick O'Brien",  van:'FL-14' },
     { pos:2,  id:'DR-0068', name:'Fatima Al-Hassan',  van:'FL-46' },
     { pos:3,  id:'DR-0125', name:'Trevor Nichols',    van:'FL-03' },
     { pos:4,  id:'DR-0059', name:'Mei Lin',           van:'FL-52' },
@@ -371,7 +371,7 @@ const WAVE_DATA = [
     { pos:6,  id:'DR-0113', name:'Valeria Rios',      van:'FL-38' },
     { pos:7,  id:'DR-0081', name:'Jason Morales',     van:'FL-64' },
     { pos:8,  id:'DR-0044', name:'Amara Diallo',      van:'FL-16' },
-    { pos:9,  id:'DR-0138', name:'Kevin O'Neal',     van:'FL-42' },
+    { pos:9,  id:'DR-0138', name:"Kevin O'Neal",     van:'FL-42' },
     { pos:10, id:'DR-0075', name:'Zara Ahmed',        van:'FL-57' },
   ]},
   { wave:5, time:'10:00 AM', drivers:[

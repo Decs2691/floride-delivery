@@ -2490,6 +2490,21 @@ function WaveBoard({ user }) {
         <div style={{ fontSize:13, color:'#999' }}>{fd('Monday, May 26, 2026')} · {i('60 drivers · 6 waves','60 conductores · 6 waves')}</div>
       </div>
 
+      {/* Driver: Day off message */}
+      {isDriver && !myAssignment && (
+        <div style={{ background:'#fff', borderRadius:16, border:'2px solid rgba(34,197,94,0.3)', marginBottom:28, padding:'24px 28px', display:'flex', alignItems:'center', gap:18 }}>
+          <div style={{ fontSize:42, flexShrink:0 }}>🌴</div>
+          <div>
+            <div style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:800, color:'var(--brand-ink)', marginBottom:4 }}>
+              {i('No route assigned today','Sin asignación de ruta hoy')}
+            </div>
+            <div style={{ fontSize:13, color:'#888' }}>
+              {i("Today is your day off. Enjoy your rest — you've earned it!","Hoy es tu día de descanso. ¡Disfrútalo, te lo has ganado!")}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Driver: My assignment card */}
       {isDriver && myAssignment && (
         <div style={{ background:'#fff', borderRadius:16, border:`2px solid ${wc(myAssignment.wave).bg}`, marginBottom:28, overflow:'hidden' }}>

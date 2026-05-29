@@ -223,10 +223,10 @@ const TRAINEES = [
 ];
 
 const TRAINING_SCHEDULE = [
-  { day:'Mon May 26', time:'7:00 AM', trainee:'Luis Fernandez',  topic:'Van pre-inspection & safety check', location:'DFL4 Lot A' },
-  { day:'Mon May 26', time:'8:30 AM', trainee:'Priya Sharma',    topic:'Route navigation & customer protocols', location:'On Route' },
-  { day:'Tue May 27', time:'7:00 AM', trainee:'Tomás Guerrero',  topic:'Final evaluation — full solo route', location:'On Route' },
-  { day:'Wed May 28', time:'9:00 AM', trainee:'Luis Fernandez',  topic:'Package handling & POD procedures', location:'Warehouse' },
+  { today:true,  day:'Mon May 26', time:'7:00 AM', trainee:'Luis Fernandez',  topic:'Van pre-inspection & safety check', location:'DFL4 Lot A' },
+  { today:true,  day:'Mon May 26', time:'8:30 AM', trainee:'Priya Sharma',    topic:'Route navigation & customer protocols', location:'On Route' },
+  { today:false, day:'Tue May 27', time:'7:00 AM', trainee:'Tomás Guerrero',  topic:'Final evaluation — full solo route', location:'On Route' },
+  { today:false, day:'Wed May 28', time:'9:00 AM', trainee:'Luis Fernandez',  topic:'Package handling & POD procedures', location:'Warehouse' },
 ];
 
 const DISPATCH_ROUTES = [
@@ -315,6 +315,110 @@ const FLEET = [
   { id:'VAN-09', driver:'Lena Muller',     status:'Active',    mileage:118200,lastInsp:'May 15', fuel:82 },
   { id:'VAN-16', driver:'—',              status:'In Service', mileage:95440, lastInsp:'May 10', fuel:100 },
 ];
+// ─── Spanish content variants ─────────────────────────────────
+const ANNOUNCEMENTS_ES = [
+  { id:1, date:'Mayo 26, 2026', title:'Rutas extra disponibles — Sábado Mayo 30', body:'Tenemos 8 rutas disponibles este sábado. El pago es $210 fijo + propinas. Responde esta notificación si estás disponible.', urgent:true, from:'Yamila Ricardo · Operaciones' },
+  { id:2, date:'Mayo 24, 2026', title:'Semana de inspección de vans — Todos los vans antes del viernes', body:'Todos los vehículos deben pasar la inspección antes del viernes Mayo 29. Habla con tu dispatcher para conocer tu horario asignado.', urgent:false, from:'Alex Johnson · CEO' },
+  { id:3, date:'Mayo 20, 2026', title:'Recordatorio de política de uniforme', body:'A partir del 1 de junio, todos los conductores deben usar el uniforme completo de FloRide (chaleco + gorra) durante cada turno. Sin excepciones.', urgent:false, from:'Logan Martínez · CEO' },
+];
+const INCIDENTS_ES = [
+  { id:'INC-041', date:'Mayo 26 · 10:14 AM', driver:'Carlos Reyes',   type:'Problema de vehículo', desc:'Luz de advertencia de sobrecalentamiento del van. Se detuvo de forma segura en Sunoco en US-17.', status:'Open', priority:'high' },
+  { id:'INC-040', date:'Mayo 26 · 8:52 AM',  driver:'Lena Muller',    type:'Reporte de cliente',   desc:'El cliente afirma que el paquete fue entregado en una dirección incorrecta.', status:'In Review', priority:'medium' },
+  { id:'INC-039', date:'Mayo 25 · 3:30 PM',  driver:'James Thompson', type:'Accidente',             desc:'Colisión menor en estacionamiento. Sin heridos. Fotos enviadas.', status:'Closed', priority:'low' },
+];
+const TRAINING_SCHEDULE_ES = [
+  { today:true,  day:'Lun Mayo 26', time:'7:00 AM', trainee:'Luis Fernandez', topic:'Pre-inspección del van y chequeo de seguridad', location:'Lote A DFL4' },
+  { today:true,  day:'Lun Mayo 26', time:'8:30 AM', trainee:'Priya Sharma',   topic:'Navegación de ruta y protocolos con clientes', location:'En Ruta' },
+  { today:false, day:'Mar Mayo 27', time:'7:00 AM', trainee:'Tomás Guerrero', topic:'Evaluación final — ruta completa en solitario', location:'En Ruta' },
+  { today:false, day:'Mié Mayo 28', time:'9:00 AM', trainee:'Luis Fernandez', topic:'Manejo de paquetes y procedimientos POD', location:'Almacén' },
+];
+const SHIFT_NOTES_ES = [
+  { id:1, author:'Yamila Ricardo', role:'Supervisora de Operaciones', shift:'AM', date:'Mayo 26, 2026 · 5:45 PM', tags:['incident','attendance'],
+    body:'RT-005 (Carlos Reyes) tuvo un problema de sobrecalentamiento en US-17 alrededor de las 10:14 AM. El conductor se detuvo de forma segura. El van #FL-012 está fuera de servicio pendiente de inspección. La ruta no se completó — quedan 72 paradas. Luis Fernandez estuvo ausente hoy sin aviso. Lo contacté a las 9:30 AM, dice que se olvidó. Esta es su segunda inasistencia sin aviso este mes. Recomiendo advertencia formal la próxima semana si se repite.' },
+  { id:2, author:'Yamila Ricardo', role:'Supervisora de Operaciones', shift:'AM', date:'Mayo 25, 2026 · 6:02 PM', tags:['general','recognition'],
+    body:'Buen día en general. Maria Gonzalez completó su ruta 40 minutos antes y ayudó a James Thompson con una entrega complicada en Winter Park. Antoine Dubois llegó a 100 paradas antes del almuerzo — récord personal. Sin incidentes mayores. La semana del scorecard cierra mañana — recuerda a los conductores revisar sus puntajes el lunes por la mañana.' },
+  { id:3, author:'Logan Martínez', role:'Gerente de Estación', shift:'PM', date:'Mayo 24, 2026 · 8:10 PM', tags:['general'],
+    body:'La ola PM salió sin problemas. Las 8 rutas regresaron antes de las 7:30 PM. Inspecciones de vans para el lunes confirmadas: FL-007 a las 8 AM, FL-012 a las 9 AM, FL-018 a las 10 AM. Recuerda a Lena Muller que debe asistir a la sesión de coaching con Yamila el martes — es obligatoria dado su racha de Bronze.' },
+];
+const REQUESTS_ES = [
+  { id:'REQ-018', driver:'Carlos Reyes',   type:'Solicitud de día libre', msg:'Solicito el viernes Mayo 30 libre — emergencia familiar.', time:'9:05 AM', urgent:true  },
+  { id:'REQ-017', driver:'Lena Muller',    type:'Problema de uniforme',   msg:'Mi talla de chaleco está mal. Necesito Medium, me enviaron Large.', time:'8:30 AM', urgent:false },
+  { id:'REQ-016', driver:'Luis Fernandez', type:'Pregunta',               msg:'¿Dónde recojo el escáner del van antes de la ruta?', time:'7:45 AM', urgent:false },
+];
+const CHECKLIST_ES = [
+  { id:1, task:'Confirmar que los 60 conductores hayan registrado su llegada', done:true },
+  { id:2, task:'Enviar recordatorios de turno para el wave PM (2:00 PM)', done:false },
+  { id:3, task:'Revisar patrón de asistencia de Carlos Reyes — 3ra tardanza de la semana', done:false },
+  { id:4, task:'Actualizar el registro de inventario de escáneres en el sistema', done:true },
+  { id:5, task:'Enviar reporte diario de asistencia al supervisor antes del mediodía', done:false },
+];
+const RECOGNITION_ES = {
+  month:'Mayo 2026',
+  winner: {
+    id:'DR-0032', name:'Maria Gonzalez', score:95, tier:'Platinum', routes:22,
+    highlights:[
+      { label:'Entregado y recibido',      value:'99/100' },
+      { label:'Satisfacción del cliente',  value:'98/100' },
+      { label:'Puntaje de manejo seguro',  value:'97/100' },
+    ],
+    quote:'Maria ha sido una figura excepcional este mes. Completó 22 rutas sin ningún incidente, recibió 4 felicitaciones personales de clientes y ayudó a dos nuevos conductores durante su primera semana en la carretera. Su constancia y actitud marcan el estándar para todo el equipo.',
+    from:'Yamila Ricardo · Supervisora de Operaciones',
+  },
+  topWeek:[
+    { id:'DR-0055', name:'Antoine Dubois',    score:91, highlight:'Sin incidentes · 5 rutas completadas',      badge:'⭐' },
+    { id:'DR-0061', name:'James Thompson',     score:88, highlight:'Mayor puntaje On-Time · 5 rutas',          badge:'⭐' },
+    { id:'DR-0045', name:'Daniel Cantor Soto', score:87, highlight:'Racha de 47 días · Mayor mejora esta semana', badge:'📈' },
+  ],
+};
+const VIDEOS_ES = [
+  { id:1, title:'¿Qué hacer cuando el cliente no está en casa?', duration:'3:42', category:'Entrega',       color:'#FF6B35' },
+  { id:2, title:'Cómo manejar paquetes dañados en ruta',         duration:'4:15', category:'Protocolo',     color:'#3B9EFF' },
+  { id:3, title:'Manejo seguro bajo lluvia intensa',              duration:'5:08', category:'Seguridad',     color:'#22c55e' },
+  { id:4, title:'Cómo usar la app Mentor correctamente',          duration:'2:55', category:'Herramientas',  color:'#a855f7' },
+];
+const COACHING_QUEUE_ES = [
+  { id:'DR-0074', name:'Lena Muller',   score:62, issues:['Manejo seguro: 58','Entrega a tiempo: 65'], sessions:0, priority:'urgent' },
+  { id:'DR-0018', name:'Carlos Reyes',  score:71, issues:['POD: 68','Sec. estacionamiento: 70'],       sessions:1, priority:'soon'   },
+  { id:'DR-0045', name:'Daniel Cantor', score:87, issues:['POD: 79','Sec. estacionamiento: 72'],       sessions:0, priority:'watch'  },
+];
+const NOTIFICATIONS_ES = {
+  'driver': [
+    { id:1, icon:'📊', title:'Tu scorecard está listo', body:'Semana Mayo 19–25 · Puntaje: 87 · Nivel: Gold', time:'Hace 2h', read:false },
+    { id:2, icon:'🔔', title:'Nuevo anuncio', body:'Rutas extra disponibles — Sábado Mayo 30. Responde si estás disponible.', time:'Hace 4h', read:false },
+    { id:3, icon:'🏆', title:'Recognition Wall actualizado', body:'Maria Gonzalez nombrada Empleada del Mes.', time:'Hace 1d', read:true },
+    { id:4, icon:'✅', title:'Entrenamiento completado', body:'Terminaste "Manejo seguro bajo lluvia intensa" — ¡excelente trabajo!', time:'Hace 2d', read:true },
+  ],
+  'trainer': [
+    { id:1, icon:'👤', title:'Luis Fernandez — Ausente hoy', body:'Sin registro de llegada ni aviso previo. Confirmar estado.', time:'Hace 2h', read:false },
+    { id:2, icon:'👤', title:'Nuevo aprendiz asignado', body:'Luis Fernandez inicia el Día 1 mañana en el Lote A de DFL4.', time:'Hace 1d', read:true },
+  ],
+  'dispatch': [
+    { id:1, icon:'⚠️', title:'RT-005 Retrasado — Carlos Reyes', body:'Ruta Sanford al 33%. Sobrecalentamiento del vehículo reportado. Ver INC-041.', time:'Hace 45m', read:false },
+    { id:2, icon:'🚨', title:'Nuevo incidente reportado', body:'INC-041: Van sobrecalentándose en US-17. Conductor se detuvo de forma segura.', time:'Hace 1h', read:false },
+  ],
+  'supervisor-assistant': [
+    { id:1, icon:'⚠️', title:'Luis Fernandez marcado como ausente', body:'Sin registro ni aviso. Contactar o escalar.', time:'Hace 1h', read:false },
+    { id:2, icon:'📋', title:'2 solicitudes pendientes', body:'Carlos Reyes: Día libre. Lena Muller: Problema de uniforme.', time:'Hace 3h', read:false },
+    { id:3, icon:'📤', title:'Scorecard subido', body:'Puntajes de la semana Mayo 19–25 ya son visibles para todos.', time:'Hace 1d', read:true },
+  ],
+  'supervisor': [
+    { id:1, icon:'🚨', title:'Alerta Bronze — Lena Muller', body:'3 semanas consecutivas en Bronze. Requiere sesión de coaching.', time:'Hace 2h', read:false },
+    { id:2, icon:'📋', title:'Solicitud de día libre pendiente', body:'Carlos Reyes solicitó el viernes Mayo 30. Pendiente de aprobación.', time:'Hace 3h', read:false },
+  ],
+  'ops-manager': [
+    { id:1, icon:'🚗', title:'Inspección de flota pendiente el viernes', body:'3 vans pendientes de inspección. Todos deben pasar antes del Mayo 29.', time:'Hace 2h', read:false },
+    { id:2, icon:'🚨', title:'Alerta Bronze en el equipo', body:'Lena Muller marcada por 3 semanas consecutivas en Bronze.', time:'Hace 3h', read:false },
+  ],
+  'ceo': [
+    { id:1, icon:'📊', title:'Scorecard semanal listo', body:'Semana Mayo 19–25 · Promedio del equipo: 84 · Tasa de entrega: 97%', time:'Hace 1h', read:false },
+    { id:2, icon:'🚨', title:'Problema de van activo', body:'INC-041 abierto: van FL-012 fuera de servicio. Ruta incompleta.', time:'Hace 2h', read:false },
+  ],
+  'manager': [
+    { id:1, icon:'📊', title:'Scorecard semanal listo', body:'Tu equipo promedia 84 esta semana. 1 conductor en alerta Bronze.', time:'Hace 1h', read:false },
+    { id:2, icon:'📋', title:'Nuevo anuncio', body:'Rutas extra disponibles este sábado. Notifica a los conductores disponibles.', time:'Hace 3h', read:false },
+  ],
+};
+
 // ─── Wave Assignments ─────────────────────────────────────────
 const WAVE_COLORS = {
   1: { bg:'#2563eb', light:'rgba(37,99,235,0.1)',  label:'Wave 1' },
@@ -450,7 +554,8 @@ function NotificationBell({ role }) {
   const i = useT();
   const [open, setOpen] = usePS(false);
   const [read, setRead] = usePS({});
-  const notifs = NOTIFICATIONS[role] || [];
+  const allNotifs = useD(NOTIFICATIONS, NOTIFICATIONS_ES);
+  const notifs = allNotifs[role] || [];
   const unread = notifs.filter(n => !n.read && !read[n.id]).length;
 
   const markRead = (id) => setRead(r => ({ ...r, [id]: true }));
@@ -616,6 +721,9 @@ function DriverPortal({ user, onLogout }) {
 function DriverHome({ user, setActive }) {
   const i = useT();
   const fd = useFmtDate();
+  const announcements = useD(ANNOUNCEMENTS, ANNOUNCEMENTS_ES);
+  const recognition = useD(RECOGNITION, RECOGNITION_ES);
+  const videos = useD(VIDEOS, VIDEOS_ES);
   return (
     <div>
       {/* Welcome */}
@@ -715,9 +823,9 @@ function DriverHome({ user, setActive }) {
           {/* Urgent announcement */}
           <div style={{ background:'linear-gradient(135deg,#FF6B35 0%,#e8541d 100%)', borderRadius:16, padding:22, color:'#fff' }}>
             <div style={{ fontSize:10, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', opacity:0.85, marginBottom:8 }}>🔔 {i('Urgent','Urgente')}</div>
-            <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, marginBottom:6 }}>{ANNOUNCEMENTS[0].title}</div>
-            <div style={{ fontSize:13, opacity:0.9, lineHeight:1.5 }}>{ANNOUNCEMENTS[0].body}</div>
-            <div style={{ marginTop:10, fontSize:11, opacity:0.65 }}>{ANNOUNCEMENTS[0].from} · {fd(ANNOUNCEMENTS[0].date)}</div>
+            <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, marginBottom:6 }}>{announcements[0].title}</div>
+            <div style={{ fontSize:13, opacity:0.9, lineHeight:1.5 }}>{announcements[0].body}</div>
+            <div style={{ marginTop:10, fontSize:11, opacity:0.65 }}>{announcements[0].from} · {fd(announcements[0].date)}</div>
           </div>
 
           {/* AI Tip */}
@@ -743,9 +851,9 @@ function DriverHome({ user, setActive }) {
       <div style={{ marginTop:24, background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:16, padding:24, color:'#fff', display:'flex', alignItems:'center', gap:20 }}>
         <div style={{ fontSize:42, flexShrink:0 }}>🏆</div>
         <div style={{ flex:1 }}>
-          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>{i('Employee of the Month','Empleado del mes')} · {fd(RECOGNITION.month)}</div>
-          <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, marginBottom:4 }}>{RECOGNITION.winner.name}</div>
-          <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} {i('routes','rutas')} · {RECOGNITION.winner.tier}</div>
+          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>{i('Employee of the Month','Empleado del mes')} · {fd(recognition.month)}</div>
+          <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, marginBottom:4 }}>{recognition.winner.name}</div>
+          <div style={{ fontSize:13, opacity:0.75 }}>Score {recognition.winner.score}/100 · {recognition.winner.routes} {i('routes','rutas')} · {recognition.winner.tier}</div>
         </div>
         <button onClick={() => setActive('recognition')} style={{ padding:'10px 18px', background:'rgba(255,255,255,0.12)', border:'1.5px solid rgba(255,255,255,0.2)', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, flexShrink:0, cursor:'pointer' }}>
           {i('See Wall of Fame →','Ver muro de honor →')}
@@ -759,7 +867,7 @@ function DriverHome({ user, setActive }) {
           <button onClick={() => setActive('training')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('See all →','Ver todo →')}</button>
         </div>
         <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14 }}>
-          {VIDEOS.map(v => (
+          {videos.map(v => (
             <div key={v.id} style={{ background:'#fff', borderRadius:14, overflow:'hidden', border:'1px solid rgba(26,26,46,0.07)', cursor:'pointer', transition:'transform .15s,box-shadow .15s' }}
               onMouseEnter={e => { e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(26,26,46,0.1)'; }}
               onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='none'; }}
@@ -852,12 +960,13 @@ function DriverScorecard() {
 
 function DriverTraining() {
   const i = useT();
+  const videos = useD(VIDEOS, VIDEOS_ES);
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Training Library','Biblioteca de Entrenamiento')}</h2>
       <p style={{ color:'#999', fontSize:14, marginBottom:28 }}>{i('Resources to handle any situation on the road.','Recursos para manejar cualquier situación en la ruta.')}</p>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:18 }}>
-        {VIDEOS.map(v => (
+        {videos.map(v => (
           <div key={v.id} style={{ background:'#fff', borderRadius:16, overflow:'hidden', border:'1px solid rgba(26,26,46,0.07)', cursor:'pointer', transition:'transform .15s,box-shadow .15s' }}
             onMouseEnter={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow='0 10px 30px rgba(26,26,46,0.1)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='none'; }}
@@ -882,12 +991,13 @@ function DriverTraining() {
 
 function DriverAnnouncements() {
   const fd = useFmtDate();
+  const announcements = useD(ANNOUNCEMENTS, ANNOUNCEMENTS_ES);
   const [read, setRead] = usePS({});
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 28px' }}>Announcements</h2>
       <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-        {ANNOUNCEMENTS.map(a => (
+        {announcements.map(a => (
           <div key={a.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:`1px solid ${a.urgent ? 'rgba(255,107,53,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${a.urgent ? '#FF6B35' : 'transparent'}` }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
               <div style={{ flex:1 }}>
@@ -1083,6 +1193,7 @@ function ManagerTeam() {
 function ManagerAnnouncements() {
   const i = useT();
   const fd = useFmtDate();
+  const announcements = useD(ANNOUNCEMENTS, ANNOUNCEMENTS_ES);
   const [showForm, setShowForm] = usePS(false);
   const [title, setTitle] = usePS('');
   const [msg, setMsg] = usePS('');
@@ -1124,7 +1235,7 @@ function ManagerAnnouncements() {
       )}
 
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-        {ANNOUNCEMENTS.map(a => (
+        {announcements.map(a => (
           <div key={a.id} style={{ background:'#fff', borderRadius:14, padding:'20px 24px', border:`1px solid ${a.urgent ? 'rgba(255,107,53,0.2)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${a.urgent ? '#FF6B35' : 'transparent'}` }}>
             {a.urgent && <span style={{ fontSize:10, fontWeight:700, background:'rgba(255,107,53,0.1)', color:'#FF6B35', padding:'2px 9px', borderRadius:999, textTransform:'uppercase', marginBottom:8, display:'inline-block' }}>Urgent</span>}
             <h4 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'6px 0 8px' }}>{a.title}</h4>
@@ -1256,10 +1367,12 @@ function TrainerPortal({ user, onLogout }) {
 
 function TrainerOverview({ user, setActive }) {
   const i = useT();
+  const fd = useFmtDate();
+  const schedule = useD(TRAINING_SCHEDULE, TRAINING_SCHEDULE_ES);
   return (
     <div>
       <div style={{ marginBottom:28 }}>
-        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
+        <div style={{ fontSize:13, color:'#999' }}>{fd('Monday, May 26, 2026')}</div>
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>{i('Good morning','Buenos días')}, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
@@ -1304,7 +1417,7 @@ function TrainerOverview({ user, setActive }) {
             <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Today's Sessions</h3>
             <button onClick={() => setActive('schedule')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>Full schedule →</button>
           </div>
-          {TRAINING_SCHEDULE.filter(s => s.day === 'Mon May 26').map((s,idx) => (
+          {schedule.filter(s => s.today).map((s,idx) => (
             <div key={idx} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                 <div>
@@ -1358,11 +1471,12 @@ function TrainerTrainees() {
 function TrainerSchedule() {
   const i = useT();
   const fd = useFmtDate();
+  const schedule = useD(TRAINING_SCHEDULE, TRAINING_SCHEDULE_ES);
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Training Schedule</h2>
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-        {TRAINING_SCHEDULE.map((s,idx) => (
+        {schedule.map((s,idx) => (
           <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:20, alignItems:'flex-start' }}>
             <div style={{ textAlign:'center', minWidth:80 }}>
               <div style={{ fontSize:11, fontWeight:700, color:'var(--brand-accent)', textTransform:'uppercase', letterSpacing:'0.06em' }}>{fd(s.day).split(' ')[0]}</div>
@@ -1487,6 +1601,7 @@ function DispatchDrivers() {
 function DispatchIncidents() {
   const i = useT();
   const fd = useFmtDate();
+  const incidents = useD(INCIDENTS, INCIDENTS_ES);
   const priColor = p => ({high:'#dc2626',medium:'#d97706',low:'#16a34a'})[p];
   return (
     <div>
@@ -1495,7 +1610,7 @@ function DispatchIncidents() {
         <button style={{ padding:'10px 18px', background:'var(--brand-accent)', color:'#fff', borderRadius:10, fontSize:13, fontWeight:700 }}>+ {i('Report Incident','Reportar incidente')}</button>
       </div>
       <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-        {INCIDENTS.map(inc => (
+        {incidents.map(inc => (
           <div key={inc.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1px solid ${inc.status==='Open' ? 'rgba(239,68,68,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${priColor(inc.priority)}` }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
               <div>
@@ -1688,12 +1803,13 @@ function SAAttendance() {
 
 function SARequests() {
   const i = useT();
+  const requests = useD(REQUESTS, REQUESTS_ES);
   const [resolved, setResolved] = usePS({});
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('Driver Requests','Solicitudes')}</h2>
       <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-        {REQUESTS.map(r => (
+        {requests.map(r => (
           <div key={r.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1px solid ${r.urgent ? 'rgba(255,107,53,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${r.urgent ? '#FF6B35' : 'rgba(26,26,46,0.1)'}` }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
               <div style={{ flex:1 }}>
@@ -1720,27 +1836,31 @@ function SARequests() {
 
 function SAChecklist() {
   const i = useT();
-  const [items, setItems] = usePS(CHECKLIST);
-  function toggle(id) { setItems(prev => prev.map(i => i.id===id ? {...i, done:!i.done} : i)); }
-  const done = items.filter(i=>i.done).length;
+  const items = useD(CHECKLIST, CHECKLIST_ES);
+  const [doneMap, setDoneMap] = usePS({1:true, 4:true});
+  function toggle(id) { setDoneMap(prev => ({...prev, [id]: !prev[id]})); }
+  const doneCount = items.filter(item => doneMap[item.id] ?? item.done).length;
   return (
     <div>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Daily Checklist</h2>
-        <span style={{ fontSize:13, fontWeight:600, color: done===items.length ? '#16a34a' : '#888' }}>{done}/{items.length} completed</span>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>{i('Daily Checklist','Lista diaria')}</h2>
+        <span style={{ fontSize:13, fontWeight:600, color: doneCount===items.length ? '#16a34a' : '#888' }}>{doneCount}/{items.length} {i('completed','completadas')}</span>
       </div>
       <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
-        {items.map((item,idx) => (
-          <div key={item.id} onClick={()=>toggle(item.id)} style={{ display:'flex', alignItems:'center', gap:14, padding:'18px 24px', borderBottom: i<items.length-1 ? '1px solid rgba(26,26,46,0.05)' : 'none', cursor:'pointer', transition:'background .12s' }}
-            onMouseEnter={e=>e.currentTarget.style.background='rgba(26,26,46,0.015)'}
-            onMouseLeave={e=>e.currentTarget.style.background=''}
-          >
-            <div style={{ width:22, height:22, borderRadius:6, border:`2px solid ${item.done ? '#16a34a' : 'rgba(26,26,46,0.2)'}`, background: item.done ? '#16a34a' : 'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
-              {item.done && <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>}
+        {items.map((item,idx) => {
+          const isDone = doneMap[item.id] ?? item.done;
+          return (
+            <div key={item.id} onClick={()=>toggle(item.id)} style={{ display:'flex', alignItems:'center', gap:14, padding:'18px 24px', borderBottom: idx<items.length-1 ? '1px solid rgba(26,26,46,0.05)' : 'none', cursor:'pointer', transition:'background .12s' }}
+              onMouseEnter={e=>e.currentTarget.style.background='rgba(26,26,46,0.015)'}
+              onMouseLeave={e=>e.currentTarget.style.background=''}
+            >
+              <div style={{ width:22, height:22, borderRadius:6, border:`2px solid ${isDone ? '#16a34a' : 'rgba(26,26,46,0.2)'}`, background: isDone ? '#16a34a' : 'transparent', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, transition:'all .15s' }}>
+                {isDone && <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg>}
+              </div>
+              <span style={{ fontSize:14, color: isDone ? '#aaa' : 'var(--brand-ink)', textDecoration: isDone ? 'line-through' : 'none', transition:'all .15s' }}>{item.task}</span>
             </div>
-            <span style={{ fontSize:14, color: item.done ? '#aaa' : 'var(--brand-ink)', textDecoration: item.done ? 'line-through' : 'none', transition:'all .15s' }}>{item.task}</span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -1766,12 +1886,13 @@ function SupervisorPortal({ user, onLogout }) {
 
 function SupervisorCoaching() {
   const i = useT();
+  const coaching = useD(COACHING_QUEUE, COACHING_QUEUE_ES);
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 8px' }}>{i('Coaching Queue','Cola de coaching')}</h2>
       <p style={{ fontSize:13, color:'#999', marginBottom:24 }}>{i('Drivers who need a 1-on-1 session based on this week\'s scorecard.','Conductores que necesitan sesión 1 a 1 según su puntuación.')}</p>
       <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
-        {COACHING_QUEUE.map(d => {
+        {coaching.map(d => {
           const pri = {urgent:'#dc2626',soon:'#d97706',watch:'#2563eb'}[d.priority];
           return (
             <div key={d.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${pri}` }}>
@@ -1827,6 +1948,7 @@ function OpsManagerPortal({ user, onLogout }) {
 function OpsOverview({ user, setActive }) {
   const i = useT();
   const fd = useFmtDate();
+  const incidents = useD(INCIDENTS, INCIDENTS_ES);
   return (
     <div>
       <div style={{ marginBottom:28 }}>
@@ -1854,7 +1976,7 @@ function OpsOverview({ user, setActive }) {
             <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('Open Incidents','Incidentes abiertos')}</h3>
             <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('View all →','Ver todos →')}</button>
           </div>
-          {INCIDENTS.filter(i=>i.status!=='Closed').map(inc=>(
+          {incidents.filter(inc=>inc.status!=='Closed').map(inc=>(
             <div key={inc.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
               <div style={{ display:'flex', justifyContent:'space-between' }}>
                 <div>
@@ -2156,17 +2278,18 @@ function InfractionStreakPage({ user }) {
 // ─── Recognition Wall ──────────────────────────────────────────
 function DriverRecognition({ user }) {
   const i = useT();
-  const w = RECOGNITION.winner;
+  const recognition = useD(RECOGNITION, RECOGNITION_ES);
+  const w = recognition.winner;
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Recognition Wall','Muro de Honor')}</h2>
-      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Celebrating the drivers who set the standard','Reconociendo a los conductores que marcan el ejemplo')} · {RECOGNITION.month}</div>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Celebrating the drivers who set the standard','Reconociendo a los conductores que marcan el ejemplo')} · {recognition.month}</div>
 
       {/* Employee of the Month */}
       <div style={{ background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:20, padding:36, color:'#fff', marginBottom:28, position:'relative', overflow:'hidden' }}>
         <div style={{ position:'absolute', top:-30, right:-30, fontSize:140, opacity:0.06, lineHeight:1 }}>🏆</div>
         <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#f59e0b', marginBottom:16 }}>
-          ⭐ Employee of the Month · {RECOGNITION.month}
+          ⭐ {i('Employee of the Month','Empleado del mes')} · {recognition.month}
         </div>
         <div style={{ display:'flex', alignItems:'flex-start', flexDirection: isMob() ? 'column' : 'row', gap:24, marginBottom:24 }}>
           <Avatar name={w.name} size={80} userId={w.id} />
@@ -2196,7 +2319,7 @@ function DriverRecognition({ user }) {
       {/* Top performers this week */}
       <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>⭐ {i('Top Performers This Week','Mejores de la semana')}</h3>
       <div style={{ display:'grid', gap:14, marginBottom:28 }}>
-        {RECOGNITION.topWeek.map((d, idx) => {
+        {recognition.topWeek.map((d, idx) => {
           const medals = ['🥇','🥈','🥉'];
           const isYou = d.id === user.id;
           return (
@@ -2232,7 +2355,9 @@ function ShiftNotes({ user }) {
   const i = useT();
   const fd = useFmtDate();
   const canWrite = ['supervisor','ops-manager','manager','ceo','trainer','dispatch','supervisor-assistant'].includes(user.role);
-  const [notes, setNotes] = usePS(SHIFT_NOTES);
+  const staticNotes = useD(SHIFT_NOTES, SHIFT_NOTES_ES);
+  const [userNotes, setUserNotes] = usePS([]);
+  const notes = [...userNotes, ...staticNotes];
   const [text, setText] = usePS('');
 
   const [tag, setTag] = usePS('general');
@@ -2259,7 +2384,7 @@ function ShiftNotes({ user }) {
       tags: [tag],
       body: text.trim(),
     };
-    setNotes(n => [newNote, ...n]);
+    setUserNotes(n => [newNote, ...n]);
     setText('');
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);

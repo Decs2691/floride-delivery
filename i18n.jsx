@@ -28,4 +28,10 @@ function useFmtDate() {
   };
 }
 
-Object.assign(window, { LangContext, useLang, useT, useFmtDate });
+/* useD(en, es) — picks the right dataset based on language */
+function useD(en, es) {
+  const { lang } = useLang();
+  return lang === 'es' ? es : en;
+}
+
+Object.assign(window, { LangContext, useLang, useT, useFmtDate, useD });

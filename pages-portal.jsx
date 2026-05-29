@@ -547,6 +547,115 @@ function ScoreRing({ score, size = 100 }) {
   );
 }
 
+// ─── Driver Profile Modal ─────────────────────────────────────
+function DriverProfileModal({ driver, onClose }) {
+  const i = useT();
+  const fd = useFmtDate();
+  if (!driver) return null;
+
+  const streak = INFRACTION_STREAKS[driver.id] || { days: 0, milestone: 30, lastInc: '—' };
+  const driverIncidents = INCIDENTS.filter(inc => inc.driver === driver.name);
+  const dl = DRIVER_LIST.find(d => d.id === driver.id) || driver;
+
+  const tColor = { Platinum:'#a855f7', Gold:'#b45309', Silver:'#64748b', Bronze:'#92400e' };
+  const tBg    = { Platinum:'rgba(168,85,247,0.1)', Gold:'rgba(180,83,9,0.1)', Silver:'rgba(100,116,139,0.1)', Bronze:'rgba(146,64,14,0.1)' };
+
+  return (
+    <div onClick={onClose} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', zIndex:3000, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:'#fff', borderRadius:20, width:'100%', maxWidth:460, maxHeight:'88vh', overflowY:'auto', boxShadow:'0 24px 64px rgba(0,0,0,0.22)' }}>
+        {/* Header */}
+        <div style={{ background:'linear-gradient(135deg,#1A1A2E,#16213e)', borderRadius:'20px 20px 0 0', padding:'28px 28px 24px', color:'#fff', position:'relative' }}>
+          <button onClick={onClose} style={{ position:'absolute', top:14, right:16, background:'rgba(255,255,255,0.12)', border:'none', borderRadius:8, color:'#fff', fontSize:20, width:32, height:32, cursor:'pointer', lineHeight:1, display:'flex', alignItems:'center', justifyContent:'center' }}>×</button>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <Avatar name={driver.name} size={64} userId={driver.id} />
+            <div>
+              <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800 }}>{driver.name}</div>
+              <div style={{ fontSize:12, opacity:0.55, marginTop:3, fontFamily:'var(--font-mono)' }}>{driver.id} · DFL4 — Orlando</div>
+              {dl.tier && <span style={{ marginTop:8, display:'inline-block', background: tBg[dl.tier]||'rgba(255,255,255,0.1)', color: tColor[dl.tier]||'#fff', padding:'3px 12px', borderRadius:999, fontSize:12, fontWeight:700 }}>{dl.tier}</span>}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ padding:24 }}>
+          {/* Score / Routes / Streak */}
+          {dl.score && (
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:20 }}>
+              {[
+                { label:i('Score','Puntuación'), value:dl.score, col:'#2563eb' },
+                { label:i('Routes','Rutas'), value:`${dl.routes || 0}`, col:'#16a34a' },
+                { label:i('Day streak','Días sin incidente'), value:streak.days, col:'#FF6B35' },
+              ].map(m => (
+                <div key={m.label} style={{ background:'#f7f7fb', borderRadius:12, padding:'14px 12px', textAlign:'center' }}>
+                  <div style={{ fontFamily:'var(--font-display)', fontSize:24, fontWeight:800, color:m.col }}>{m.value}</div>
+                  <div style={{ fontSize:10, color:'#aaa', marginTop:3, fontWeight:600 }}>{m.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Training progress (trainees) */}
+          {driver.days !== undefined && (
+            <div style={{ background:'#f7f7fb', borderRadius:12, padding:'16px', marginBottom:20 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8 }}>
+                <span style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{i('Training Progress','Progreso de entrenamiento')}</span>
+                <span style={{ fontSize:13, fontWeight:700, color:'var(--brand-accent)' }}>{driver.progress}%</span>
+              </div>
+              <div style={{ background:'rgba(26,26,46,0.08)', borderRadius:999, height:8, overflow:'hidden', marginBottom:8 }}>
+                <div style={{ width:`${driver.progress}%`, height:'100%', background: driver.progress===100 ? '#16a34a' : 'var(--brand-accent)', borderRadius:999 }} />
+              </div>
+              <div style={{ fontSize:12, color:'#888' }}>{i('Day','Día')} {driver.days} · {driver.status==='Completed' ? i('Completed','Completado') : driver.status==='Final Eval' ? i('Final Eval','Eval. final') : i('In Training','En entrenamiento')}</div>
+            </div>
+          )}
+
+          {/* Tier history */}
+          {dl.tierHistory && (
+            <div style={{ marginBottom:20 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.07em', marginBottom:10 }}>{i('Tier History — last 3 weeks','Historial de nivel — últimas 3 semanas')}</div>
+              <div style={{ display:'flex', gap:8 }}>
+                {dl.tierHistory.map((t, idx) => (
+                  <span key={idx} style={{ padding:'5px 14px', borderRadius:999, fontSize:12, fontWeight:700, background: tBg[t]||'rgba(26,26,46,0.06)', color: tColor[t]||'#666' }}>{t}</span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Infraction streak */}
+          {dl.score && (
+            <div style={{ background:'#f7f7fb', borderRadius:12, padding:'14px 16px', marginBottom:20, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, color:'#888' }}>{i('Infraction-free streak','Racha sin infracciones')}</div>
+                <div style={{ fontSize:11, color:'#bbb', marginTop:2 }}>{i('Last incident','Último incidente')}: {fd(streak.lastInc)}</div>
+              </div>
+              <div style={{ textAlign:'right' }}>
+                <div style={{ fontFamily:'var(--font-display)', fontSize:26, fontWeight:800, color: streak.days >= streak.milestone ? '#16a34a' : 'var(--brand-accent)' }}>{streak.days}</div>
+                <div style={{ fontSize:10, color:'#aaa' }}>{i('days','días')}</div>
+              </div>
+            </div>
+          )}
+
+          {/* Recent incidents */}
+          <div>
+            <div style={{ fontSize:11, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.07em', marginBottom:10 }}>{i('Incidents','Incidentes')}</div>
+            {driverIncidents.length === 0
+              ? <div style={{ fontSize:13, color:'#16a34a', fontWeight:600 }}>✓ {i('No incidents on record','Sin incidentes registrados')}</div>
+              : driverIncidents.map(inc => (
+                <div key={inc.id} style={{ padding:'12px 0', borderBottom:'1px solid rgba(26,26,46,0.06)' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                    <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{inc.type}</div>
+                    <span style={{ fontSize:10, fontWeight:700, padding:'2px 8px', borderRadius:999, background: inc.status==='Open'?'rgba(239,68,68,0.1)':inc.status==='In Review'?'rgba(251,191,36,0.1)':'rgba(34,197,94,0.1)', color: inc.status==='Open'?'#dc2626':inc.status==='In Review'?'#d97706':'#16a34a', flexShrink:0, marginLeft:8 }}>{inc.status}</span>
+                  </div>
+                  <div style={{ fontSize:12, color:'#888', marginTop:3 }}>{inc.desc}</div>
+                  <div style={{ fontSize:11, color:'#ccc', marginTop:4 }}>{inc.id} · {fd(inc.date)}</div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Portal Navbar ────────────────────────────────────────────
 
 // ─── Notification Bell ────────────────────────────────────────
@@ -724,6 +833,8 @@ function DriverHome({ user, setActive }) {
   const announcements = useD(ANNOUNCEMENTS, ANNOUNCEMENTS_ES);
   const recognition = useD(RECOGNITION, RECOGNITION_ES);
   const videos = useD(VIDEOS, VIDEOS_ES);
+  const [showProfile, setShowProfile] = usePS(false);
+  const myDriver = DRIVER_LIST.find(d => d.id === user.id) || { id: user.id, name: user.name };
   return (
     <div>
       {/* Welcome */}
@@ -733,6 +844,7 @@ function DriverHome({ user, setActive }) {
           <div style={{ position:'absolute', bottom:0, right:0, width:20, height:20, borderRadius:'50%', background:'var(--brand-accent)', border:'2px solid #fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, cursor:'pointer' }} title="Click avatar to change photo">📷</div>
         </div>
         <div>
+        {showProfile && <DriverProfileModal driver={myDriver} onClose={() => setShowProfile(false)} />}
         <div style={{ fontSize:13, color:'#999', fontWeight:500 }}>{fd('Monday, May 26, 2026')}</div>
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 8px' }}>
           {i('Good morning','Buenos días')}, {user.name.split(' ')[0]}
@@ -742,6 +854,10 @@ function DriverHome({ user, setActive }) {
           <span style={{ color:'#666' }}>{i('Route','Ruta')}: <strong>{user.route}</strong></span>
           <span style={{ color:'#ccc' }}>·</span>
           <span style={{ color:'#666' }}>{i('Shift at','Turno a las')}: <strong>{user.shiftTime}</strong></span>
+          <span style={{ color:'#ccc' }}>·</span>
+          <button onClick={() => setShowProfile(true)} style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)', background:'none', border:'none', cursor:'pointer', padding:0 }}>
+            👤 {i('My Profile','Mi perfil')}
+          </button>
         </div>
         </div>
       </div>
@@ -1145,14 +1261,16 @@ function ManagerOverview({ user, setActive }) {
 
 function ManagerTeam() {
   const i = useT();
+  const [profileDriver, setProfileDriver] = usePS(null);
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>My Team</h2>
+      {profileDriver && <DriverProfileModal driver={profileDriver} onClose={() => setProfileDriver(null)} />}
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('My Team','Mi equipo')}</h2>
       <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
         <table style={{ width:'100%', borderCollapse:'collapse' }}>
           <thead>
             <tr style={{ background:'rgba(26,26,46,0.03)' }}>
-              {['Driver','ID','Score','Tier','Routes','Status'].map(h => (
+              {[i('Driver','Conductor'),'ID',i('Score','Puntaje'),i('Tier','Nivel'),i('Routes','Rutas'),i('Status','Estado')].map(h => (
                 <th key={h} style={{ padding:'12px 22px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', letterSpacing:'0.04em', textTransform:'uppercase' }}>{h}</th>
               ))}
             </tr>
@@ -1161,14 +1279,15 @@ function ManagerTeam() {
             {DRIVER_LIST.map(d => {
               const c = scoreColor(d.score);
               return (
-                <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', transition:'background .12s' }}
+                <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', transition:'background .12s', cursor:'pointer' }}
                   onMouseEnter={e => e.currentTarget.style.background='rgba(26,26,46,0.015)'}
                   onMouseLeave={e => e.currentTarget.style.background=''}
+                  onClick={() => setProfileDriver(d)}
                 >
                   <td style={{ padding:'14px 22px' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
                       <Avatar name={d.name} size={34} />
-                      <span style={{ fontSize:14, fontWeight:600, color:'var(--brand-ink)' }}>{d.name}</span>
+                      <span style={{ fontSize:14, fontWeight:600, color:'var(--brand-accent)' }}>{d.name}</span>
                     </div>
                   </td>
                   <td style={{ padding:'14px 22px', fontSize:12, color:'#bbb', fontFamily:'var(--font-mono)' }}>{d.id}</td>
@@ -1437,12 +1556,17 @@ function TrainerOverview({ user, setActive }) {
 
 function TrainerTrainees() {
   const i = useT();
+  const [profileDriver, setProfileDriver] = usePS(null);
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>My Trainees</h2>
+      {profileDriver && <DriverProfileModal driver={profileDriver} onClose={() => setProfileDriver(null)} />}
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('My Trainees','Mis aprendices')}</h2>
       <div style={{ display:'grid', gap:16 }}>
         {TRAINEES.map(t => (
-          <div key={t.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', alignItems:'center', gap:18 }}>
+          <div key={t.id} onClick={() => setProfileDriver(t)} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', alignItems:'center', gap:18, cursor:'pointer', transition:'box-shadow .15s' }}
+            onMouseEnter={e=>e.currentTarget.style.boxShadow='0 4px 16px rgba(26,26,46,0.09)'}
+            onMouseLeave={e=>e.currentTarget.style.boxShadow='none'}
+          >
             <Avatar name={t.name} size={48} />
             <div style={{ flex:1 }}>
               <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{t.name}</div>
@@ -1746,11 +1870,13 @@ function SupervisorAssistantPortal({ user, onLogout }) {
 
 function SAAttendance() {
   const i = useT();
+  const [profileDriver, setProfileDriver] = usePS(null);
   const stCol = s => ({ 'On Time':{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, 'Late':{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, 'Absent':{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s] || {};
   const stLabel = s => s==='On Time' ? i('On Time','A tiempo') : s==='Late' ? i('Late','Tarde') : i('Absent','Ausente');
   const counts = { onTime: ATTENDANCE.filter(a=>a.status==='On Time').length, late: ATTENDANCE.filter(a=>a.status==='Late').length, absent: ATTENDANCE.filter(a=>a.status==='Absent').length };
   return (
     <div>
+      {profileDriver && <DriverProfileModal driver={profileDriver} onClose={() => setProfileDriver(null)} />}
       <div style={{ marginBottom:24 }}>
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Attendance Today','Asistencia de hoy')}</h2>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
@@ -1777,11 +1903,14 @@ function SAAttendance() {
             {ATTENDANCE.map(a => {
               const c = stCol(a.status);
               return (
-                <tr key={a.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                <tr key={a.id} onClick={() => setProfileDriver(DRIVER_LIST.find(d=>d.id===a.id) || {id:a.id, name:a.name})} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', cursor:'pointer', transition:'background .12s' }}
+                  onMouseEnter={e=>e.currentTarget.style.background='rgba(26,26,46,0.015)'}
+                  onMouseLeave={e=>e.currentTarget.style.background=''}
+                >
                   <td style={{ padding:'13px 20px' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:10 }}>
                       <Avatar name={a.name} size={32} />
-                      <span style={{ fontSize:13, fontWeight:600 }}>{a.name}</span>
+                      <span style={{ fontSize:13, fontWeight:600, color:'var(--brand-accent)' }}>{a.name}</span>
                     </div>
                   </td>
                   <td style={{ padding:'13px 20px', fontSize:12, color:'#aaa', fontFamily:'var(--font-mono)' }}>{a.id}</td>
@@ -1887,20 +2016,26 @@ function SupervisorPortal({ user, onLogout }) {
 function SupervisorCoaching() {
   const i = useT();
   const coaching = useD(COACHING_QUEUE, COACHING_QUEUE_ES);
+  const [profileDriver, setProfileDriver] = usePS(null);
   return (
     <div>
+      {profileDriver && <DriverProfileModal driver={profileDriver} onClose={() => setProfileDriver(null)} />}
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 8px' }}>{i('Coaching Queue','Cola de coaching')}</h2>
       <p style={{ fontSize:13, color:'#999', marginBottom:24 }}>{i('Drivers who need a 1-on-1 session based on this week\'s scorecard.','Conductores que necesitan sesión 1 a 1 según su puntuación.')}</p>
       <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
         {coaching.map(d => {
           const pri = {urgent:'#dc2626',soon:'#d97706',watch:'#2563eb'}[d.priority];
+          const dlDriver = DRIVER_LIST.find(dl=>dl.id===d.id) || d;
           return (
             <div key={d.id} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${pri}` }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                 <div style={{ display:'flex', gap:14, alignItems:'center' }}>
                   <Avatar name={d.name} size={46} />
                   <div>
-                    <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{d.name}</div>
+                    <div onClick={() => setProfileDriver(dlDriver)} style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, color:'var(--brand-accent)', cursor:'pointer', textDecoration:'underline', textDecorationColor:'transparent', transition:'text-decoration-color .15s' }}
+                      onMouseEnter={e=>e.currentTarget.style.textDecorationColor='var(--brand-accent)'}
+                      onMouseLeave={e=>e.currentTarget.style.textDecorationColor='transparent'}
+                    >{d.name}</div>
                     <div style={{ fontSize:12, color:'#aaa', marginTop:2 }}>{d.id} · {d.sessions} session{d.sessions!==1?'s':''} this month</div>
                     <div style={{ display:'flex', gap:8, marginTop:8, flexWrap:'wrap' }}>
                       {d.issues.map(iss => (

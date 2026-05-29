@@ -178,8 +178,12 @@ const SCORECARD = {
     { name: 'Proper Park Sequence',  abbr: 'PPS', score: 72 },
   ],
   tips: [
-    { metric: 'Photo on Delivery', icon: '📷', tip: 'Your POD score dropped to 79 this week. Take the photo BEFORE walking away — make sure the package is fully visible in the frame, not just the door.' },
-    { metric: 'Proper Park Sequence', icon: '🅿️', tip: 'PPS is at 72 — make this your priority this week. Always: hazard lights ON → parking brake → step out. Even on 10-second stops.' },
+    { metric: 'Photo on Delivery', metricEs: 'Foto en entrega', icon: '📷',
+      tip: 'Your POD score dropped to 79 this week. Take the photo BEFORE walking away — make sure the package is fully visible in the frame, not just the door.',
+      tipEs: 'Tu puntuación POD bajó a 79 esta semana. Toma la foto ANTES de alejarte — asegúrate de que el paquete esté completamente visible en la imagen, no solo la puerta.' },
+    { metric: 'Proper Park Sequence', metricEs: 'Secuencia de estacionamiento', icon: '🅿️',
+      tip: 'PPS is at 72 — make this your priority this week. Always: hazard lights ON → parking brake → step out. Even on 10-second stops.',
+      tipEs: 'El PPS está en 72 — hazlo tu prioridad esta semana. Siempre: luces de emergencia ENCENDIDAS → freno de mano → salir del vehículo. Incluso en paradas de 10 segundos.' },
   ],
 };
 
@@ -637,9 +641,10 @@ function DriverHome({ user, setActive }) {
                 <div style={{ fontSize:11, color:'#aaa' }}>{i('Based on your scorecard','Basado en tu desempeño')}</div>
               </div>
             </div>
-            <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)', marginBottom:8 }}>📷 Photo on Delivery · 79/100</div>
+            <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)', marginBottom:8 }}>📷 {i('Photo on Delivery','Foto en entrega')} · 79/100</div>
             <p style={{ fontSize:13, color:'#555', lineHeight:1.65, margin:0 }}>
-              Take the photo BEFORE walking away — make sure the package is fully visible in the frame, not just the door.
+              {i('Take the photo BEFORE walking away — make sure the package is fully visible in the frame, not just the door.',
+                 'Toma la foto ANTES de alejarte — asegúrate de que el paquete esté completamente visible en la imagen, no solo la puerta.')}
             </p>
           </div>
         </div>
@@ -650,9 +655,9 @@ function DriverHome({ user, setActive }) {
       <div style={{ marginTop:24, background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:16, padding:24, color:'#fff', display:'flex', alignItems:'center', gap:20 }}>
         <div style={{ fontSize:42, flexShrink:0 }}>🏆</div>
         <div style={{ flex:1 }}>
-          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>Employee of the Month · {RECOGNITION.month}</div>
+          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>{i('Employee of the Month','Empleado del mes')} · {RECOGNITION.month}</div>
           <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, marginBottom:4 }}>{RECOGNITION.winner.name}</div>
-          <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} routes · {RECOGNITION.winner.tier} tier</div>
+          <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} {i('routes','rutas')} · {RECOGNITION.winner.tier}</div>
         </div>
         <button onClick={() => setActive('recognition')} style={{ padding:'10px 18px', background:'rgba(255,255,255,0.12)', border:'1.5px solid rgba(255,255,255,0.2)', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, flexShrink:0, cursor:'pointer' }}>
           {i('See Wall of Fame →','Ver muro de honor →')}
@@ -742,12 +747,12 @@ function DriverScorecard() {
 
       {/* AI Tips */}
       <div>
-        <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, margin:'0 0 14px' }}>✨ AI Coaching Tips for This Week</h3>
+        <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, margin:'0 0 14px' }}>✨ {i('AI Coaching Tips for This Week','Consejos de Coaching para esta semana')}</h3>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
-          {SCORECARD.tips.map((tip,i) => (
-            <div key={i} style={{ background:'#fff', borderRadius:14, padding:22, border:'1px solid rgba(255,107,53,0.18)', background:'linear-gradient(135deg,rgba(255,107,53,0.03) 0%,rgba(26,26,46,0.02) 100%)' }}>
-              <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-accent)', marginBottom:10 }}>{tip.icon} {tip.metric}</div>
-              <p style={{ fontSize:13, color:'#444', lineHeight:1.7, margin:0 }}>{tip.tip}</p>
+          {SCORECARD.tips.map((tip,idx) => (
+            <div key={idx} style={{ background:'#fff', borderRadius:14, padding:22, border:'1px solid rgba(255,107,53,0.18)', background:'linear-gradient(135deg,rgba(255,107,53,0.03) 0%,rgba(26,26,46,0.02) 100%)' }}>
+              <div style={{ fontSize:13, fontWeight:700, color:'var(--brand-accent)', marginBottom:10 }}>{tip.icon} {i(tip.metric, tip.metricEs || tip.metric)}</div>
+              <p style={{ fontSize:13, color:'#444', lineHeight:1.7, margin:0 }}>{i(tip.tip, tip.tipEs || tip.tip)}</p>
             </div>
           ))}
         </div>
@@ -761,7 +766,7 @@ function DriverTraining() {
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Training Library','Biblioteca de Entrenamiento')}</h2>
-      <p style={{ color:'#999', fontSize:14, marginBottom:28 }}>Resources to handle any situation on the road.</p>
+      <p style={{ color:'#999', fontSize:14, marginBottom:28 }}>{i('Resources to handle any situation on the road.','Recursos para manejar cualquier situación en la ruta.')}</p>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:18 }}>
         {VIDEOS.map(v => (
           <div key={v.id} style={{ background:'#fff', borderRadius:16, overflow:'hidden', border:'1px solid rgba(26,26,46,0.07)', cursor:'pointer', transition:'transform .15s,box-shadow .15s' }}

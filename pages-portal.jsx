@@ -519,7 +519,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
   const roleLinks = {
     'driver':               ['dashboard','scorecard','training','announcements','recognition','waves'],
     'trainer':              ['overview','trainees','schedule','materials','notes','waves'],
-    'dispatch':             ['routes','drivers','incidents','messages','notes'],
+    'dispatch':             ['routes','incidents','messages','notes'],
     'supervisor-assistant': ['attendance','requests','checklist','notes','waves'],
     'supervisor':           ['overview','team','coaching','incidents','notes','waves'],
     'ops-manager':          ['overview','teams','fleet','reports','notes','waves'],
@@ -1384,7 +1384,6 @@ function DispatchPortal({ user, onLogout }) {
       <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
       <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
         {active === 'routes'    && <WaveBoard user={user} />}
-        {active === 'drivers'   && <DispatchDrivers />}
         {active === 'incidents' && <DispatchIncidents />}
         {active === 'messages'  && <VanReport />}
         {active === 'notes'     && <ShiftNotes user={user} />}

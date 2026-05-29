@@ -2492,15 +2492,10 @@ function WaveBoard({ user }) {
 
       {/* Driver: Day off message */}
       {isDriver && !myAssignment && (
-        <div style={{ background:'#fff', borderRadius:16, border:'2px solid rgba(34,197,94,0.3)', marginBottom:28, padding:'24px 28px', display:'flex', alignItems:'center', gap:18 }}>
-          <div style={{ fontSize:42, flexShrink:0 }}>🌴</div>
-          <div>
-            <div style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:800, color:'var(--brand-ink)', marginBottom:4 }}>
-              {i('No route assigned today','Sin asignación de ruta hoy')}
-            </div>
-            <div style={{ fontSize:13, color:'#888' }}>
-              {i("Today is your day off. Enjoy your rest — you've earned it!","Hoy es tu día de descanso. ¡Disfrútalo, te lo has ganado!")}
-            </div>
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.1)', marginBottom:28, padding:'20px 24px', display:'flex', alignItems:'center', gap:14 }}>
+          <span style={{ fontSize:20 }}>📋</span>
+          <div style={{ fontSize:14, fontWeight:600, color:'#666' }}>
+            {i('No route assigned today','Sin ruta asignada hoy')}
           </div>
         </div>
       )}

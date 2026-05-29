@@ -615,6 +615,7 @@ function DriverPortal({ user, onLogout }) {
 
 function DriverHome({ user, setActive }) {
   const i = useT();
+  const fd = useFmtDate();
   return (
     <div>
       {/* Welcome */}
@@ -624,7 +625,7 @@ function DriverHome({ user, setActive }) {
           <div style={{ position:'absolute', bottom:0, right:0, width:20, height:20, borderRadius:'50%', background:'var(--brand-accent)', border:'2px solid #fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, cursor:'pointer' }} title="Click avatar to change photo">📷</div>
         </div>
         <div>
-        <div style={{ fontSize:13, color:'#999', fontWeight:500 }}>Monday, May 26, 2026</div>
+        <div style={{ fontSize:13, color:'#999', fontWeight:500 }}>{fd('Monday, May 26, 2026')}</div>
         <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 8px' }}>
           {i('Good morning','Buenos días')}, {user.name.split(' ')[0]}
         </h1>
@@ -691,7 +692,7 @@ function DriverHome({ user, setActive }) {
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:18 }}>
             <div>
               <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i("This Week's Scorecard",'Desempeño esta semana')}</h3>
-              <div style={{ fontSize:12, color:'#999', marginTop:3 }}>{SCORECARD.week}</div>
+              <div style={{ fontSize:12, color:'#999', marginTop:3 }}>{fd(SCORECARD.week)}</div>
             </div>
             <ScoreRing score={87} size={72} />
           </div>
@@ -716,7 +717,7 @@ function DriverHome({ user, setActive }) {
             <div style={{ fontSize:10, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', opacity:0.85, marginBottom:8 }}>🔔 {i('Urgent','Urgente')}</div>
             <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, marginBottom:6 }}>{ANNOUNCEMENTS[0].title}</div>
             <div style={{ fontSize:13, opacity:0.9, lineHeight:1.5 }}>{ANNOUNCEMENTS[0].body}</div>
-            <div style={{ marginTop:10, fontSize:11, opacity:0.65 }}>{ANNOUNCEMENTS[0].from} · {ANNOUNCEMENTS[0].date}</div>
+            <div style={{ marginTop:10, fontSize:11, opacity:0.65 }}>{ANNOUNCEMENTS[0].from} · {fd(ANNOUNCEMENTS[0].date)}</div>
           </div>
 
           {/* AI Tip */}
@@ -742,7 +743,7 @@ function DriverHome({ user, setActive }) {
       <div style={{ marginTop:24, background:'linear-gradient(135deg,#1A1A2E 0%,#16213e 100%)', borderRadius:16, padding:24, color:'#fff', display:'flex', alignItems:'center', gap:20 }}>
         <div style={{ fontSize:42, flexShrink:0 }}>🏆</div>
         <div style={{ flex:1 }}>
-          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>{i('Employee of the Month','Empleado del mes')} · {RECOGNITION.month}</div>
+          <div style={{ fontSize:11, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.08em', color:'#f59e0b', marginBottom:6 }}>{i('Employee of the Month','Empleado del mes')} · {fd(RECOGNITION.month)}</div>
           <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, marginBottom:4 }}>{RECOGNITION.winner.name}</div>
           <div style={{ fontSize:13, opacity:0.75 }}>Score {RECOGNITION.winner.score}/100 · {RECOGNITION.winner.routes} {i('routes','rutas')} · {RECOGNITION.winner.tier}</div>
         </div>
@@ -783,10 +784,11 @@ function DriverHome({ user, setActive }) {
 
 function DriverScorecard() {
   const i = useT();
+  const fd = useFmtDate();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('My Scorecard','Mi Desempeño')}</h2>
-      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>Week of {SCORECARD.week}</div>
+      <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Week of','Semana del')} {fd(SCORECARD.week)}</div>
 
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '320px 1fr', gap:20, marginBottom:24 }}>
         {/* Overall card */}
@@ -879,6 +881,7 @@ function DriverTraining() {
 }
 
 function DriverAnnouncements() {
+  const fd = useFmtDate();
   const [read, setRead] = usePS({});
   return (
     <div>
@@ -894,7 +897,7 @@ function DriverAnnouncements() {
                 </div>
                 <h4 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, margin:'0 0 8px' }}>{a.title}</h4>
                 <p style={{ fontSize:13, color:'#555', lineHeight:1.65, margin:'0 0 10px' }}>{a.body}</p>
-                <div style={{ fontSize:11, color:'#bbb' }}>{a.from} · {a.date}</div>
+                <div style={{ fontSize:11, color:'#bbb' }}>{a.from} · {fd(a.date)}</div>
               </div>
               {!read[a.id] ? (
                 <button onClick={() => setRead(r => ({...r,[a.id]:true}))} style={{ marginLeft:20, padding:'8px 16px', fontSize:12, fontWeight:600, background:'rgba(26,26,46,0.05)', border:'1px solid rgba(26,26,46,0.1)', borderRadius:8, color:'#555', flexShrink:0, whiteSpace:'nowrap' }}>
@@ -1079,6 +1082,7 @@ function ManagerTeam() {
 
 function ManagerAnnouncements() {
   const i = useT();
+  const fd = useFmtDate();
   const [showForm, setShowForm] = usePS(false);
   const [title, setTitle] = usePS('');
   const [msg, setMsg] = usePS('');
@@ -1125,7 +1129,7 @@ function ManagerAnnouncements() {
             {a.urgent && <span style={{ fontSize:10, fontWeight:700, background:'rgba(255,107,53,0.1)', color:'#FF6B35', padding:'2px 9px', borderRadius:999, textTransform:'uppercase', marginBottom:8, display:'inline-block' }}>Urgent</span>}
             <h4 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'6px 0 8px' }}>{a.title}</h4>
             <p style={{ fontSize:13, color:'#555', lineHeight:1.65, margin:'0 0 8px' }}>{a.body}</p>
-            <div style={{ fontSize:11, color:'#bbb' }}>Sent by {a.from} · {a.date}</div>
+            <div style={{ fontSize:11, color:'#bbb' }}>{i('Sent by','Enviado por')} {a.from} · {fd(a.date)}</div>
           </div>
         ))}
       </div>
@@ -1353,6 +1357,7 @@ function TrainerTrainees() {
 
 function TrainerSchedule() {
   const i = useT();
+  const fd = useFmtDate();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Training Schedule</h2>
@@ -1360,8 +1365,8 @@ function TrainerSchedule() {
         {TRAINING_SCHEDULE.map((s,idx) => (
           <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:20, alignItems:'flex-start' }}>
             <div style={{ textAlign:'center', minWidth:80 }}>
-              <div style={{ fontSize:11, fontWeight:700, color:'var(--brand-accent)', textTransform:'uppercase', letterSpacing:'0.06em' }}>{s.day.split(' ')[0]}</div>
-              <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{s.day.split(' ').slice(1).join(' ')}</div>
+              <div style={{ fontSize:11, fontWeight:700, color:'var(--brand-accent)', textTransform:'uppercase', letterSpacing:'0.06em' }}>{fd(s.day).split(' ')[0]}</div>
+              <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{fd(s.day).split(' ').slice(1).join(' ')}</div>
               <div style={{ fontSize:16, fontWeight:800, fontFamily:'var(--font-display)', color:'var(--brand-ink)', marginTop:4 }}>{s.time}</div>
             </div>
             <div style={{ flex:1 }}>
@@ -1481,6 +1486,7 @@ function DispatchDrivers() {
 
 function DispatchIncidents() {
   const i = useT();
+  const fd = useFmtDate();
   const priColor = p => ({high:'#dc2626',medium:'#d97706',low:'#16a34a'})[p];
   return (
     <div>
@@ -1499,7 +1505,7 @@ function DispatchIncidents() {
                 </div>
                 <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14 }}>{inc.driver}</div>
                 <p style={{ fontSize:13, color:'#555', lineHeight:1.6, margin:'6px 0 8px' }}>{inc.desc}</p>
-                <div style={{ fontSize:11, color:'#bbb' }}>{inc.id} · {inc.date}</div>
+                <div style={{ fontSize:11, color:'#bbb' }}>{inc.id} · {fd(inc.date)}</div>
               </div>
               <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background: inc.status==='Open' ? 'rgba(239,68,68,0.1)' : inc.status==='In Review' ? 'rgba(251,191,36,0.1)' : 'rgba(34,197,94,0.1)', color: inc.status==='Open' ? '#dc2626' : inc.status==='In Review' ? '#d97706' : '#16a34a', flexShrink:0 }}>{inc.status==='Open' ? i('Open','Abierto') : inc.status==='In Review' ? i('In Review','En revisión') : i('Closed','Cerrado')}</span>
             </div>
@@ -1820,6 +1826,7 @@ function OpsManagerPortal({ user, onLogout }) {
 
 function OpsOverview({ user, setActive }) {
   const i = useT();
+  const fd = useFmtDate();
   return (
     <div>
       <div style={{ marginBottom:28 }}>
@@ -1852,7 +1859,7 @@ function OpsOverview({ user, setActive }) {
               <div style={{ display:'flex', justifyContent:'space-between' }}>
                 <div>
                   <div style={{ fontSize:13, fontWeight:600 }}>{inc.driver} — {inc.type}</div>
-                  <div style={{ fontSize:12, color:'#888', marginTop:2 }}>{inc.date}</div>
+                  <div style={{ fontSize:12, color:'#888', marginTop:2 }}>{fd(inc.date)}</div>
                 </div>
                 <span style={{ fontSize:11, fontWeight:700, color: inc.status==='Open' ? '#dc2626' : '#d97706', background: inc.status==='Open' ? 'rgba(239,68,68,0.08)' : 'rgba(251,191,36,0.08)', padding:'3px 9px', borderRadius:999 }}>{inc.status==='Open' ? i('Open','Abierto') : i('In Review','En revisión')}</span>
               </div>
@@ -2223,6 +2230,7 @@ function DriverRecognition({ user }) {
 // ─── Shift Notes / Handoff ─────────────────────────────────────
 function ShiftNotes({ user }) {
   const i = useT();
+  const fd = useFmtDate();
   const canWrite = ['supervisor','ops-manager','manager','ceo','trainer','dispatch','supervisor-assistant'].includes(user.role);
   const [notes, setNotes] = usePS(SHIFT_NOTES);
   const [text, setText] = usePS('');
@@ -2318,7 +2326,7 @@ function ShiftNotes({ user }) {
                     {tagLabels[t] || t}
                   </span>
                 ))}
-                <span style={{ fontSize:11, color:'#bbb' }}>{n.date}</span>
+                <span style={{ fontSize:11, color:'#bbb' }}>{fd(n.date)}</span>
               </div>
             </div>
             <p style={{ fontSize:13, color:'#444', lineHeight:1.75, margin:0 }}>{n.body}</p>
@@ -2333,6 +2341,7 @@ function ShiftNotes({ user }) {
 // ─── Wave Board ────────────────────────────────────────────────
 function WaveBoard({ user }) {
   const i = useT();
+  const fd = useFmtDate();
   const isDriver = user && user.role === 'driver';
   const driverId = user && user.id;
 
@@ -2353,7 +2362,7 @@ function WaveBoard({ user }) {
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>
           📋 {i('Wave Board — Today','Tabla de Waves — Hoy')}
         </h2>
-        <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026 · {i('60 drivers · 6 waves','60 conductores · 6 waves')}</div>
+        <div style={{ fontSize:13, color:'#999' }}>{fd('Monday, May 26, 2026')} · {i('60 drivers · 6 waves','60 conductores · 6 waves')}</div>
       </div>
 
       {/* Driver: My assignment card */}

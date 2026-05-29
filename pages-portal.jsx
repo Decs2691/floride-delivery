@@ -456,7 +456,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
     routes:        i('Routes Today','Rutas Hoy'),
     drivers:       i('Drivers','Conductores'),
     incidents:     i('Incidents','Incidentes'),
-    messages:      i('Messages','Mensajes'),
+    messages:      i('Van Report','Reporte de van'),
     attendance:    i('Attendance','Asistencia'),
     requests:      i('Requests','Solicitudes'),
     checklist:     i('Checklist','Lista de tareas'),
@@ -1296,7 +1296,7 @@ function DispatchPortal({ user, onLogout }) {
         {active === 'routes'    && <DispatchRoutes />}
         {active === 'drivers'   && <DispatchDrivers />}
         {active === 'incidents' && <DispatchIncidents />}
-        {active === 'messages'  && <DispatchMessages />}
+        {active === 'messages'  && <VanReport />}
         {active === 'notes'     && <ShiftNotes user={user} />}
       </main>
     </div>
@@ -1396,8 +1396,8 @@ function DispatchIncidents() {
   return (
     <div>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Incidents</h2>
-        <button style={{ padding:'10px 18px', background:'var(--brand-accent)', color:'#fff', borderRadius:10, fontSize:13, fontWeight:700 }}>+ Report Incident</button>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>{i('Incidents','Incidentes')}</h2>
+        <button style={{ padding:'10px 18px', background:'var(--brand-accent)', color:'#fff', borderRadius:10, fontSize:13, fontWeight:700 }}>+ {i('Report Incident','Reportar incidente')}</button>
       </div>
       <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
         {INCIDENTS.map(inc => (
@@ -1412,7 +1412,7 @@ function DispatchIncidents() {
                 <p style={{ fontSize:13, color:'#555', lineHeight:1.6, margin:'6px 0 8px' }}>{inc.desc}</p>
                 <div style={{ fontSize:11, color:'#bbb' }}>{inc.id} · {inc.date}</div>
               </div>
-              <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background: inc.status==='Open' ? 'rgba(239,68,68,0.1)' : inc.status==='In Review' ? 'rgba(251,191,36,0.1)' : 'rgba(34,197,94,0.1)', color: inc.status==='Open' ? '#dc2626' : inc.status==='In Review' ? '#d97706' : '#16a34a', flexShrink:0 }}>{inc.status}</span>
+              <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background: inc.status==='Open' ? 'rgba(239,68,68,0.1)' : inc.status==='In Review' ? 'rgba(251,191,36,0.1)' : 'rgba(34,197,94,0.1)', color: inc.status==='Open' ? '#dc2626' : inc.status==='In Review' ? '#d97706' : '#16a34a', flexShrink:0 }}>{inc.status==='Open' ? i('Open','Abierto') : inc.status==='In Review' ? i('In Review','En revisión') : i('Closed','Cerrado')}</span>
             </div>
           </div>
         ))}
@@ -1421,35 +1421,103 @@ function DispatchIncidents() {
   );
 }
 
-function DispatchMessages() {
+function VanReport() {
   const i = useT();
-  const [msg, setMsg] = usePS('');
-  const [target, setTarget] = usePS('all');
+  const [van, setVan] = usePS('');
+  const [category, setCategory] = usePS('engine');
+  const [desc, setDesc] = usePS('');
+  const [photoUrl, setPhotoUrl] = usePS('');
+  const [reports, setReports] = usePS([
+    { id:1, van:'FL-012', driver:'Carlos Reyes', category:'Engine', desc:'Overheating warning light on US-17. Pulled over safely at 10:14 AM.', photoUrl:'', date:'May 26 · 10:18 AM', status:'In Review' },
+    { id:2, van:'FL-007', driver:'Lena Muller',  category:'Tire',   desc:'Front left tire losing pressure slowly. Manageable but needs check.', photoUrl:'', date:'May 25 · 3:52 PM', status:'Resolved' },
+  ]);
   const [sent, setSent] = usePS(false);
-  function send() { if(!msg.trim()) return; setSent(true); setMsg(''); setTimeout(()=>setSent(false),3000); }
+
+  const categories = {
+    engine:    i('Engine Issue','Falla motor'),
+    tire:      i('Tire / Pressure','Llanta / Presión'),
+    damage:    i('Body Damage','Daño carrocería'),
+    electrical:i('Electrical','Eléctrico'),
+    other:     i('Other','Otro'),
+  };
+
+  function submit() {
+    if (!van.trim() || !desc.trim()) return;
+    const r = { id: Date.now(), van: van.trim(), driver: i('You','Tú'), category: categories[category], desc: desc.trim(), photoUrl: photoUrl.trim(), date: `May 28 · ${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`, status: 'Open' };
+    setReports(prev => [r, ...prev]);
+    setVan(''); setDesc(''); setPhotoUrl(''); setSent(true);
+    setTimeout(() => setSent(false), 3000);
+  }
+
+  const stColor = s => s==='Open' ? {bg:'rgba(239,68,68,0.1)',text:'#dc2626'} : s==='In Review' ? {bg:'rgba(251,191,36,0.1)',text:'#d97706'} : {bg:'rgba(34,197,94,0.1)',text:'#16a34a'};
+  const stLabel = s => s==='Open' ? i('Open','Abierto') : s==='In Review' ? i('In Review','En revisión') : i('Resolved','Resuelto');
+
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Send Message</h2>
-      {sent && <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:12, padding:'12px 18px', marginBottom:18, color:'#16a34a', fontSize:13, fontWeight:600 }}>✓ Message sent successfully.</div>}
-      <div style={{ background:'#fff', borderRadius:16, padding:28, border:'1px solid rgba(26,26,46,0.07)', maxWidth:560 }}>
-        <div style={{ marginBottom:16 }}>
-          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:6 }}>Send to</label>
-          <select value={target} onChange={e=>setTarget(e.target.value)} style={{ width:'100%', padding:'11px 14px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, outline:'none' }}>
-            <option value="all">All Drivers (60)</option>
-            {DISPATCH_ROUTES.map(r => <option key={r.id} value={r.driver}>{r.driver}</option>)}
-          </select>
+      <div style={{ marginBottom:24 }}>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>🚐 {i('Van Incident Report','Reporte de incidente de van')}</h2>
+        <div style={{ fontSize:13, color:'#999' }}>{i('Log a vehicle issue — photo link stored, dispatcher notified','Registra un problema de vehículo — el enlace de la foto queda guardado, el despachador es notificado')}</div>
+      </div>
+
+      <div style={{ background:'#fff', borderRadius:16, padding:28, border:'1px solid rgba(26,26,46,0.07)', marginBottom:28, maxWidth:600 }}>
+        {sent && <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.25)', borderRadius:10, padding:'11px 16px', marginBottom:18, color:'#16a34a', fontSize:13, fontWeight:600 }}>✓ {i('Report submitted. Dispatcher notified.','Reporte enviado. Despachador notificado.')}</div>}
+        <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 1fr', gap:14, marginBottom:14 }}>
+          <div>
+            <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:5 }}>{i('Van ID','ID de van')} *</label>
+            <input value={van} onChange={e=>setVan(e.target.value)} placeholder="FL-012" style={{ width:'100%', padding:'10px 13px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, outline:'none', boxSizing:'border-box' }} />
+          </div>
+          <div>
+            <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:5 }}>{i('Category','Categoría')}</label>
+            <select value={category} onChange={e=>setCategory(e.target.value)} style={{ width:'100%', padding:'10px 13px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, outline:'none', boxSizing:'border-box' }}>
+              {Object.keys(categories).map(k => <option key={k} value={k}>{categories[k]}</option>)}
+            </select>
+          </div>
+        </div>
+        <div style={{ marginBottom:14 }}>
+          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:5 }}>{i('Description','Descripción')} *</label>
+          <textarea value={desc} onChange={e=>setDesc(e.target.value)} rows={3} placeholder={i('Describe the issue — what happened, when, current status of the van...','Describe el problema — qué pasó, cuándo, estado actual de la van...')} style={{ width:'100%', padding:'10px 13px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, resize:'vertical', boxSizing:'border-box', outline:'none', fontFamily:'var(--font-body)' }} />
         </div>
         <div style={{ marginBottom:20 }}>
-          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:6 }}>Message</label>
-          <textarea value={msg} onChange={e=>setMsg(e.target.value)} rows={4} placeholder="Type your message..." style={{ width:'100%', padding:'11px 14px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, resize:'vertical', boxSizing:'border-box', outline:'none' }} />
+          <label style={{ fontSize:12, fontWeight:600, color:'var(--brand-ink)', display:'block', marginBottom:5 }}>📸 {i('Photo Link (optional)','Link de foto (opcional)')}</label>
+          <input value={photoUrl} onChange={e=>setPhotoUrl(e.target.value)} placeholder="https://drive.google.com/... or similar" style={{ width:'100%', padding:'10px 13px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, outline:'none', boxSizing:'border-box', fontFamily:'var(--font-mono)', fontSize:12 }} />
+          <div style={{ fontSize:11, color:'#bbb', marginTop:4 }}>{i('Paste a Google Drive, iCloud, or any public photo link','Pega un link de Google Drive, iCloud o cualquier enlace público de foto')}</div>
         </div>
-        <button onClick={send} style={{ padding:'11px 22px', background:'var(--brand-accent)', color:'#fff', borderRadius:9, fontSize:13, fontWeight:700 }}>Send Message</button>
+        <button onClick={submit} disabled={!van.trim() || !desc.trim()} style={{ padding:'10px 22px', background: (van.trim() && desc.trim()) ? 'var(--brand-ink)' : 'rgba(26,26,46,0.15)', color:'#fff', borderRadius:9, fontSize:13, fontWeight:700, cursor:(van.trim() && desc.trim()) ? 'pointer' : 'default' }}>
+          {i('Submit Report','Enviar reporte')}
+        </button>
+      </div>
+
+      <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, margin:'0 0 16px' }}>{i('Recent Reports','Reportes recientes')}</h3>
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+        {reports.map(r => {
+          const sc = stColor(r.status);
+          return (
+            <div key={r.id} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:16, alignItems:'flex-start' }}>
+              <div style={{ flex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:6, flexWrap:'wrap' }}>
+                  <span style={{ fontFamily:'var(--font-mono)', fontWeight:700, fontSize:13, color:'var(--brand-ink)' }}>Van {r.van}</span>
+                  <span style={{ fontSize:11, fontWeight:600, background:'rgba(26,26,46,0.05)', color:'#666', padding:'2px 8px', borderRadius:999 }}>{r.category}</span>
+                  <span style={{ fontSize:11, fontWeight:700, background:sc.bg, color:sc.text, padding:'2px 8px', borderRadius:999 }}>{stLabel(r.status)}</span>
+                </div>
+                <div style={{ fontSize:13, color:'#444', lineHeight:1.6, marginBottom:6 }}>{r.desc}</div>
+                <div style={{ display:'flex', gap:14, alignItems:'center', flexWrap:'wrap' }}>
+                  <span style={{ fontSize:11, color:'#bbb' }}>{r.driver} · {r.date}</span>
+                  {r.photoUrl && (
+                    <a href={r.photoUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize:11, fontWeight:600, color:'var(--brand-accent)', display:'flex', alignItems:'center', gap:4, textDecoration:'none' }}>
+                      📸 {i('View photo →','Ver foto →')}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-// ─── SUPERVISOR ASSISTANT PORTAL ──────────────────────────────
+
 function SupervisorAssistantPortal({ user, onLogout }) {
   const [active, setActive] = usePS('attendance');
   return (
@@ -1467,7 +1535,8 @@ function SupervisorAssistantPortal({ user, onLogout }) {
 
 function SAAttendance() {
   const i = useT();
-  const stCol = s => ({  [i('On Time','A tiempo')]:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, [i('Late','Tarde')]:{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, [i('Absent','Ausente')]:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s];
+  const stCol = s => ({ 'On Time':{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, 'Late':{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, 'Absent':{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s] || {};
+  const stLabel = s => s==='On Time' ? i('On Time','A tiempo') : s==='Late' ? i('Late','Tarde') : i('Absent','Ausente');
   const counts = { onTime: ATTENDANCE.filter(a=>a.status==='On Time').length, late: ATTENDANCE.filter(a=>a.status==='Late').length, absent: ATTENDANCE.filter(a=>a.status==='Absent').length };
   return (
     <div>
@@ -1508,7 +1577,7 @@ function SAAttendance() {
                   <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{a.time}</td>
                   <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{a.route}</td>
                   <td style={{ padding:'13px 20px' }}>
-                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{a.status}</span>
+                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{stLabel(a.status)}</span>
                   </td>
                 </tr>
               );
@@ -1668,10 +1737,10 @@ function OpsOverview({ user, setActive }) {
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
-          { label:'Routes Today',      value:'60',   sub:'all active',     col:'#2563eb' },
-          { label:'Fleet Status',      value:'59/60',sub:'1 in service',   col:'#16a34a' },
-          { label:i('Incidents Open','Incidentes abiertos'),    value:'2',    sub:'need attention', col:'#dc2626' },
-          { label:i('Weekly Score Avg','Promedio semanal'),  value:'83.2', sub:'vs 81.4 last wk',col:'#FF6B35' },
+          { label:i('Routes Today','Rutas hoy'),      value:'60',   sub:i('all active','todas activas'),     col:'#2563eb' },
+          { label:i('Fleet Status','Estado de flota'),      value:'59/60',sub:i('1 in service','1 en servicio'),   col:'#16a34a' },
+          { label:i('Incidents Open','Incidentes abiertos'),    value:'2',    sub:i('need attention','requieren atención'), col:'#dc2626' },
+          { label:i('Weekly Score Avg','Promedio semanal'),  value:'83.2', sub:i('vs 81.4 last wk','vs 81.4 sem anterior'),col:'#FF6B35' },
         ].map(k=>(
           <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
@@ -1683,8 +1752,8 @@ function OpsOverview({ user, setActive }) {
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
-            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Open Incidents</h3>
-            <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('Open Incidents','Incidentes abiertos')}</h3>
+            <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('View all →','Ver todos →')}</button>
           </div>
           {INCIDENTS.filter(i=>i.status!=='Closed').map(inc=>(
             <div key={inc.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
@@ -1693,14 +1762,14 @@ function OpsOverview({ user, setActive }) {
                   <div style={{ fontSize:13, fontWeight:600 }}>{inc.driver} — {inc.type}</div>
                   <div style={{ fontSize:12, color:'#888', marginTop:2 }}>{inc.date}</div>
                 </div>
-                <span style={{ fontSize:11, fontWeight:700, color: inc.status==='Open' ? '#dc2626' : '#d97706', background: inc.status==='Open' ? 'rgba(239,68,68,0.08)' : 'rgba(251,191,36,0.08)', padding:'3px 9px', borderRadius:999 }}>{inc.status}</span>
+                <span style={{ fontSize:11, fontWeight:700, color: inc.status==='Open' ? '#dc2626' : '#d97706', background: inc.status==='Open' ? 'rgba(239,68,68,0.08)' : 'rgba(251,191,36,0.08)', padding:'3px 9px', borderRadius:999 }}>{inc.status==='Open' ? i('Open','Abierto') : i('In Review','En revisión')}</span>
               </div>
             </div>
           ))}
         </div>
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
-            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Drivers At Risk</h3>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('Drivers At Risk','Conductores en riesgo')}</h3>
             <button onClick={()=>setActive('teams')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
           </div>
           {DRIVER_LIST.filter(d=>d.score<75).map(d=>(
@@ -1725,7 +1794,7 @@ function OpsTeams() {
   const i = useT();
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>All Teams</h2>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('All Teams','Todos los equipos')}</h2>
       <ManagerTeam />
     </div>
   );
@@ -1737,9 +1806,9 @@ function OpsFleet() {
   return (
     <div>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>Fleet Status</h2>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>{i('Fleet Status','Estado de flota')}</h2>
         <div style={{ display:'flex', gap:12 }}>
-          {[['Active','#16a34a',4],['Issue','#dc2626',1],['In Service','#d97706',1]].map(([l,c,n])=>(
+          {[[i('Active','Activo'),'#16a34a',4],[i('Issue','Con falla'),'#dc2626',1],[i('In Service','En servicio'),'#d97706',1]].map(([l,c,n])=>(
             <div key={l} style={{ textAlign:'center', padding:'10px 16px', background:'#fff', borderRadius:10, border:'1px solid rgba(26,26,46,0.07)' }}>
               <div style={{ fontFamily:'var(--font-display)', fontSize:20, fontWeight:800, color:c }}>{n}</div>
               <div style={{ fontSize:11, color:'#aaa' }}>{l}</div>
@@ -1751,7 +1820,7 @@ function OpsFleet() {
         <table style={{ width:'100%', borderCollapse:'collapse' }}>
           <thead>
             <tr style={{ background:'rgba(26,26,46,0.025)' }}>
-              {['Van','Driver','Status','Mileage','Last Inspection','Fuel'].map(h=>(
+              {[i('Van','Van'),i('Driver','Conductor'),i('Status','Estado'),i('Mileage','Kilometraje'),i('Last Inspection','Últ. inspección'),i('Fuel','Combustible')].map(h=>(
                 <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
               ))}
             </tr>
@@ -1763,7 +1832,7 @@ function OpsFleet() {
                 <tr key={v.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
                   <td style={{ padding:'13px 20px', fontSize:13, fontFamily:'var(--font-mono)', fontWeight:600, color:'var(--brand-ink)' }}>{v.id}</td>
                   <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.driver}</td>
-                  <td style={{ padding:'13px 20px' }}><span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{v.status}</span></td>
+                  <td style={{ padding:'13px 20px' }}><span style={{ fontSize:11, fontWeight:700, padding:'3px 9px', borderRadius:999, background:c.bg, color:c.text }}>{v.status==='Active' ? i('Active','Activo') : v.status==='Issue' ? i('Issue','Con falla') : i('In Service','En servicio')}</span></td>
                   <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.mileage.toLocaleString()} mi</td>
                   <td style={{ padding:'13px 20px', fontSize:13, color:'#555' }}>{v.lastInsp}</td>
                   <td style={{ padding:'13px 20px', minWidth:120 }}>
@@ -1788,15 +1857,15 @@ function OpsReports() {
   const i = useT();
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Reports</h2>
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16 }}>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('Reports','Reportes')}</h2>
+      <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : 'repeat(3,1fr)', gap:16 }}>
         {[
-          { title:'Weekly Performance Report', desc:'Driver scores, tiers, and improvements for May 19–25', date:'May 25, 2026', type:'PDF' },
-          { title:'Monthly Operations Summary', desc:'Route completion, incidents, fleet status for May 2026', date:'May 31, 2026', type:'PDF' },
-          { title:'Attendance & Punctuality', desc:'Check-in records and patterns for current month', date:'May 26, 2026', type:'XLSX' },
-          { title:'Incident Log', desc:'All incidents from the past 30 days with resolutions', date:'May 26, 2026', type:'PDF' },
-          { title:'Coaching Sessions Log', desc:'1-on-1 sessions completed and driver improvement tracking', date:'May 24, 2026', type:'PDF' },
-          { title:'Fleet Maintenance Log', desc:'Van mileage, inspections, and service history', date:'May 22, 2026', type:'XLSX' },
+          { title:i('Weekly Performance Report','Reporte semanal de desempeño'), desc:i('Driver scores, tiers, and improvements for May 19–25','Puntuaciones, niveles y mejoras May 19–25'), date:'May 25, 2026', type:'PDF' },
+          { title:i('Monthly Operations Summary','Resumen mensual de operaciones'), desc:i('Route completion, incidents, fleet status for May 2026','Rutas completadas, incidentes, flota Mayo 2026'), date:'May 31, 2026', type:'PDF' },
+          { title:i('Attendance & Punctuality','Asistencia y puntualidad'), desc:i('Check-in records and patterns for current month','Registros de entrada y patrones del mes actual'), date:'May 26, 2026', type:'XLSX' },
+          { title:i('Incident Log','Bitácora de incidentes'), desc:i('All incidents from the past 30 days with resolutions','Todos los incidentes de los últimos 30 días con resoluciones'), date:'May 26, 2026', type:'PDF' },
+          { title:i('Coaching Sessions Log','Registro de sesiones de coaching'), desc:i('1-on-1 sessions completed and driver improvement tracking','Sesiones 1 a 1 completadas y seguimiento de mejoras'), date:'May 24, 2026', type:'PDF' },
+          { title:i('Fleet Maintenance Log','Bitácora de mantenimiento de flota'), desc:i('Van mileage, inspections, and service history','Kilometraje, inspecciones e historial de servicio'), date:'May 22, 2026', type:'XLSX' },
         ].map((r,idx)=>(
           <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'20px 22px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
@@ -1806,7 +1875,7 @@ function OpsReports() {
             <p style={{ fontSize:12, color:'#888', lineHeight:1.5, margin:'0 0 12px' }}>{r.desc}</p>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <span style={{ fontSize:11, color:'#bbb' }}>{r.date}</span>
-              <button style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)' }}>Download →</button>
+              <button style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)' }}>{i('Download →','Descargar →')}</button>
             </div>
           </div>
         ))}

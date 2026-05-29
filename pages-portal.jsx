@@ -712,8 +712,8 @@ function DriverScorecard() {
           {/* History bars */}
           <div style={{ width:'100%', marginTop:8 }}>
             <div style={{ display:'flex', justifyContent:'center', gap:6, alignItems:'flex-end', height:60 }}>
-              {SCORECARD.history.map((s,i) => (
-                <div key={i} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
+              {SCORECARD.history.map((s,idx) => (
+                <div key={idx} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
                   <div style={{ width:28, height:`${(s/100)*52}px`, background: i===5 ? 'var(--brand-accent)' : 'rgba(26,26,46,0.1)', borderRadius:4, transition:'height .4s' }} />
                   <div style={{ fontSize:9, color:'#bbb' }}>{s}</div>
                 </div>
@@ -1210,8 +1210,8 @@ function TrainerOverview({ user, setActive }) {
             <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Today's Sessions</h3>
             <button onClick={() => setActive('schedule')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>Full schedule →</button>
           </div>
-          {TRAINING_SCHEDULE.filter(s => s.day === 'Mon May 26').map((s,i) => (
-            <div key={i} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
+          {TRAINING_SCHEDULE.filter(s => s.day === 'Mon May 26').map((s,idx) => (
+            <div key={idx} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)' }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                 <div>
                   <div style={{ fontSize:12, fontWeight:700, color:'var(--brand-accent)' }}>{s.time}</div>
@@ -1267,8 +1267,8 @@ function TrainerSchedule() {
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Training Schedule</h2>
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-        {TRAINING_SCHEDULE.map((s,i) => (
-          <div key={i} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:20, alignItems:'flex-start' }}>
+        {TRAINING_SCHEDULE.map((s,idx) => (
+          <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', gap:20, alignItems:'flex-start' }}>
             <div style={{ textAlign:'center', minWidth:80 }}>
               <div style={{ fontSize:11, fontWeight:700, color:'var(--brand-accent)', textTransform:'uppercase', letterSpacing:'0.06em' }}>{s.day.split(' ')[0]}</div>
               <div style={{ fontSize:13, fontWeight:600, color:'var(--brand-ink)' }}>{s.day.split(' ').slice(1).join(' ')}</div>
@@ -1565,7 +1565,7 @@ function SAChecklist() {
         <span style={{ fontSize:13, fontWeight:600, color: done===items.length ? '#16a34a' : '#888' }}>{done}/{items.length} completed</span>
       </div>
       <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
-        {items.map((item,i) => (
+        {items.map((item,idx) => (
           <div key={item.id} onClick={()=>toggle(item.id)} style={{ display:'flex', alignItems:'center', gap:14, padding:'18px 24px', borderBottom: i<items.length-1 ? '1px solid rgba(26,26,46,0.05)' : 'none', cursor:'pointer', transition:'background .12s' }}
             onMouseEnter={e=>e.currentTarget.style.background='rgba(26,26,46,0.015)'}
             onMouseLeave={e=>e.currentTarget.style.background=''}
@@ -1797,8 +1797,8 @@ function OpsReports() {
           { title:'Incident Log', desc:'All incidents from the past 30 days with resolutions', date:'May 26, 2026', type:'PDF' },
           { title:'Coaching Sessions Log', desc:'1-on-1 sessions completed and driver improvement tracking', date:'May 24, 2026', type:'PDF' },
           { title:'Fleet Maintenance Log', desc:'Van mileage, inspections, and service history', date:'May 22, 2026', type:'XLSX' },
-        ].map((r,i)=>(
-          <div key={i} style={{ background:'#fff', borderRadius:14, padding:'20px 22px', border:'1px solid rgba(26,26,46,0.07)' }}>
+        ].map((r,idx)=>(
+          <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'20px 22px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
               <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:14, flex:1 }}>{r.title}</div>
               <span style={{ fontSize:10, fontWeight:700, color:'#FF6B35', background:'rgba(255,107,53,0.1)', padding:'2px 7px', borderRadius:4, marginLeft:8 }}>{r.type}</span>
@@ -1859,7 +1859,7 @@ function CEOExecutive({ user, setActive }) {
         <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}>
           <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'0 0 20px' }}>Monthly Revenue Trend</h3>
           <div style={{ display:'flex', gap:8, alignItems:'flex-end', height:120 }}>
-            {[{m:'Dec',v:61},{m:'Jan',v:68},{m:'Feb',v:64},{m:'Mar',v:73},{m:'Apr',v:78},{m:'May',v:82}].map((d,i)=>(
+            {[{m:'Dec',v:61},{m:'Jan',v:68},{m:'Feb',v:64},{m:'Mar',v:73},{m:'Apr',v:78},{m:'May',v:82}].map((d,idx)=>(
               <div key={d.m} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:6 }}>
                 <div style={{ fontSize:10, color:'#aaa' }}>${d.v}K</div>
                 <div style={{ width:'100%', background: i===5 ? 'var(--brand-accent)' : 'rgba(26,26,46,0.1)', borderRadius:'4px 4px 0 0', height:`${(d.v/82)*100}px`, transition:'height .4s' }} />
@@ -1922,10 +1922,10 @@ function CEOAlerts() {
           { level:'warning',  icon:'⚠️', title:'Lena Muller — At-Risk Score: 62/100', body:'Second consecutive week below 65. Coaching session must be scheduled within 48 hours per Amazon policy.', action:'Schedule Coaching' },
           { level:'info',     icon:'📋', title:'Monthly Report Due Friday May 30', body:'Submit the monthly operations summary to Amazon regional manager by end of day Friday.', action:'View Report' },
           { level:'info',     icon:'👥', title:'3 Open Driver Positions', body:'Headcount approved for 63 drivers. 3 positions still open — referrals from existing team recommended.', action:'View Hiring' },
-        ].map((a,i)=>{
+        ].map((a,idx)=>{
           const col = {critical:'#dc2626',warning:'#d97706',info:'#2563eb'}[a.level];
           return (
-            <div key={i} style={{ background:'#fff', borderRadius:14, padding:'20px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${col}`, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16 }}>
+            <div key={idx} style={{ background:'#fff', borderRadius:14, padding:'20px 24px', border:'1px solid rgba(26,26,46,0.07)', borderLeft:`4px solid ${col}`, display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16 }}>
               <div>
                 <div style={{ display:'flex', gap:8, alignItems:'center', marginBottom:8 }}>
                   <span style={{ fontSize:16 }}>{a.icon}</span>
@@ -1957,13 +1957,13 @@ function InfractionStreakPage({ user }) {
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Safety Streaks','Rachas de seguridad')}</h2>
       <div style={{ fontSize:13, color:'#999', marginBottom:28 }}>{i('Days without incidents across the team','Días sin incidentes en todo el equipo')}</div>
       <div style={{ display:'grid', gap:14 }}>
-        {all.map((s, i) => {
+        {all.map((s, idx) => {
           const pct = Math.min(100, Math.round((s.days / s.milestone) * 100));
           const isYou = s.id === user.id;
           const col = s.days >= s.milestone ? '#16a34a' : s.days >= s.milestone * 0.6 ? 'var(--brand-accent)' : '#f59e0b';
           return (
             <div key={s.id} style={{ background:'#fff', borderRadius:14, padding:'18px 22px', border:`1.5px solid ${isYou ? 'var(--brand-accent)' : 'rgba(26,26,46,0.07)'}`, display:'flex', alignItems:'center', gap:16 }}>
-              <div style={{ fontSize:22, fontWeight:800, color:'#ddd', width:32, textAlign:'center' }}>{i+1}</div>
+              <div style={{ fontSize:22, fontWeight:800, color:'#ddd', width:32, textAlign:'center' }}>{idx+1}</div>
               <Avatar name={s.name} size={42} />
               <div style={{ flex:1 }}>
                 <div style={{ fontWeight:700, fontSize:14, color:'var(--brand-ink)', marginBottom:6 }}>{s.name}{isYou ? ` (${i('you','tú')})` : ''}</div>

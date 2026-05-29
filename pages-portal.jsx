@@ -2027,21 +2027,21 @@ function DriverRecognition({ user }) {
       {/* Top performers this week */}
       <h3 style={{ fontFamily:'var(--font-display)', fontSize:17, fontWeight:700, margin:'0 0 16px' }}>⭐ {i('Top Performers This Week','Mejores de la semana')}</h3>
       <div style={{ display:'grid', gap:14, marginBottom:28 }}>
-        {RECOGNITION.topWeek.map((d, i) => {
+        {RECOGNITION.topWeek.map((d, idx) => {
           const medals = ['🥇','🥈','🥉'];
           const isYou = d.id === user.id;
           return (
             <div key={d.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1.5px solid ${isYou ? 'var(--brand-accent)' : 'rgba(26,26,46,0.07)'}`, display:'flex', alignItems:'center', gap:16, boxShadow:'0 2px 8px rgba(26,26,46,0.04)' }}>
-              <div style={{ fontSize:32 }}>{medals[i]}</div>
+              <div style={{ fontSize:32 }}>{medals[idx]}</div>
               <Avatar name={d.name} size={48} />
               <div style={{ flex:1 }}>
                 <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16, color:'var(--brand-ink)', marginBottom:4 }}>
-                  {d.name}{isYou ? <span style={{ fontSize:12, color:'var(--brand-accent)', marginLeft:8, fontFamily:'var(--font-body)' }}>← that's you!</span> : ''}
+                  {d.name}{isYou ? <span style={{ fontSize:12, color:'var(--brand-accent)', marginLeft:8, fontFamily:'var(--font-body)' }}>← {i("that's you!",'¡eres tú!')}</span> : ''}
                 </div>
                 <div style={{ fontSize:13, color:'#666' }}>{d.highlight}</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color: i===0 ? '#f59e0b' : i===1 ? '#94a3b8' : '#a16207' }}>{d.score}</div>
+                <div style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color: idx===0 ? '#f59e0b' : idx===1 ? '#94a3b8' : '#a16207' }}>{d.score}</div>
                 <div style={{ fontSize:11, color:'#aaa' }}>score</div>
               </div>
             </div>

@@ -212,10 +212,10 @@ const BRONZE_ALERTS = DRIVER_LIST.filter(d =>
 
 // ─── Role-specific sample data ───────────────────────────────
 const TRAINEES = [
-  { id:'DR-0088', name:'Luis Fernandez',   days:3,  progress:28, status:'In Training',  score: null },
+  { id:'DR-0088', name:'Luis Fernandez',   days:3,  progress:28, status:i('In Training','En entrenamiento'),  score: null },
   { id:'DR-0091', name:'Priya Sharma',     days:7,  progress:65, status:'In Training',  score: null },
-  { id:'DR-0079', name:'Tomás Guerrero',   days:12, progress:90, status:'Final Eval',   score: 84   },
-  { id:'DR-0083', name:'Aisha Okafor',     days:14, progress:100,status:'Completed',    score: 91   },
+  { id:'DR-0079', name:'Tomás Guerrero',   days:12, progress:90, status:i('Final Eval','Eval. final'),   score: 84   },
+  { id:'DR-0083', name:'Aisha Okafor',     days:14, progress:100,status:i(i('Completed','Completado'),'Completado'),    score: 91   },
 ];
 
 const TRAINING_SCHEDULE = [
@@ -226,14 +226,14 @@ const TRAINING_SCHEDULE = [
 ];
 
 const DISPATCH_ROUTES = [
-  { id:'RT-001', driver:'Maria Gonzalez',  zone:'Orlando Central',     stops:148, status:'Active',    pct:62 },
+  { id:'RT-001', driver:'Maria Gonzalez',  zone:'Orlando Central',     stops:148, status:i('Active','Activo'),    pct:62 },
   { id:'RT-002', driver:'Daniel Cantor',   zone:'Lake Nona',           stops:132, status:'Active',    pct:48 },
   { id:'RT-003', driver:'James Thompson',  zone:'Winter Park',         stops:119, status:'Active',    pct:71 },
   { id:'RT-004', driver:'Antoine Dubois',  zone:'Kissimmee',           stops:155, status:'Active',    pct:55 },
-  { id:'RT-005', driver:'Carlos Reyes',    zone:'Sanford',             stops:108, status:'Delayed',   pct:33 },
+  { id:'RT-005', driver:'Carlos Reyes',    zone:'Sanford',             stops:108, status:i('Delayed','Retrasado'),   pct:33 },
   { id:'RT-006', driver:'Lena Muller',     zone:'Apopka',              stops:141, status:'Active',    pct:80 },
-  { id:'RT-007', driver:'Aisha Okafor',    zone:'Hunter\'s Creek',     stops:127, status:'Completed', pct:100 },
-  { id:'RT-008', driver:'Priya Sharma',    zone:'Lake Mary',           stops:98,  status:'Not Started',pct:0 },
+  { id:'RT-007', driver:'Aisha Okafor',    zone:'Hunter\'s Creek',     stops:127, status:i('Completed','Completado'), pct:100 },
+  { id:'RT-008', driver:'Priya Sharma',    zone:'Lake Mary',           stops:98,  status:i('Not Started','Sin iniciar'),pct:0 },
 ];
 
 const INCIDENTS = [
@@ -843,11 +843,12 @@ function ManagerPortal({ user, onLogout }) {
 }
 
 function ManagerOverview({ user, setActive }) {
+  const i = useT();
   return (
     <div>
       <div style={{ marginBottom:28 }}>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
-        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>{i('Good morning','Buenos días')}, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
 
@@ -855,10 +856,10 @@ function ManagerOverview({ user, setActive }) {
 
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
-          { label:'Active Drivers',    value:'60', sub:'on route today',   col:'#2563eb' },
-          { label:'Avg Team Score',    value:'82', sub:'this week',        col:'#16a34a' },
-          { label:'At-Risk Drivers',   value:'2',  sub:'need coaching',    col:'#dc2626' },
-          { label:'Announcements',     value:'3',  sub:'sent this week',   col:'#FF6B35' },
+          { label:i('Active Drivers','Conductores activos'), value:'60', sub:i('on route today','en ruta hoy'), col:'#2563eb' },
+          { label:i('Avg Team Score','Promedio del equipo'), value:'82', sub:i('this week','esta semana'), col:'#16a34a' },
+          { label:i('At-Risk Drivers','En riesgo'), value:'2', sub:i('need coaching','necesitan coaching'), col:'#dc2626' },
+          { label:i('Announcements','Avisos'), value:'3', sub:i('sent this week','enviados esta semana'), col:'#FF6B35' },
         ].map(k => (
           <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
@@ -872,14 +873,14 @@ function ManagerOverview({ user, setActive }) {
         {/* Team table */}
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>Team Performance</h3>
-            <button onClick={() => setActive('my-team')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('Team Performance','Desempeño del equipo')}</h3>
+            <button onClick={() => setActive('my-team')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('View all →','Ver todo →')}</button>
           </div>
           <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
         <table style={{ width:'100%', borderCollapse:'collapse', minWidth: isMob() ? 480 : 'auto' }}>
             <thead>
               <tr style={{ background:'rgba(26,26,46,0.025)' }}>
-                {['Driver','ID','Score','Tier','Routes'].map(h => (
+                {[i('Driver','Conductor'),i('ID','ID'),i('Score','Puntos'),i('Tier','Nivel'),i('Routes','Rutas')].map(h => (
                   <th key={h} style={{ padding:'10px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', letterSpacing:'0.04em', textTransform:'uppercase' }}>{h}</th>
                 ))}
               </tr>
@@ -916,12 +917,12 @@ function ManagerOverview({ user, setActive }) {
 
         {/* Quick actions */}
         <div style={{ background:'#fff', borderRadius:16, padding:22, border:'1px solid rgba(26,26,46,0.07)', alignSelf:'start' }}>
-          <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'0 0 14px' }}>Quick Actions</h3>
+          <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:'0 0 14px' }}>{i('Quick Actions','Acciones rápidas')}</h3>
           {[
-            { label:'Upload Scorecard',      icon:'📤', fn: () => setActive('scorecards') },
-            { label:'Send Announcement',     icon:'📢', fn: () => setActive('announcements') },
-            { label:'Schedule Extra Routes', icon:'🗓️', fn: () => {} },
-            { label:'Add Training Video',    icon:'🎥', fn: () => {} },
+            { label:i('Upload Scorecard','Subir Puntuación'),      icon:'📤', fn: () => setActive('scorecards') },
+            { label:i('Send Announcement','Enviar Aviso'),     icon:'📢', fn: () => setActive('announcements') },
+            { label:i('Schedule Extra Routes','Rutas adicionales'), icon:'🗓️', fn: () => {} },
+            { label:i('Add Training Video','Agregar video'),    icon:'🎥', fn: () => {} },
           ].map(a => (
             <button key={a.label} onClick={a.fn} style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'12px 14px', borderRadius:10, marginBottom:6, background:'rgba(26,26,46,0.025)', border:'1px solid rgba(26,26,46,0.07)', textAlign:'left', fontSize:13, fontWeight:600, color:'var(--brand-ink)', transition:'background .15s' }}
               onMouseEnter={e => e.currentTarget.style.background='rgba(26,26,46,0.05)'}
@@ -937,6 +938,7 @@ function ManagerOverview({ user, setActive }) {
 }
 
 function ManagerTeam() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>My Team</h2>
@@ -983,6 +985,7 @@ function ManagerTeam() {
 }
 
 function ManagerAnnouncements() {
+  const i = useT();
   const [showForm, setShowForm] = usePS(false);
   const [title, setTitle] = usePS('');
   const [msg, setMsg] = usePS('');
@@ -1017,7 +1020,7 @@ function ManagerAnnouncements() {
           <textarea placeholder="Write your message here..." value={msg} onChange={e => setMsg(e.target.value)} rows={4}
             style={{ width:'100%', padding:'11px 14px', borderRadius:9, border:'1.5px solid rgba(26,26,46,0.14)', fontSize:13, resize:'vertical', boxSizing:'border-box', outline:'none' }} />
           <div style={{ display:'flex', gap:10, marginTop:12 }}>
-            <button onClick={handleSend} style={{ padding:'10px 20px', background:'var(--brand-accent)', color:'#fff', borderRadius:9, fontSize:13, fontWeight:700 }}>Send to All Drivers</button>
+            <button onClick={handleSend} style={{ padding:'10px 20px', background:'var(--brand-accent)', color:'#fff', borderRadius:9, fontSize:13, fontWeight:700 }}>{i('Send to All Drivers','Enviar a todos')}</button>
             <button onClick={() => setShowForm(false)} style={{ padding:'10px 16px', border:'1px solid rgba(26,26,46,0.14)', borderRadius:9, fontSize:13, color:'#666' }}>Cancel</button>
           </div>
         </div>
@@ -1153,19 +1156,20 @@ function TrainerPortal({ user, onLogout }) {
 }
 
 function TrainerOverview({ user, setActive }) {
+  const i = useT();
   return (
     <div>
       <div style={{ marginBottom:28 }}>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
-        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>{i('Good morning','Buenos días')}, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
-          { label:'Active Trainees',    value:'3',  sub:'in program',     col:'#2563eb' },
-          { label:'Completed This Month',value:'1', sub:'graduated',      col:'#16a34a' },
-          { label:'Sessions Today',      value:'2', sub:'scheduled',      col:'#FF6B35' },
-          { label:'Avg Completion',      value:'71%',sub:'across trainees',col:'#a855f7' },
+          { label:i('Active Trainees','Aprendices activos'), value:'3', sub:i('in program','en programa'), col:'#2563eb' },
+          { label:i('Completed This Month','Completados este mes'), value:'1', sub:i('graduated','graduados'), col:'#16a34a' },
+          { label:i('Sessions Today','Sesiones hoy'), value:'2', sub:i('scheduled','programadas'), col:'#FF6B35' },
+          { label:i('Avg Completion','Avance promedio'), value:'71%', sub:i('across trainees','entre aprendices'), col:'#a855f7' },
         ].map(k => (
           <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
@@ -1177,8 +1181,8 @@ function TrainerOverview({ user, setActive }) {
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr' : '1fr 1fr', gap:20 }}>
         <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
           <div style={{ padding:'16px 22px', borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}>
-            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>My Trainees</h3>
-            <button onClick={() => setActive('trainees')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>View all →</button>
+            <h3 style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, margin:0 }}>{i('My Trainees','Mis aprendices')}</h3>
+            <button onClick={() => setActive('trainees')} style={{ fontSize:12, color:'var(--brand-accent)', fontWeight:600 }}>{i('View all →','Ver todo →')}</button>
           </div>
           {TRAINEES.map(t => (
             <div key={t.id} style={{ padding:'14px 22px', borderBottom:'1px solid rgba(26,26,46,0.05)', display:'flex', alignItems:'center', gap:12 }}>
@@ -1220,6 +1224,7 @@ function TrainerOverview({ user, setActive }) {
 }
 
 function TrainerTrainees() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>My Trainees</h2>
@@ -1252,6 +1257,7 @@ function TrainerTrainees() {
 }
 
 function TrainerSchedule() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Training Schedule</h2>
@@ -1293,6 +1299,7 @@ function DispatchPortal({ user, onLogout }) {
 }
 
 function DispatchRoutes() {
+  const i = useT();
   const statusColor = s => ({ Active:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, Delayed:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'}, Completed:{bg:'rgba(59,158,255,0.1)',text:'#2563eb'}, 'Not Started':{bg:'rgba(26,26,46,0.06)',text:'#888'} })[s] || {};
   return (
     <div>
@@ -1314,7 +1321,7 @@ function DispatchRoutes() {
         <table style={{ width:'100%', borderCollapse:'collapse' }}>
           <thead>
             <tr style={{ background:'rgba(26,26,46,0.025)' }}>
-              {['Route','Driver','Zone','Stops','Progress','Status'].map(h => (
+              {[i('Route','Ruta'),i('Driver','Conductor'),i('Zone','Zona'),i('Stops','Paradas'),i('Progress','Avance'),i('Status','Estado')].map(h => (
                 <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
               ))}
             </tr>
@@ -1350,6 +1357,7 @@ function DispatchRoutes() {
 }
 
 function DispatchDrivers() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Driver Status</h2>
@@ -1378,6 +1386,7 @@ function DispatchDrivers() {
 }
 
 function DispatchIncidents() {
+  const i = useT();
   const priColor = p => ({high:'#dc2626',medium:'#d97706',low:'#16a34a'})[p];
   return (
     <div>
@@ -1408,6 +1417,7 @@ function DispatchIncidents() {
 }
 
 function DispatchMessages() {
+  const i = useT();
   const [msg, setMsg] = usePS('');
   const [target, setTarget] = usePS('all');
   const [sent, setSent] = usePS(false);
@@ -1451,16 +1461,17 @@ function SupervisorAssistantPortal({ user, onLogout }) {
 }
 
 function SAAttendance() {
-  const stCol = s => ({  'On Time':{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, Late:{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, Absent:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s];
+  const i = useT();
+  const stCol = s => ({  [i('On Time','A tiempo')]:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'}, [i('Late','Tarde')]:{bg:'rgba(251,191,36,0.1)',text:'#d97706'}, [i('Absent','Ausente')]:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'} })[s];
   const counts = { onTime: ATTENDANCE.filter(a=>a.status==='On Time').length, late: ATTENDANCE.filter(a=>a.status==='Late').length, absent: ATTENDANCE.filter(a=>a.status==='Absent').length };
   return (
     <div>
       <div style={{ marginBottom:24 }}>
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>Attendance Today</h2>
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>{i('Attendance Today','Asistencia de hoy')}</h2>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
       </div>
       <div style={{ display:'grid', gridTemplateColumns: isMob() ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap:16, marginBottom:24 }}>
-        {[['On Time',counts.onTime,'#16a34a'],['Late',counts.late,'#d97706'],['Absent',counts.absent,'#dc2626']].map(([l,v,c])=>(
+        {[[i('On Time','A tiempo'),counts.onTime,'#16a34a'],[i('Late','Tarde'),counts.late,'#d97706'],[i('Absent','Ausente'),counts.absent,'#dc2626']].map(([l,v,c])=>(
           <div key={l} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', marginBottom:6 }}>{l}</div>
             <div style={{ fontFamily:'var(--font-display)', fontSize:32, fontWeight:800, color:c }}>{v}</div>
@@ -1472,7 +1483,7 @@ function SAAttendance() {
         <table style={{ width:'100%', borderCollapse:'collapse', minWidth: isMob() ? 520 : 'auto' }}>
           <thead>
             <tr style={{ background:'rgba(26,26,46,0.025)' }}>
-              {['Driver','ID','Check-in','Route','Status'].map(h=>(
+              {[i('Driver','Conductor'),i('ID','ID'),i('Check-in','Entrada'),i('Route','Ruta'),i('Status','Estado')].map(h=>(
                 <th key={h} style={{ padding:'11px 20px', textAlign:'left', fontSize:11, fontWeight:600, color:'#aaa', textTransform:'uppercase', letterSpacing:'0.04em' }}>{h}</th>
               ))}
             </tr>
@@ -1506,10 +1517,11 @@ function SAAttendance() {
 }
 
 function SARequests() {
+  const i = useT();
   const [resolved, setResolved] = usePS({});
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Driver Requests</h2>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('Driver Requests','Solicitudes')}</h2>
       <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
         {REQUESTS.map(r => (
           <div key={r.id} style={{ background:'#fff', borderRadius:16, padding:'20px 24px', border:`1px solid ${r.urgent ? 'rgba(255,107,53,0.25)' : 'rgba(26,26,46,0.07)'}`, borderLeft:`4px solid ${r.urgent ? '#FF6B35' : 'rgba(26,26,46,0.1)'}` }}>
@@ -1537,6 +1549,7 @@ function SARequests() {
 }
 
 function SAChecklist() {
+  const i = useT();
   const [items, setItems] = usePS(CHECKLIST);
   function toggle(id) { setItems(prev => prev.map(i => i.id===id ? {...i, done:!i.done} : i)); }
   const done = items.filter(i=>i.done).length;
@@ -1581,10 +1594,11 @@ function SupervisorPortal({ user, onLogout }) {
 }
 
 function SupervisorCoaching() {
+  const i = useT();
   return (
     <div>
-      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 8px' }}>Coaching Queue</h2>
-      <p style={{ fontSize:13, color:'#999', marginBottom:24 }}>Drivers who need a 1-on-1 session based on this week's scorecard.</p>
+      <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 8px' }}>{i('Coaching Queue','Cola de coaching')}</h2>
+      <p style={{ fontSize:13, color:'#999', marginBottom:24 }}>{i('Drivers who need a 1-on-1 session based on this week\'s scorecard.','Conductores que necesitan sesión 1 a 1 según su puntuación.')}</p>
       <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
         {COACHING_QUEUE.map(d => {
           const pri = {urgent:'#dc2626',soon:'#d97706',watch:'#2563eb'}[d.priority];
@@ -1610,7 +1624,7 @@ function SupervisorCoaching() {
                 </div>
               </div>
               <div style={{ marginTop:14, paddingTop:14, borderTop:'1px solid rgba(26,26,46,0.06)', display:'flex', gap:10 }}>
-                <button style={{ padding:'8px 16px', background:'var(--brand-accent)', color:'#fff', borderRadius:8, fontSize:12, fontWeight:700 }}>Schedule Session</button>
+                <button style={{ padding:'8px 16px', background:'var(--brand-accent)', color:'#fff', borderRadius:8, fontSize:12, fontWeight:700 }}>{i('Schedule Session','Programar sesión')}</button>
                 <button style={{ padding:'8px 16px', border:'1px solid rgba(26,26,46,0.14)', borderRadius:8, fontSize:12, fontWeight:600, color:'#555' }}>Add Note</button>
               </div>
             </div>
@@ -1639,19 +1653,20 @@ function OpsManagerPortal({ user, onLogout }) {
 }
 
 function OpsOverview({ user, setActive }) {
+  const i = useT();
   return (
     <div>
       <div style={{ marginBottom:28 }}>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
-        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>{i('Good morning','Buenos días')}, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
         {[
           { label:'Routes Today',      value:'60',   sub:'all active',     col:'#2563eb' },
           { label:'Fleet Status',      value:'59/60',sub:'1 in service',   col:'#16a34a' },
-          { label:'Incidents Open',    value:'2',    sub:'need attention', col:'#dc2626' },
-          { label:'Weekly Score Avg',  value:'83.2', sub:'vs 81.4 last wk',col:'#FF6B35' },
+          { label:i('Incidents Open','Incidentes abiertos'),    value:'2',    sub:'need attention', col:'#dc2626' },
+          { label:i('Weekly Score Avg','Promedio semanal'),  value:'83.2', sub:'vs 81.4 last wk',col:'#FF6B35' },
         ].map(k=>(
           <div key={k.label} style={{ background:'#fff', borderRadius:14, padding:'18px 20px', border:'1px solid rgba(26,26,46,0.07)' }}>
             <div style={{ fontSize:12, color:'#999', fontWeight:500, marginBottom:6 }}>{k.label}</div>
@@ -1702,6 +1717,7 @@ function OpsOverview({ user, setActive }) {
 }
 
 function OpsTeams() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>All Teams</h2>
@@ -1711,6 +1727,7 @@ function OpsTeams() {
 }
 
 function OpsFleet() {
+  const i = useT();
   const stCol = s => ({Active:{bg:'rgba(34,197,94,0.1)',text:'#16a34a'},Issue:{bg:'rgba(239,68,68,0.1)',text:'#dc2626'},'In Service':{bg:'rgba(251,191,36,0.1)',text:'#d97706'}})[s] || {};
   return (
     <div>
@@ -1763,6 +1780,7 @@ function OpsFleet() {
 }
 
 function OpsReports() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Reports</h2>
@@ -1810,11 +1828,12 @@ function CEOPortal({ user, onLogout }) {
 }
 
 function CEOExecutive({ user, setActive }) {
+  const i = useT();
   return (
     <div>
       <div style={{ marginBottom:28 }}>
         <div style={{ fontSize:13, color:'#999' }}>Monday, May 26, 2026</div>
-        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>Good morning, {user.name.split(' ')[0]}</h1>
+        <h1 style={{ fontFamily:'var(--font-display)', fontSize:28, fontWeight:800, color:'var(--brand-ink)', margin:'4px 0 4px' }}>{i('Good morning','Buenos días')}, {user.name.split(' ')[0]}</h1>
         <div style={{ fontSize:13, color:'#999' }}>{user.title} · {user.station}</div>
       </div>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
@@ -1862,6 +1881,7 @@ function CEOExecutive({ user, setActive }) {
 }
 
 function CEOFinancials() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Financials</h2>
@@ -1887,6 +1907,7 @@ function CEOFinancials() {
 }
 
 function CEOAlerts() {
+  const i = useT();
   return (
     <div>
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>Alerts & Action Items</h2>

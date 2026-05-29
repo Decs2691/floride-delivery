@@ -216,10 +216,10 @@ const BRONZE_ALERTS = DRIVER_LIST.filter(d =>
 
 // ─── Role-specific sample data ───────────────────────────────
 const TRAINEES = [
-  { id:'DR-0088', name:'Luis Fernandez',   days:3,  progress:28, status:i('In Training','En entrenamiento'),  score: null },
+  { id:'DR-0088', name:'Luis Fernandez',   days:3,  progress:28, status:'In Training',  score: null },
   { id:'DR-0091', name:'Priya Sharma',     days:7,  progress:65, status:'In Training',  score: null },
-  { id:'DR-0079', name:'Tomás Guerrero',   days:12, progress:90, status:i('Final Eval','Eval. final'),   score: 84   },
-  { id:'DR-0083', name:'Aisha Okafor',     days:14, progress:100,status:i(i('Completed','Completado'),'Completado'),    score: 91   },
+  { id:'DR-0079', name:'Tomás Guerrero',   days:12, progress:90, status:'Final Eval',   score: 84   },
+  { id:'DR-0083', name:'Aisha Okafor',     days:14, progress:100,status:'Completed',    score: 91   },
 ];
 
 const TRAINING_SCHEDULE = [
@@ -230,14 +230,14 @@ const TRAINING_SCHEDULE = [
 ];
 
 const DISPATCH_ROUTES = [
-  { id:'RT-001', driver:'Maria Gonzalez',  zone:'Orlando Central',     stops:148, status:i('Active','Activo'),    pct:62 },
-  { id:'RT-002', driver:'Daniel Cantor',   zone:'Lake Nona',           stops:132, status:'Active',    pct:48 },
-  { id:'RT-003', driver:'James Thompson',  zone:'Winter Park',         stops:119, status:'Active',    pct:71 },
-  { id:'RT-004', driver:'Antoine Dubois',  zone:'Kissimmee',           stops:155, status:'Active',    pct:55 },
-  { id:'RT-005', driver:'Carlos Reyes',    zone:'Sanford',             stops:108, status:i('Delayed','Retrasado'),   pct:33 },
-  { id:'RT-006', driver:'Lena Muller',     zone:'Apopka',              stops:141, status:'Active',    pct:80 },
-  { id:'RT-007', driver:'Aisha Okafor',    zone:'Hunter\'s Creek',     stops:127, status:i('Completed','Completado'), pct:100 },
-  { id:'RT-008', driver:'Priya Sharma',    zone:'Lake Mary',           stops:98,  status:i('Not Started','Sin iniciar'),pct:0 },
+  { id:'RT-001', driver:'Maria Gonzalez',  zone:'Orlando Central',     stops:148, status:'Active',      pct:62 },
+  { id:'RT-002', driver:'Daniel Cantor',   zone:'Lake Nona',           stops:132, status:'Active',      pct:48 },
+  { id:'RT-003', driver:'James Thompson',  zone:'Winter Park',         stops:119, status:'Active',      pct:71 },
+  { id:'RT-004', driver:'Antoine Dubois',  zone:'Kissimmee',           stops:155, status:'Active',      pct:55 },
+  { id:'RT-005', driver:'Carlos Reyes',    zone:'Sanford',             stops:108, status:'Delayed',     pct:33 },
+  { id:'RT-006', driver:'Lena Muller',     zone:'Apopka',              stops:141, status:'Active',      pct:80 },
+  { id:'RT-007', driver:'Aisha Okafor',    zone:'Hunter\'s Creek',     stops:127, status:'Completed',   pct:100 },
+  { id:'RT-008', driver:'Priya Sharma',    zone:'Lake Mary',           stops:98,  status:'Not Started', pct:0 },
 ];
 
 const INCIDENTS = [
@@ -1251,7 +1251,7 @@ function TrainerTrainees() {
               </div>
             </div>
             <div style={{ textAlign:'right' }}>
-              <span style={{ fontSize:12, fontWeight:700, padding:'4px 12px', borderRadius:999, background: t.status==='Completed' ? 'rgba(34,197,94,0.1)' : t.status==='Final Eval' ? 'rgba(59,158,255,0.1)' : 'rgba(255,107,53,0.1)', color: t.status==='Completed' ? '#16a34a' : t.status==='Final Eval' ? '#2563eb' : '#FF6B35' }}>{t.status}</span>
+              <span style={{ fontSize:12, fontWeight:700, padding:'4px 12px', borderRadius:999, background: t.status==='Completed' ? 'rgba(34,197,94,0.1)' : t.status==='Final Eval' ? 'rgba(59,158,255,0.1)' : 'rgba(255,107,53,0.1)', color: t.status==='Completed' ? '#16a34a' : t.status==='Final Eval' ? '#2563eb' : '#FF6B35' }}>{t.status==='Completed' ? i('Completed','Completado') : t.status==='Final Eval' ? i('Final Eval','Eval. final') : i('In Training','En entrenamiento')}</span>
               {t.score && <div style={{ fontSize:20, fontWeight:800, fontFamily:'var(--font-display)', color:'#16a34a', marginTop:8 }}>{t.score}/100</div>}
             </div>
           </div>
@@ -1349,7 +1349,7 @@ function DispatchRoutes() {
                     </div>
                   </td>
                   <td style={{ padding:'13px 20px' }}>
-                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:sc.bg, color:sc.text }}>{r.status}</span>
+                    <span style={{ fontSize:11, fontWeight:700, padding:'3px 10px', borderRadius:999, background:sc.bg, color:sc.text }}>{r.status==='Active' ? i('Active','Activo') : r.status==='Delayed' ? i('Delayed','Retrasado') : r.status==='Completed' ? i('Completed','Completado') : i('Not Started','Sin iniciar')}</span>
                   </td>
                 </tr>
               );

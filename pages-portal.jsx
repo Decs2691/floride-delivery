@@ -201,12 +201,12 @@ const VIDEOS = [
 ];
 
 const DRIVER_LIST = [
-  { id: 'DR-0045', name: 'Daniel Cantor Soto', score: 87, tier: 'Gold',     routes: 5, tierHistory: ['Silver','Gold','Gold']     },
-  { id: 'DR-0032', name: 'Maria Gonzalez',     score: 95, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Platinum','Platinum'] },
-  { id: 'DR-0018', name: 'Carlos Reyes',       score: 71, tier: 'Silver',   routes: 4, tierHistory: ['Gold','Bronze','Silver']    },
-  { id: 'DR-0061', name: 'James Thompson',     score: 88, tier: 'Gold',     routes: 5, tierHistory: ['Gold','Gold','Gold']        },
-  { id: 'DR-0074', name: 'Lena Muller',        score: 62, tier: 'Bronze',   routes: 3, tierHistory: ['Bronze','Bronze','Bronze']  },
-  { id: 'DR-0055', name: 'Antoine Dubois',     score: 91, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Gold','Platinum']    },
+  { id: 'DR-0045', name: 'Daniel Cantor Soto', score: 87, tier: 'Gold',     routes: 5, tierHistory: ['Silver','Gold','Gold'],     phone: '(407) 555-0145', address: '1204 Lake Nona Blvd, Orlando, FL 32827' },
+  { id: 'DR-0032', name: 'Maria Gonzalez',     score: 95, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Platinum','Platinum'], phone: '(321) 555-0232', address: '890 Kissimmee Ave, Kissimmee, FL 34741' },
+  { id: 'DR-0018', name: 'Carlos Reyes',       score: 71, tier: 'Silver',   routes: 4, tierHistory: ['Gold','Bronze','Silver'],    phone: '(407) 555-0318', address: '3345 Sanford Rd, Sanford, FL 32771' },
+  { id: 'DR-0061', name: 'James Thompson',     score: 88, tier: 'Gold',     routes: 5, tierHistory: ['Gold','Gold','Gold'],        phone: '(689) 555-0461', address: '210 Winter Park Dr, Winter Park, FL 32789' },
+  { id: 'DR-0074', name: 'Lena Muller',        score: 62, tier: 'Bronze',   routes: 3, tierHistory: ['Bronze','Bronze','Bronze'],  phone: '(407) 555-0574', address: '78 Apopka Loop, Apopka, FL 32703' },
+  { id: 'DR-0055', name: 'Antoine Dubois',     score: 91, tier: 'Platinum', routes: 5, tierHistory: ['Gold','Gold','Platinum'],    phone: '(321) 555-0655', address: '512 Central Blvd, Orlando, FL 32801' },
 ];
 
 // Drivers with 3 consecutive Bronze weeks → need intervention
@@ -633,6 +633,31 @@ function DriverProfileModal({ driver, onClose }) {
             </div>
           )}
 
+          {/* Contact info */}
+          {(dl.phone || dl.address) && (
+            <div style={{ background:'#f7f7fb', borderRadius:12, padding:'16px', marginBottom:20 }}>
+              <div style={{ fontSize:11, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.07em', marginBottom:12 }}>{i('Contact Info','Información de contacto')}</div>
+              {dl.phone && (
+                <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:10 }}>
+                  <span style={{ fontSize:16 }}>📞</span>
+                  <div>
+                    <div style={{ fontSize:11, color:'#aaa', marginBottom:2 }}>{i('Phone','Teléfono')}</div>
+                    <a href={`tel:${dl.phone.replace(/\D/g,'')}`} style={{ fontSize:14, fontWeight:700, color:'var(--brand-accent)', textDecoration:'none' }}>{dl.phone}</a>
+                  </div>
+                </div>
+              )}
+              {dl.address && (
+                <div style={{ display:'flex', alignItems:'flex-start', gap:10 }}>
+                  <span style={{ fontSize:16 }}>📍</span>
+                  <div>
+                    <div style={{ fontSize:11, color:'#aaa', marginBottom:2 }}>{i('Address','Dirección')}</div>
+                    <div style={{ fontSize:13, color:'var(--brand-ink)', fontWeight:600 }}>{dl.address}</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Recent incidents */}
           <div>
             <div style={{ fontSize:11, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.07em', marginBottom:10 }}>{i('Incidents','Incidentes')}</div>
@@ -736,7 +761,7 @@ function PortalNav({ user, onLogout, active, setActive }) {
     'dispatch':             ['routes','incidents','messages','notes'],
     'supervisor-assistant': ['attendance','requests','checklist','notes','waves'],
     'supervisor':           ['overview','team','coaching','incidents','notes','waves'],
-    'ops-manager':          ['overview','teams','fleet','reports','notes','waves'],
+    'ops-manager':          ['overview','teams','reports','notes','waves'],
     'ceo':                  ['executive','financials','team','alerts','notes','waves'],
     'manager':              ['overview','my-team','announcements','scorecards','waves'],
   };
@@ -1562,31 +1587,37 @@ function TrainerTrainees() {
       {profileDriver && <DriverProfileModal driver={profileDriver} onClose={() => setProfileDriver(null)} />}
       <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 24px' }}>{i('My Trainees','Mis aprendices')}</h2>
       <div style={{ display:'grid', gap:16 }}>
-        {TRAINEES.map(t => (
-          <div key={t.id} onClick={() => setProfileDriver(t)} style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', alignItems:'center', gap:18, cursor:'pointer', transition:'box-shadow .15s' }}
-            onMouseEnter={e=>e.currentTarget.style.boxShadow='0 4px 16px rgba(26,26,46,0.09)'}
-            onMouseLeave={e=>e.currentTarget.style.boxShadow='none'}
-          >
-            <Avatar name={t.name} size={48} />
-            <div style={{ flex:1 }}>
-              <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{t.name}</div>
-              <div style={{ fontSize:12, color:'#aaa', marginTop:2 }}>{t.id} · Day {t.days} of training</div>
-              <div style={{ marginTop:10, width:'60%' }}>
-                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
-                  <span style={{ fontSize:11, color:'#888' }}>Training progress</span>
-                  <span style={{ fontSize:11, fontWeight:700, color: t.progress===100 ? '#16a34a' : 'var(--brand-accent)' }}>{t.progress}%</span>
-                </div>
-                <div style={{ background:'rgba(26,26,46,0.06)', borderRadius:999, height:8, overflow:'hidden' }}>
-                  <div style={{ width:`${t.progress}%`, height:'100%', background: t.progress===100 ? '#16a34a' : 'var(--brand-accent)', borderRadius:999, transition:'width .6s ease' }} />
+        {TRAINEES.map(t => {
+          const canViewProfile = t.days <= 14 && t.status !== 'Completed';
+          return (
+            <div key={t.id}
+              onClick={canViewProfile ? () => setProfileDriver(t) : undefined}
+              style={{ background:'#fff', borderRadius:16, padding:'22px 24px', border:'1px solid rgba(26,26,46,0.07)', display:'flex', alignItems:'center', gap:18, cursor: canViewProfile ? 'pointer' : 'default', transition:'box-shadow .15s', opacity: canViewProfile ? 1 : 0.72 }}
+              onMouseEnter={canViewProfile ? e=>e.currentTarget.style.boxShadow='0 4px 16px rgba(26,26,46,0.09)' : undefined}
+              onMouseLeave={canViewProfile ? e=>e.currentTarget.style.boxShadow='none' : undefined}
+            >
+              <Avatar name={t.name} size={48} />
+              <div style={{ flex:1 }}>
+                <div style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:16 }}>{t.name}</div>
+                <div style={{ fontSize:12, color:'#aaa', marginTop:2 }}>{t.id} · Day {t.days} of training</div>
+                <div style={{ marginTop:10, width:'60%' }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                    <span style={{ fontSize:11, color:'#888' }}>Training progress</span>
+                    <span style={{ fontSize:11, fontWeight:700, color: t.progress===100 ? '#16a34a' : 'var(--brand-accent)' }}>{t.progress}%</span>
+                  </div>
+                  <div style={{ background:'rgba(26,26,46,0.06)', borderRadius:999, height:8, overflow:'hidden' }}>
+                    <div style={{ width:`${t.progress}%`, height:'100%', background: t.progress===100 ? '#16a34a' : 'var(--brand-accent)', borderRadius:999, transition:'width .6s ease' }} />
+                  </div>
                 </div>
               </div>
+              <div style={{ textAlign:'right' }}>
+                <span style={{ fontSize:12, fontWeight:700, padding:'4px 12px', borderRadius:999, background: t.status==='Completed' ? 'rgba(34,197,94,0.1)' : t.status==='Final Eval' ? 'rgba(59,158,255,0.1)' : 'rgba(255,107,53,0.1)', color: t.status==='Completed' ? '#16a34a' : t.status==='Final Eval' ? '#2563eb' : '#FF6B35' }}>{t.status==='Completed' ? i('Completed','Completado') : t.status==='Final Eval' ? i('Final Eval','Eval. final') : i('In Training','En entrenamiento')}</span>
+                {t.score && <div style={{ fontSize:20, fontWeight:800, fontFamily:'var(--font-display)', color:'#16a34a', marginTop:8 }}>{t.score}/100</div>}
+                {!canViewProfile && <div style={{ fontSize:11, color:'#bbb', marginTop:6, display:'flex', alignItems:'center', justifyContent:'flex-end', gap:3 }}>🔒 {i('Access expired','Acceso expirado')}</div>}
+              </div>
             </div>
-            <div style={{ textAlign:'right' }}>
-              <span style={{ fontSize:12, fontWeight:700, padding:'4px 12px', borderRadius:999, background: t.status==='Completed' ? 'rgba(34,197,94,0.1)' : t.status==='Final Eval' ? 'rgba(59,158,255,0.1)' : 'rgba(255,107,53,0.1)', color: t.status==='Completed' ? '#16a34a' : t.status==='Final Eval' ? '#2563eb' : '#FF6B35' }}>{t.status==='Completed' ? i('Completed','Completado') : t.status==='Final Eval' ? i('Final Eval','Eval. final') : i('In Training','En entrenamiento')}</span>
-              {t.score && <div style={{ fontSize:20, fontWeight:800, fontFamily:'var(--font-display)', color:'#16a34a', marginTop:8 }}>{t.score}/100</div>}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -2071,7 +2102,6 @@ function OpsManagerPortal({ user, onLogout }) {
       <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
         {active === 'overview' && <OpsOverview user={user} setActive={setActive} />}
         {active === 'teams'    && <OpsTeams />}
-        {active === 'fleet'    && <OpsFleet />}
         {active === 'reports'  && <OpsReports />}
         {active === 'notes'    && <ShiftNotes user={user} />}
         {active === 'waves'    && <WaveBoard user={user} />}
@@ -2603,34 +2633,266 @@ function WaveBoard({ user }) {
   const i = useT();
   const fd = useFmtDate();
   const isDriver = user && user.role === 'driver';
+  const isOps = user && ['ops-manager','supervisor','supervisor-assistant','ceo','dispatch'].includes(user.role);
   const driverId = user && user.id;
 
-  // Find this driver's assignment
+  const [stage, setStage] = usePS('idle');   // idle | processing | preview | live
+  const [editWaves, setEditWaves] = usePS(null);
+  const [liveWaves, setLiveWaves] = usePS(null);
+  const [dspCode, setDspCode] = usePS('LLMD');
+  const [dragState, setDragState] = usePS(null);
+  const fileRef = React.useRef();
+
+  const activeWaves = liveWaves || WAVE_DATA;
+
   let myAssignment = null;
   if (isDriver) {
-    for (const w of WAVE_DATA) {
+    for (const w of activeWaves) {
       const found = w.drivers.find(d => d.id === driverId);
       if (found) { myAssignment = { ...found, wave: w.wave, time: w.time }; break; }
     }
   }
 
-  const wc = (n) => WAVE_COLORS[n];
+  const wc = (n) => WAVE_COLORS[n] || { bg:'#555', light:'rgba(85,85,85,0.1)' };
+
+  function parseFile(file) {
+    if (!file || !window.XLSX) return;
+    setStage('processing');
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const wb = window.XLSX.read(new Uint8Array(e.target.result), { type:'array' });
+        const sheetName = wb.SheetNames.includes('Waves') ? 'Waves' : wb.SheetNames[0];
+        const rows = window.XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header:1 });
+
+        // Locate header row (contains "DSP")
+        let hRow = -1, hMap = {};
+        for (let r = 0; r < Math.min(rows.length, 6); r++) {
+          const row = rows[r] || [];
+          const hasDriver = row.some(c => String(c||'').toLowerCase() === 'driver');
+          const hasDsp = row.some(c => String(c||'').toLowerCase() === 'dsp');
+          if (hasDriver && hasDsp) {
+            hRow = r;
+            row.forEach((h, idx) => {
+              const k = String(h||'').toLowerCase().replace(/\s+/g,'');
+              if (k.includes('dispatch') || k === 'time') hMap.time = idx;
+              if (k === 'dsp') hMap.dsp = idx;
+              if (k === 'routecode' || k === 'route') hMap.route = idx;
+              if (k.includes('staging') || k.includes('location')) hMap.staging = idx;
+              if (k === 'driver') hMap.driver = idx;
+              if (k.includes('service') || k.includes('type')) hMap.type = idx;
+            });
+            break;
+          }
+        }
+
+        if (hRow === -1) { alert('Could not find header row.'); setStage('idle'); return; }
+
+        const filtered = rows.slice(hRow + 1).filter(r => r && String(r[hMap.dsp]||'').trim().toUpperCase() === dspCode.toUpperCase());
+        if (!filtered.length) { alert(`No routes found for DSP: ${dspCode}`); setStage('idle'); return; }
+
+        // Format time value (could be Excel fraction or "HH:MM:SS" string)
+        const fmtTime = (v) => {
+          if (typeof v === 'number') {
+            const mins = Math.round(v * 1440);
+            const h = Math.floor(mins / 60), m = mins % 60;
+            const ap = h >= 12 ? 'PM' : 'AM';
+            return `${h > 12 ? h-12 : h===0 ? 12 : h}:${String(m).padStart(2,'0')} ${ap}`;
+          }
+          const parts = String(v||'').split(':');
+          if (parts.length < 2) return String(v||'');
+          const h = parseInt(parts[0]), m = parts[1];
+          const ap = h >= 12 ? 'PM' : 'AM';
+          return `${h > 12 ? h-12 : h===0 ? 12 : h}:${m} ${ap}`;
+        };
+
+        // Group by dispatch time
+        const groups = {};
+        filtered.forEach(row => {
+          const t = fmtTime(row[hMap.time]);
+          if (!groups[t]) groups[t] = [];
+          groups[t].push(row);
+        });
+
+        // Sort times chronologically
+        const toMins = (t) => {
+          const [tp, ap] = t.split(' ');
+          const [h, m] = tp.split(':').map(Number);
+          return (ap === 'PM' && h !== 12 ? h+12 : ap === 'AM' && h === 12 ? 0 : h) * 60 + m;
+        };
+        const times = Object.keys(groups).sort((a,b) => toMins(a) - toMins(b));
+
+        const waves = times.map((time, wi) => ({
+          wave: wi + 1,
+          time,
+          drivers: groups[time].map((row, di) => {
+            const raw = String(row[hMap.driver]||'');
+            const name = raw.replace(/\s*\([^)]+\)\s*$/, '').trim();
+            const route = String(row[hMap.route]||'');
+            const staging = String(row[hMap.staging]||'');
+            const svc = hMap.type !== undefined ? String(row[hMap.type]||'') : '';
+            const vanType = svc.includes('Rivian') ? 'Rivian' : svc.includes('16ft') ? 'Van 16ft' : svc.includes('Nursery') ? 'Nursery' : 'Van';
+            return { pos: di+1, id:`UPL-${wi+1}-${di+1}`, name, route, staging, vanType, van:`${di+1}` };
+          })
+        }));
+
+        setEditWaves(waves);
+        setStage('preview');
+      } catch(err) {
+        console.error(err);
+        alert('Error reading file.');
+        setStage('idle');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function moveDriver(wIdx, fromPos, dir) {
+    const toPos = fromPos + dir;
+    const w = editWaves[wIdx];
+    if (toPos < 0 || toPos >= w.drivers.length) return;
+    const drivers = [...w.drivers];
+    [drivers[fromPos], drivers[toPos]] = [drivers[toPos], drivers[fromPos]];
+    const updated = drivers.map((d,i) => ({...d, pos:i+1, van:`${i+1}`}));
+    const newWaves = editWaves.map((wv, i) => i === wIdx ? {...wv, drivers: updated} : wv);
+    setEditWaves(newWaves);
+  }
+
+  function handleApprove() {
+    setLiveWaves(editWaves);
+    setStage('live');
+  }
+
+  if (stage === 'processing') return (
+    <div style={{ textAlign:'center', padding:'80px 20px' }}>
+      <div style={{ fontSize:36, marginBottom:16, animation:'spin 1s linear infinite' }}>⚙️</div>
+      <div style={{ fontFamily:'var(--font-display)', fontSize:18, fontWeight:800, marginBottom:8 }}>Processing Wave Sheet…</div>
+      <div style={{ fontSize:13, color:'#999' }}>Filtering {dspCode} routes…</div>
+    </div>
+  );
+
+  if (stage === 'preview' && editWaves) return (
+    <div>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24, flexWrap:'wrap', gap:12 }}>
+        <div>
+          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
+            <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>📋 Wave Preview — {dspCode}</h2>
+            <span style={{ fontSize:11, fontWeight:700, background:'rgba(234,179,8,0.15)', color:'#b45309', padding:'3px 10px', borderRadius:999, border:'1px solid rgba(234,179,8,0.3)' }}>PENDING APPROVAL</span>
+          </div>
+          <div style={{ fontSize:13, color:'#999' }}>{editWaves.reduce((s,w)=>s+w.drivers.length,0)} drivers · {editWaves.length} waves · Use ↑↓ to reorder within each wave</div>
+        </div>
+        <div style={{ display:'flex', gap:10 }}>
+          <button onClick={() => setStage('idle')} style={{ padding:'10px 18px', background:'transparent', border:'1.5px solid rgba(26,26,46,0.15)', borderRadius:10, color:'#666', fontSize:13, fontWeight:600, cursor:'pointer' }}>
+            ← Discard
+          </button>
+          <button onClick={handleApprove} style={{ padding:'10px 22px', background:'var(--brand-accent)', border:'none', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, cursor:'pointer' }}>
+            ✓ Approve & Push to Drivers
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+        {editWaves.map((w, wIdx) => {
+          const col = wc(w.wave);
+          return (
+            <div key={w.wave} style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
+              <div style={{ background:col.light, borderBottom:`2px solid ${col.bg}`, padding:'12px 20px', display:'flex', alignItems:'center', gap:12 }}>
+                <span style={{ background:col.bg, color:'#fff', fontWeight:800, fontSize:13, padding:'4px 14px', borderRadius:999, fontFamily:'var(--font-display)' }}>Wave {w.wave}</span>
+                <span style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15 }}>{w.time}</span>
+                <span style={{ fontSize:12, color:'#888', marginLeft:'auto' }}>{w.drivers.length} drivers</span>
+              </div>
+              <div style={{ overflowX:'auto' }}>
+                <table style={{ width:'100%', borderCollapse:'collapse', minWidth:540 }}>
+                  <thead>
+                    <tr style={{ background:'rgba(26,26,46,0.02)' }}>
+                      {['Van','Driver','Route','Staging','Type',''].map(h => (
+                        <th key={h} style={{ padding:'9px 16px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {w.drivers.map((d, dIdx) => (
+                      <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                        <td style={{ padding:'10px 16px' }}>
+                          <span style={{ fontSize:13, fontWeight:800, color:col.bg, background:col.light, padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.pos}</span>
+                        </td>
+                        <td style={{ padding:'10px 16px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
+                        <td style={{ padding:'10px 16px', fontSize:12, color:'#555', fontFamily:'var(--font-mono)', fontWeight:600 }}>{d.route}</td>
+                        <td style={{ padding:'10px 16px', fontSize:12, color:'#777' }}>{d.staging}</td>
+                        <td style={{ padding:'10px 16px', fontSize:11, color:'#aaa' }}>{d.vanType}</td>
+                        <td style={{ padding:'10px 12px', whiteSpace:'nowrap' }}>
+                          <button onClick={() => moveDriver(wIdx, dIdx, -1)} disabled={dIdx===0} style={{ background:'none', border:'1px solid rgba(26,26,46,0.15)', borderRadius:6, width:26, height:26, cursor:dIdx===0?'default':'pointer', color:dIdx===0?'#ddd':'#555', fontSize:11, marginRight:4 }}>↑</button>
+                          <button onClick={() => moveDriver(wIdx, dIdx, 1)} disabled={dIdx===w.drivers.length-1} style={{ background:'none', border:'1px solid rgba(26,26,46,0.15)', borderRadius:6, width:26, height:26, cursor:dIdx===w.drivers.length-1?'default':'pointer', color:dIdx===w.drivers.length-1?'#ddd':'#555', fontSize:11 }}>↓</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const totalDrivers = activeWaves.reduce((s,w) => s+w.drivers.length, 0);
 
   return (
     <div>
-      <div style={{ marginBottom:24 }}>
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:'0 0 4px' }}>
-          📋 {i('Wave Board — Today','Tabla de Waves — Hoy')}
-        </h2>
-        <div style={{ fontSize:13, color:'#999' }}>{fd('Monday, May 26, 2026')} · {i('60 drivers · 6 waves','60 conductores · 6 waves')}</div>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:24, flexWrap:'wrap', gap:12 }}>
+        <div>
+          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
+            <h2 style={{ fontFamily:'var(--font-display)', fontSize:22, fontWeight:800, margin:0 }}>
+              📋 {i('Wave Board — Today','Tabla de Waves — Hoy')}
+            </h2>
+            {stage === 'live' && (
+              <span style={{ fontSize:11, fontWeight:700, background:'rgba(22,163,74,0.12)', color:'#16a34a', padding:'3px 10px', borderRadius:999, border:'1px solid rgba(22,163,74,0.25)' }}>● LIVE</span>
+            )}
+          </div>
+          <div style={{ fontSize:13, color:'#999' }}>{fd('Monday, May 26, 2026')} · {totalDrivers} {i('drivers','conductores')} · {activeWaves.length} waves</div>
+        </div>
+
+        {isOps && (
+          <div>
+            {stage === 'live' ? (
+              <button onClick={() => { setStage('idle'); setLiveWaves(null); setEditWaves(null); }} style={{ padding:'10px 18px', background:'transparent', border:'1.5px solid rgba(26,26,46,0.15)', borderRadius:10, color:'#666', fontSize:13, fontWeight:600, cursor:'pointer' }}>
+                ↺ Upload New Wave
+              </button>
+            ) : (
+              <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                <input value={dspCode} onChange={e => setDspCode(e.target.value.toUpperCase())} placeholder="DSP Code" style={{ width:80, padding:'8px 12px', border:'1.5px solid rgba(26,26,46,0.15)', borderRadius:10, fontSize:13, fontFamily:'var(--font-mono)', fontWeight:700, textAlign:'center', outline:'none' }} />
+                <button onClick={() => fileRef.current && fileRef.current.click()} style={{ padding:'10px 18px', background:'var(--brand-accent)', border:'none', borderRadius:10, color:'#fff', fontSize:13, fontWeight:700, cursor:'pointer', display:'flex', alignItems:'center', gap:8 }}>
+                  ↑ Upload Wave Sheet
+                </button>
+                <input ref={fileRef} type="file" accept=".xlsx,.xls" style={{ display:'none' }} onChange={e => { const f = e.target.files[0]; if(f) parseFile(f); e.target.value=''; }} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Driver: Day off message */}
-      {isDriver && !myAssignment && (
-        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.1)', marginBottom:28, padding:'20px 24px', display:'flex', alignItems:'center', gap:14 }}>
-          <span style={{ fontSize:20 }}>📋</span>
-          <div style={{ fontSize:14, fontWeight:600, color:'#666' }}>
-            {i('No route assigned today','Sin ruta asignada hoy')}
+      {/* Upload drop zone (idle state, ops only) */}
+      {isOps && stage === 'idle' && (
+        <div
+          onDragOver={e => e.preventDefault()}
+          onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f) parseFile(f); }}
+          style={{ border:'2px dashed rgba(26,26,46,0.15)', borderRadius:16, padding:'28px 24px', marginBottom:28, textAlign:'center', cursor:'pointer', background:'rgba(26,26,46,0.02)', transition:'border-color .2s' }}
+          onClick={() => fileRef.current && fileRef.current.click()}
+        >
+          <div style={{ fontSize:28, marginBottom:8 }}>📂</div>
+          <div style={{ fontSize:14, fontWeight:700, color:'var(--brand-ink)', marginBottom:4 }}>Drop Amazon Wave Sheet here or click to browse</div>
+          <div style={{ fontSize:12, color:'#aaa' }}>Accepts .xlsx · Filters automatically for DSP: <strong style={{ color:'var(--brand-accent)' }}>{dspCode}</strong></div>
+        </div>
+      )}
+
+      {/* Approved confirmation banner */}
+      {stage === 'live' && (
+        <div style={{ background:'rgba(22,163,74,0.08)', border:'1px solid rgba(22,163,74,0.2)', borderRadius:14, padding:'14px 20px', marginBottom:24, display:'flex', alignItems:'center', gap:12 }}>
+          <span style={{ fontSize:18 }}>✅</span>
+          <div>
+            <div style={{ fontSize:14, fontWeight:700, color:'#15803d' }}>Wave approved — pushed to {totalDrivers} drivers</div>
+            <div style={{ fontSize:12, color:'#16a34a' }}>All driver profiles updated with today's route assignment</div>
           </div>
         </div>
       )}
@@ -2644,11 +2906,11 @@ function WaveBoard({ user }) {
           </div>
           <div style={{ display:'grid', gridTemplateColumns: isMob() ? '1fr 1fr' : 'repeat(5,1fr)' }}>
             {[
-              { label:i('Date','Fecha'),       value:'May 26, 2026',       accent:false },
-              { label:i('Driver','Conductor'), value:myAssignment.name,    accent:false },
-              { label:'Wave',                  value:`Wave ${myAssignment.wave}`, accent:true },
-              { label:i('Van','Van'),          value:myAssignment.van,     accent:true },
-              { label:i('Departure','Salida'), value:myAssignment.time,    accent:false },
+              { label:i('Date','Fecha'),       value:'May 26, 2026',                    accent:false },
+              { label:i('Driver','Conductor'), value:myAssignment.name,                 accent:false },
+              { label:'Wave',                  value:`Wave ${myAssignment.wave}`,        accent:true  },
+              { label:i('Van','Van'),          value:myAssignment.van,                  accent:true  },
+              { label:i('Departure','Salida'), value:myAssignment.time,                 accent:false },
             ].map((f, idx, arr) => (
               <div key={idx} style={{ padding:'16px 20px', borderRight: idx < arr.length-1 ? '1px solid rgba(26,26,46,0.07)' : 'none' }}>
                 <div style={{ fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.05em', color:'#bbb', marginBottom:5 }}>{f.label}</div>
@@ -2659,49 +2921,71 @@ function WaveBoard({ user }) {
         </div>
       )}
 
+      {isDriver && !myAssignment && (
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.1)', marginBottom:28, padding:'20px 24px', display:'flex', alignItems:'center', gap:14 }}>
+          <span style={{ fontSize:20 }}>📋</span>
+          <div style={{ fontSize:14, fontWeight:600, color:'#666' }}>{i('No route assigned today','Sin ruta asignada hoy')}</div>
+        </div>
+      )}
+
       {/* Wave blocks */}
       <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
-        {WAVE_DATA.map(w => {
+        {activeWaves.map(w => {
           const col = wc(w.wave);
+          const isFromUpload = stage === 'live';
           return (
             <div key={w.wave} style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}>
-              {/* Wave header */}
               <div style={{ background:col.light, borderBottom:`2px solid ${col.bg}`, padding:'14px 22px', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-                  <span style={{ background:col.bg, color:'#fff', fontWeight:800, fontSize:13, padding:'4px 14px', borderRadius:999, fontFamily:'var(--font-display)' }}>
-                    Wave {w.wave}
-                  </span>
+                  <span style={{ background:col.bg, color:'#fff', fontWeight:800, fontSize:13, padding:'4px 14px', borderRadius:999, fontFamily:'var(--font-display)' }}>Wave {w.wave}</span>
                   <span style={{ fontFamily:'var(--font-display)', fontWeight:700, fontSize:15, color:'var(--brand-ink)' }}>{w.time}</span>
                 </div>
                 <span style={{ fontSize:12, color:'#888', fontWeight:600 }}>{w.drivers.length} {i('drivers','conductores')}</span>
               </div>
-
-              {/* Table */}
               <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
-                <table style={{ width:'100%', borderCollapse:'collapse', minWidth:380 }}>
+                <table style={{ width:'100%', borderCollapse:'collapse', minWidth: isFromUpload ? 540 : 380 }}>
                   <thead>
                     <tr style={{ background:'rgba(26,26,46,0.02)' }}>
-                      {['#', i('Driver','Conductor'), i('ID','ID'), i('Van','Van')].map(h => (
-                        <th key={h} style={{ padding:'9px 18px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
-                      ))}
+                      {isFromUpload
+                        ? ['Van','Driver','Route','Staging','Type'].map(h => (
+                            <th key={h} style={{ padding:'9px 18px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
+                          ))
+                        : ['#', i('Driver','Conductor'), i('ID','ID'), i('Van','Van')].map(h => (
+                            <th key={h} style={{ padding:'9px 18px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
+                          ))
+                      }
                     </tr>
                   </thead>
                   <tbody>
                     {w.drivers.map(d => {
                       const isMe = d.id === driverId;
                       return (
-                        <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', background: isMe ? col.light : 'transparent', transition:'background .15s' }}>
-                          <td style={{ padding:'11px 18px', fontSize:12, color:'#bbb', fontWeight:600, width:36 }}>{d.pos}</td>
-                          <td style={{ padding:'11px 18px' }}>
-                            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                              {isMe && <span style={{ fontSize:10, fontWeight:800, color:col.bg, background:`${col.bg}18`, padding:'1px 7px', borderRadius:999 }}>YOU</span>}
-                              <span style={{ fontSize:13, fontWeight: isMe ? 700 : 500, color: isMe ? col.bg : 'var(--brand-ink)' }}>{d.name}</span>
-                            </div>
-                          </td>
-                          <td style={{ padding:'11px 18px', fontSize:11, color:'#aaa', fontFamily:'var(--font-mono)' }}>{d.id}</td>
-                          <td style={{ padding:'11px 18px' }}>
-                            <span style={{ fontSize:12, fontWeight:700, color: isMe ? col.bg : '#555', background: isMe ? col.light : 'rgba(26,26,46,0.05)', padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.van}</span>
-                          </td>
+                        <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', background: isMe ? col.light : 'transparent' }}>
+                          {isFromUpload ? (
+                            <>
+                              <td style={{ padding:'11px 18px' }}>
+                                <span style={{ fontSize:13, fontWeight:800, color:col.bg, background:col.light, padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.pos}</span>
+                              </td>
+                              <td style={{ padding:'11px 18px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
+                              <td style={{ padding:'11px 18px', fontSize:12, fontFamily:'var(--font-mono)', color:'#555', fontWeight:600 }}>{d.route}</td>
+                              <td style={{ padding:'11px 18px', fontSize:12, color:'#777' }}>{d.staging}</td>
+                              <td style={{ padding:'11px 18px', fontSize:11, color:'#aaa' }}>{d.vanType}</td>
+                            </>
+                          ) : (
+                            <>
+                              <td style={{ padding:'11px 18px', fontSize:12, color:'#bbb', fontWeight:600, width:36 }}>{d.pos}</td>
+                              <td style={{ padding:'11px 18px' }}>
+                                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                                  {isMe && <span style={{ fontSize:10, fontWeight:800, color:col.bg, background:`${col.bg}18`, padding:'1px 7px', borderRadius:999 }}>YOU</span>}
+                                  <span style={{ fontSize:13, fontWeight: isMe ? 700 : 500, color: isMe ? col.bg : 'var(--brand-ink)' }}>{d.name}</span>
+                                </div>
+                              </td>
+                              <td style={{ padding:'11px 18px', fontSize:11, color:'#aaa', fontFamily:'var(--font-mono)' }}>{d.id}</td>
+                              <td style={{ padding:'11px 18px' }}>
+                                <span style={{ fontSize:12, fontWeight:700, color: isMe ? col.bg : '#555', background: isMe ? col.light : 'rgba(26,26,46,0.05)', padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.van}</span>
+                              </td>
+                            </>
+                          )}
                         </tr>
                       );
                     })}
@@ -2715,7 +2999,6 @@ function WaveBoard({ user }) {
     </div>
   );
 }
-
 
 // ─── Bronze Alert Banner ───────────────────────────────────────
 function BronzeAlertBanner({ onViewDriver }) {

@@ -2805,7 +2805,7 @@ function WaveBoard({ user }) {
                 <table style={{ width:'100%', borderCollapse:'collapse', minWidth:540 }}>
                   <thead>
                     <tr style={{ background:'rgba(26,26,46,0.02)' }}>
-                      {['Van','Driver','Route','Staging','Type',''].map(h => (
+                      {['Route','Staging','Driver','Van',''].map(h => (
                         <th key={h} style={{ padding:'9px 16px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
                       ))}
                     </tr>
@@ -2813,13 +2813,12 @@ function WaveBoard({ user }) {
                   <tbody>
                     {w.drivers.map((d, dIdx) => (
                       <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}>
+                        <td style={{ padding:'10px 16px', fontSize:12, color:'#555', fontFamily:'var(--font-mono)', fontWeight:600 }}>{d.route}</td>
+                        <td style={{ padding:'10px 16px', fontSize:12, color:'#777' }}>{d.staging}</td>
+                        <td style={{ padding:'10px 16px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
                         <td style={{ padding:'10px 16px' }}>
                           <span style={{ fontSize:13, fontWeight:800, color:col.bg, background:col.light, padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.pos}</span>
                         </td>
-                        <td style={{ padding:'10px 16px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
-                        <td style={{ padding:'10px 16px', fontSize:12, color:'#555', fontFamily:'var(--font-mono)', fontWeight:600 }}>{d.route}</td>
-                        <td style={{ padding:'10px 16px', fontSize:12, color:'#777' }}>{d.staging}</td>
-                        <td style={{ padding:'10px 16px', fontSize:11, color:'#aaa' }}>{d.vanType}</td>
                         <td style={{ padding:'10px 12px', whiteSpace:'nowrap' }}>
                           <button onClick={() => moveDriver(wIdx, dIdx, -1)} disabled={dIdx===0} style={{ background:'none', border:'1px solid rgba(26,26,46,0.15)', borderRadius:6, width:26, height:26, cursor:dIdx===0?'default':'pointer', color:dIdx===0?'#ddd':'#555', fontSize:11, marginRight:4 }}>↑</button>
                           <button onClick={() => moveDriver(wIdx, dIdx, 1)} disabled={dIdx===w.drivers.length-1} style={{ background:'none', border:'1px solid rgba(26,26,46,0.15)', borderRadius:6, width:26, height:26, cursor:dIdx===w.drivers.length-1?'default':'pointer', color:dIdx===w.drivers.length-1?'#ddd':'#555', fontSize:11 }}>↓</button>
@@ -2947,7 +2946,7 @@ function WaveBoard({ user }) {
                   <thead>
                     <tr style={{ background:'rgba(26,26,46,0.02)' }}>
                       {isFromUpload
-                        ? ['Van','Driver','Route','Staging','Type'].map(h => (
+                        ? ['Route','Staging','Driver','Van'].map(h => (
                             <th key={h} style={{ padding:'9px 18px', textAlign:'left', fontSize:10, fontWeight:700, color:'#bbb', textTransform:'uppercase', letterSpacing:'0.05em' }}>{h}</th>
                           ))
                         : ['#', i('Driver','Conductor'), i('ID','ID'), i('Van','Van')].map(h => (
@@ -2963,13 +2962,12 @@ function WaveBoard({ user }) {
                         <tr key={d.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)', background: isMe ? col.light : 'transparent' }}>
                           {isFromUpload ? (
                             <>
+                              <td style={{ padding:'11px 18px', fontSize:12, fontFamily:'var(--font-mono)', color:'#555', fontWeight:600 }}>{d.route}</td>
+                              <td style={{ padding:'11px 18px', fontSize:12, color:'#777' }}>{d.staging}</td>
+                              <td style={{ padding:'11px 18px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
                               <td style={{ padding:'11px 18px' }}>
                                 <span style={{ fontSize:13, fontWeight:800, color:col.bg, background:col.light, padding:'3px 10px', borderRadius:999, fontFamily:'var(--font-mono)' }}>{d.pos}</span>
                               </td>
-                              <td style={{ padding:'11px 18px', fontSize:13, fontWeight:600, color:'var(--brand-ink)', minWidth:160 }}>{d.name}</td>
-                              <td style={{ padding:'11px 18px', fontSize:12, fontFamily:'var(--font-mono)', color:'#555', fontWeight:600 }}>{d.route}</td>
-                              <td style={{ padding:'11px 18px', fontSize:12, color:'#777' }}>{d.staging}</td>
-                              <td style={{ padding:'11px 18px', fontSize:11, color:'#aaa' }}>{d.vanType}</td>
                             </>
                           ) : (
                             <>

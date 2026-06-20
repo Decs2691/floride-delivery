@@ -1,6 +1,16 @@
 /* FloRide — How to Apply page with embedded multi-step form */
 const { useState: useStateA, useMemo: useMemoA } = React;
 
+const ATS_STATUSES = ['New Applicant','Interview Scheduled','Background Check','Drug Test','Onboarding','Active Driver','Rejected'];
+function atsLoadApplicants(){ try { return JSON.parse(localStorage.getItem('floride-ats-applicants') || '[]'); } catch(e){ return []; } }
+function atsSaveApplicant(applicant){
+  const current = atsLoadApplicants();
+  const enriched = { id: 'APP-' + String(Date.now()).slice(-6), status: 'New Applicant', appliedAt: new Date().toISOString(), ...applicant };
+  localStorage.setItem('floride-ats-applicants', JSON.stringify([enriched, ...current]));
+  return enriched;
+}
+function fileMeta(file){ return file ? { name:file.name, size:file.size, type:file.type, uploadedAt:new Date().toISOString() } : null; }
+
 function ApplyPage({ navigate }) {
   const i = useT();
   const steps = [
@@ -17,9 +27,11 @@ function ApplyPage({ navigate }) {
     age21: 'yes', license: 'yes', tickets: 'none', criminal: 'no',
     zone: 'Orlando Central', shift: 'morning', start: '2-weeks',
     referredBy: '',
+    resume: null, driverLicense: null,
   });
 
   const set = (k, v) => setData((d) => ({ ...d, [k]: v }));
+  const submitApplication = () => { atsSaveApplicant(data); setSubmitted(true); };
 
   const canAdvance = () => {
     if (step === 0) return data.firstName && data.lastName && data.email && data.phone;
@@ -94,7 +106,7 @@ function ApplyPage({ navigate }) {
                   {step === 0 && <Step1 data={data} set={set} />}
                   {step === 1 && <Step2 data={data} set={set} />}
                   {step === 2 && <Step3 data={data} set={set} />}
-                  {step === 3 && <Step4 data={data} />}
+                  {step === 3 && <Step4 data={data} set={set} />}
                 </div>
 
                 <div style={{
@@ -121,7 +133,7 @@ function ApplyPage({ navigate }) {
                       {i('Continue', 'Continuar')} <Icon.Arrow/>
                     </button>
                   ) : (
-                    <button className="fr-btn fr-btn--primary" onClick={() => setSubmitted(true)}>
+                    <button className="fr-btn fr-btn--primary" onClick={submitApplication}>
                       {i('Submit application', 'Enviar solicitud')} <Icon.Arrow/>
                     </button>
                   )}
@@ -274,7 +286,7 @@ function Step3({ data, set }) {
   );
 }
 
-function Step4({ data }) {
+function Step4({ data, set }) {
   const i = useT();
   const summary = [
     [i('Name', 'Nombre'), `${data.firstName} ${data.lastName}`],
@@ -288,11 +300,29 @@ function Step4({ data }) {
     [i('Shift', 'Turno'), data.shift],
     [i('Start', 'Inicio'), data.start],
     [i('Referred by', 'Referido por'), data.referredBy || '—'],
+    [i('Resume', 'Résumé'), data.resume?.name || i('Not uploaded yet','No cargado')],
+    [i('Driver’s license', 'Licencia'), data.driverLicense?.name || i('Not uploaded yet','No cargado')],
   ];
   return (
     <div>
       <h3 className="fr-h3" style={{ fontSize: 26 }}>{i('Looks good?', '¿Todo bien?')}</h3>
       <p style={{ color: 'var(--brand-muted-dark)', marginTop: 6 }}>{i('Double-check, then send it our way.', 'Revisa y envíanos tu solicitud.')}</p>
+
+      <div style={{ marginTop: 24, padding: 18, borderRadius: 14, border: '1px solid rgba(26,26,46,0.08)', background:'#fff' }}>
+        <div className="fr-eyebrow muted" style={{ fontSize: 10 }}>{i('Required documents', 'Documentos requeridos')}</div>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginTop:14 }} className="fr-form-grid">
+          <FormField label={i('Resume upload *', 'Subir résumé *')}>
+            <input className="fr-input" type="file" accept=".pdf,.doc,.docx" onChange={(e) => set('resume', fileMeta(e.target.files[0]))}/>
+            {data.resume ? <div style={{ fontSize:12, color:'var(--brand-accent)', marginTop:6 }}>✓ {data.resume.name}</div> : null}
+          </FormField>
+          <FormField label={i('Driver’s license upload *', 'Subir licencia *')}>
+            <input className="fr-input" type="file" accept="image/*,.pdf" onChange={(e) => set('driverLicense', fileMeta(e.target.files[0]))}/>
+            {data.driverLicense ? <div style={{ fontSize:12, color:'var(--brand-accent)', marginTop:6 }}>✓ {data.driverLicense.name}</div> : null}
+          </FormField>
+        </div>
+        <p style={{ fontSize:12, color:'var(--brand-muted-dark)', marginTop:10 }}>{i('Demo build stores document metadata locally; production connects these uploads to Supabase Storage and applicant records.', 'La demo guarda metadatos localmente; producción conecta archivos a Supabase Storage.')}</p>
+      </div>
+
       <div style={{
         marginTop: 28, padding: 24, borderRadius: 'var(--r-md)',
         background: 'var(--brand-paper)', border: '1px solid rgba(26,26,46,0.06)',

@@ -75,6 +75,22 @@ const DEMO_USERS = {
     title: 'Operations Manager',
     station: 'DFL4 — Orlando',
   },
+  'owner@floride.com': {
+    password: 'owner2026',
+    role: 'owner',
+    name: 'Logan Jack',
+    id: 'OWN-001',
+    title: 'Owner',
+    station: 'FloRide HQ — Orlando',
+  },
+  'recruiter@floride.com': {
+    password: 'recruit2026',
+    role: 'recruiter',
+    name: 'Avery Collins',
+    id: 'REC-001',
+    title: 'Recruiter',
+    station: 'FloRide HQ — Orlando',
+  },
   'ceo@floride.com': {
     password: 'ceo2026',
     role: 'ceo',
@@ -761,12 +777,15 @@ function PortalNav({ user, onLogout, active, setActive }) {
     'dispatch':             ['routes','incidents','messages','notes'],
     'supervisor-assistant': ['attendance','requests','checklist','notes','waves'],
     'supervisor':           ['overview','team','coaching','incidents','notes','waves'],
-    'ops-manager':          ['overview','teams','reports','notes','waves'],
+    'ops-manager':          ['dashboard','pipeline','drivers','reports','notes','waves'],
+    'owner':                ['dashboard','pipeline','drivers','reports','incidents','notes','waves'],
+    'recruiter':            ['dashboard','pipeline'],
     'ceo':                  ['executive','financials','team','alerts','notes','waves'],
     'manager':              ['overview','my-team','announcements','scorecards','waves'],
   };
   const labels = {
     dashboard:     i('Dashboard','Panel'),
+    pipeline:      i('Candidate Pipeline','Candidatos'),
     scorecard:     i('My Scorecard','Mi Desempeño'),
     training:      i('Training','Entrenamiento'),
     announcements: i('Announcements','Avisos'),
@@ -1390,6 +1409,45 @@ function ManagerAnnouncements() {
       </div>
     </div>
   );
+}
+
+
+function getATSApplicants(){
+  const seed = [
+    { id:'APP-240101', firstName:'Nia', lastName:'Robinson', email:'nia@example.com', phone:'(407) 555-0184', city:'Orlando', zone:'Orlando Central', shift:'morning', status:'Interview Scheduled', appliedAt:'2026-06-03T12:00:00Z', resume:{name:'nia-robinson-resume.pdf'}, driverLicense:{name:'nia-license.pdf'} },
+    { id:'APP-240102', firstName:'Brandon', lastName:'Cruz', email:'brandon@example.com', phone:'(321) 555-0112', city:'Kissimmee', zone:'Kissimmee / St. Cloud', shift:'mid', status:'Background Check', appliedAt:'2026-06-08T12:00:00Z', resume:{name:'brandon-cruz.docx'}, driverLicense:{name:'dl-front.jpg'} },
+    { id:'APP-240103', firstName:'Mei', lastName:'Lin', email:'mei@example.com', phone:'(689) 555-0109', city:'Winter Park', zone:'Winter Park / Maitland', shift:'morning', status:'Onboarding', appliedAt:'2026-06-14T12:00:00Z', resume:{name:'mei-lin-resume.pdf'}, driverLicense:{name:'mei-license.pdf'} },
+  ];
+  try { return [...JSON.parse(localStorage.getItem('floride-ats-applicants') || '[]'), ...seed]; } catch(e) { return seed; }
+}
+const ATS_STATUS_OPTIONS = ['New Applicant','Interview Scheduled','Background Check','Drug Test','Onboarding','Active Driver','Rejected'];
+function AdminATSPortal({ user, onLogout }) {
+  const [active, setActive] = usePS('dashboard');
+  const [applicants, setApplicants] = usePS(getATSApplicants());
+  const canManage = ['owner','ops-manager','recruiter'].includes(user.role);
+  const activeDrivers = DRIVER_LIST.length + applicants.filter(a => a.status === 'Active Driver').length;
+  const total = applicants.length;
+  const hired = applicants.filter(a => a.status === 'Active Driver').length;
+  const conversion = total ? Math.round((hired / total) * 100) : 0;
+  const updateStatus = (id, status) => { const next = applicants.map(a => a.id===id ? {...a,status} : a); setApplicants(next); localStorage.setItem('floride-ats-applicants', JSON.stringify(next.filter(a => String(a.id).startsWith('APP-') && !['APP-240101','APP-240102','APP-240103'].includes(a.id)))); };
+  return <div style={{ minHeight:'100vh', background:'#f7f7fa' }}>
+    <PortalNav user={user} onLogout={onLogout} active={active} setActive={setActive} />
+    <main style={{ maxWidth:1160, margin:'0 auto', padding:'36px 28px' }}>
+      <div style={{ marginBottom:24 }}><h1 style={{ fontFamily:'var(--font-display)', fontSize:30, fontWeight:800, margin:0 }}>Amazon DSP Backoffice</h1><p style={{ color:'#777', marginTop:6 }}>{user.title} role · Supabase-ready ATS, driver operations, reporting, and RBAC screens.</p></div>
+      {active === 'dashboard' && <>
+        <div style={{ display:'grid', gridTemplateColumns:isMob()?'1fr 1fr':'repeat(4,1fr)', gap:16, marginBottom:24 }}>{[
+          ['Total applicants', total, '📥', '#2563eb'], ['Active drivers', activeDrivers, '🚚', '#16a34a'], ['Hiring conversion', conversion+'%', '📈', '#FF6B35'], ['This month hires', hired + 6, '🗓️', '#7c3aed']
+        ].map(k => <div key={k[0]} style={{ background:'#fff', border:'1px solid rgba(26,26,46,0.07)', borderRadius:16, padding:20 }}><div style={{ fontSize:24 }}>{k[2]}</div><div style={{ fontSize:12, color:'#999', marginTop:8 }}>{k[0]}</div><div style={{ fontFamily:'var(--font-display)', fontSize:32, fontWeight:800, color:k[3] }}>{k[1]}</div></div>)}</div>
+        <div style={{ background:'#fff', borderRadius:16, padding:24, border:'1px solid rgba(26,26,46,0.07)' }}><h3 style={{ margin:'0 0 16px', fontFamily:'var(--font-display)' }}>Monthly hiring metrics</h3><div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', alignItems:'end', gap:12, height:180 }}>{[8,11,9,14,12,17].map((v,i)=><div key={i} style={{ display:'flex', flexDirection:'column', justifyContent:'end', gap:8, height:'100%' }}><div style={{ height:v*8, background:'linear-gradient(180deg,var(--brand-accent),var(--brand-ink))', borderRadius:10 }} /><div style={{ fontSize:11, color:'#999', textAlign:'center' }}>{['Jan','Feb','Mar','Apr','May','Jun'][i]}</div></div>)}</div></div>
+      </>}
+      {active === 'pipeline' && <div style={{ background:'#fff', borderRadius:16, border:'1px solid rgba(26,26,46,0.07)', overflow:'hidden' }}><div style={{ padding:18, borderBottom:'1px solid rgba(26,26,46,0.07)', display:'flex', justifyContent:'space-between' }}><strong>Candidate pipeline</strong><span style={{ color:'#999', fontSize:12 }}>Resume + driver license tracked for Supabase Storage</span></div><div style={{ overflowX:'auto' }}><table style={{ width:'100%', borderCollapse:'collapse', minWidth:900 }}><thead><tr>{['Candidate','Contact','Zone','Documents','Status','Interview'].map(h=><th key={h} style={{ textAlign:'left', padding:12, fontSize:11, color:'#999', textTransform:'uppercase' }}>{h}</th>)}</tr></thead><tbody>{applicants.map(a=><tr key={a.id} style={{ borderTop:'1px solid rgba(26,26,46,0.05)' }}><td style={{ padding:12, fontWeight:700 }}>{a.firstName} {a.lastName}<div style={{ fontSize:11, color:'#aaa', fontWeight:500 }}>{a.id}</div></td><td style={{ padding:12, fontSize:13 }}>{a.email}<br/>{a.phone}</td><td style={{ padding:12, fontSize:13 }}>{a.zone}</td><td style={{ padding:12, fontSize:12 }}>📄 {a.resume?.name || 'Missing'}<br/>🪪 {a.driverLicense?.name || 'Missing'}</td><td style={{ padding:12 }}>{canManage ? <select value={a.status} onChange={e=>updateStatus(a.id,e.target.value)} style={{ padding:8, borderRadius:8, border:'1px solid rgba(26,26,46,0.14)' }}>{ATS_STATUS_OPTIONS.map(st=><option key={st}>{st}</option>)}</select> : <span>{a.status}</span>}</td><td style={{ padding:12 }}><button disabled={!canManage} style={{ padding:'8px 12px', borderRadius:8, background:canManage?'var(--brand-accent)':'#eee', color:canManage?'#fff':'#999', fontSize:12 }}>Schedule</button></td></tr>)}</tbody></table></div></div>}
+      {active === 'drivers' && <ManagerTeam />}
+      {active === 'reports' && <div style={{ background:'#fff', borderRadius:16, padding:24 }}>Reports include applicant source, pipeline aging, conversion by status, active-driver count, incidents, and monthly hiring trends.</div>}
+      {active === 'incidents' && <DispatchPortal user={{...user, role:'dispatch'}} onLogout={onLogout} />}
+      {active === 'notes' && <ShiftNotes user={user} />}
+      {active === 'waves' && <WaveBoard user={user} />}
+    </main>
+  </div>;
 }
 
 // ─── LOGIN PAGE ───────────────────────────────────────────────
@@ -3040,7 +3098,9 @@ function PortalPage({ user, setUser }) {
     case 'dispatch':             return <DispatchPortal            user={user} onLogout={logout} />;
     case 'supervisor-assistant': return <SupervisorAssistantPortal user={user} onLogout={logout} />;
     case 'supervisor':           return <SupervisorPortal          user={user} onLogout={logout} />;
-    case 'ops-manager':          return <OpsManagerPortal          user={user} onLogout={logout} />;
+    case 'ops-manager':          return <AdminATSPortal          user={user} onLogout={logout} />;
+    case 'owner':                return <AdminATSPortal          user={user} onLogout={logout} />;
+    case 'recruiter':            return <AdminATSPortal          user={user} onLogout={logout} />;
     case 'ceo':                  return <CEOPortal                 user={user} onLogout={logout} />;
     case 'manager':              return <ManagerPortal             user={user} onLogout={logout} />;
     default:                     return <DriverPortal              user={user} onLogout={logout} />;

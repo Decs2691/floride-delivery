@@ -67,6 +67,7 @@ function App() {
   let Page;
   switch (route) {
     case 'about':    Page = <AboutPage navigate={navigate} />; break;
+    case 'careers':  Page = <CareersPage navigate={navigate} />; break;
     case 'benefits': Page = <BenefitsPage navigate={navigate} />; break;
     case 'apply':    Page = <ApplyPage navigate={navigate} />; break;
     case 'areas':    Page = <AreasPage navigate={navigate} />; break;

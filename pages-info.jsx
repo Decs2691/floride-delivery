@@ -732,3 +732,43 @@ function Field({ label, children }) {
 }
 
 Object.assign(window, { AboutPage, BenefitsPage, AreasPage, FAQPage, BlogPage, ContactPage, FinalCTA: window.FinalCTA });
+
+function CareersPage({ navigate }) {
+  const roles = [
+    ['Delivery Associate', 'Full-time and part-time routes from DFL4 with paid training, weekly schedules, and growth paths.'],
+    ['Dispatcher', 'Coordinate daily waves, support drivers in the field, and track route exceptions.'],
+    ['Driver Trainer', 'Coach new hires through ride-alongs, safety standards, and final evaluations.'],
+  ];
+  return (
+    <>
+      <PageHeader
+        eyebrow="Careers"
+        title="Build your DSP career with a logistics team that moves fast."
+        lede="Explore driver, dispatch, training, recruiting, and operations roles built for Amazon Delivery Service Partner companies."
+      >
+        <div style={{ display:'flex', gap:12, marginTop:28, flexWrap:'wrap' }}>
+          <button className="fr-btn fr-btn--primary" onClick={() => navigate('apply')}>Apply online <Icon.Arrow /></button>
+          <button className="fr-btn fr-btn--ghost" onClick={() => navigate('about')}>Meet the team</button>
+        </div>
+      </PageHeader>
+      <section className="fr-section surface-white">
+        <div className="fr-container">
+          <div className="fr-eyebrow">Open roles</div>
+          <h2 className="fr-h2" style={{ marginTop:14 }}>Hiring pipeline connected to the backoffice ATS.</h2>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:18, marginTop:36 }} className="fr-values-grid">
+            {roles.map(([title, body]) => (
+              <div key={title} style={{ background:'var(--brand-paper)', border:'1px solid rgba(26,26,46,0.07)', borderRadius:'var(--r-lg)', padding:24 }}>
+                <h3 style={{ fontFamily:'var(--font-display)', fontSize:22, margin:0 }}>{title}</h3>
+                <p style={{ color:'var(--brand-muted-dark)', marginTop:10 }}>{body}</p>
+                <button onClick={() => navigate('apply')} style={{ marginTop:18, color:'var(--brand-accent)', fontWeight:700 }}>Start application →</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <FinalCTA navigate={navigate} />
+    </>
+  );
+}
+
+Object.assign(window, { CareersPage });

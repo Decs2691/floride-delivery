@@ -228,7 +228,8 @@ function Navbar({ route, navigate }) {
     { id: 'home', label: i('Home', 'Inicio') },
     { id: 'about', label: i('About', 'Nosotros') },
     { id: 'benefits', label: i('Benefits', 'Beneficios') },
-    { id: 'jobs', label: i('Jobs', 'Empleos'), mega: true },
+    { id: 'careers', label: i('Careers', 'Empleos') },
+    { id: 'jobs', label: i('Jobs', 'Vacantes'), mega: true },
     { id: 'areas', label: i('Service Areas', 'Áreas') },
     { id: 'faq', label: 'FAQ' },
     { id: 'blog', label: 'Blog' },
@@ -533,7 +534,7 @@ function Footer({ navigate }) {
             </div>
           </div>
           <FooterCol title={i('Company', 'Empresa')} links={[
-            [i('About', 'Nosotros'), 'about'], [i('Benefits', 'Beneficios'), 'benefits'], [i('Service Areas', 'Áreas'), 'areas'], ['Blog', 'blog'],
+            [i('About', 'Nosotros'), 'about'], [i('Careers', 'Empleos'), 'careers'], [i('Benefits', 'Beneficios'), 'benefits'], [i('Service Areas', 'Áreas'), 'areas'], ['Blog', 'blog'],
           ]} navigate={navigate} />
           <FooterCol title={i('Drivers', 'Conductores')} links={[
             [i('Apply', 'Aplicar'), 'apply'], ['FAQ', 'faq'], [i('Contact', 'Contacto'), 'contact'],
